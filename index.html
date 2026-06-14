@@ -64,6 +64,7 @@
         .daily-game-card:hover{border-color:var(--accent);background:#fff8e1;}
         .daily-game-card .match-info{flex:1;}
         .daily-game-card .teams-line{font-weight:700;font-size:.9em;color:#212529;}
+        .daily-game-card .group-badge{display:inline-block;background:var(--accent);color:#fff;font-size:.6em;padding:2px 8px;border-radius:20px;margin-left:8px;font-weight:600;}
         .daily-game-card .details-line{font-size:.65em;color:#6c757d;margin-top:1px;}
         .daily-game-card .player-line{font-size:.72em;font-weight:700;margin-top:1px;}
         .daily-game-card .score-badge{font-weight:700;font-size:1.1em;color:var(--accent2);min-width:45px;text-align:center;}
@@ -112,7 +113,6 @@
         .legend-player .legend-teams{font-size:.7em;color:#6c757d;line-height:1.4;}
         .legend-dot{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:6px;}
         
-        /* BRACKET STYLES - ADDED AT BOTTOM, FULLY VISIBLE WITH SCROLL */
         .bracket-wrapper {
             margin-top: 48px;
             margin-bottom: 40px;
@@ -207,7 +207,6 @@
         <div class="view" id="view-knockout"><div id="knockoutContainer"></div></div>
     </div>
     
-    <!-- ========== BRACKET ADDED AT THE BOTTOM OF THE PAGE ========== -->
     <div id="globalBracketContainer" class="bracket-wrapper">
         <div class="bracket-header">
             <h2>🏆 WORLD CUP 2026 · KNOCKOUT BRACKET</h2>
@@ -472,8 +471,33 @@
             const dn=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'],mn=['January','February','March','April','May','June','July'];
             let h=`<h3>📅 ${dn[dateObj.getUTCDay()]}, ${mn[dateObj.getUTCMonth()]} ${dateObj.getUTCDate()}, 2026</h3><div class="daily-date">${dayGames.length} match${dayGames.length!==1?'es':''}</div>`;
             if(dayGames.length===0)h+=`<div class="daily-empty">No matches today.</div>`;
-            else dayGames.forEach(game=>{const sc=game.homeScore!==null&&game.awayScore!==null,hp=peopleMap[game.home]||'',ap=peopleMap[game.away]||'',hc=playerColors[hp]||'#6c3bd4',ac=playerColors[ap]||'#6c3bd4';h+=`<div class="daily-game-card" data-game-id="${game.id}"><div class="match-info"><div class="teams-line">${game.home} vs ${game.away}</div><div class="details-line">${game.round==='group'?'Group '+game.group:game.round} · ${game.stadium}</div><div class="details-line">🕐 ${game.time} (${game.pst})</div><div class="player-line"><span style="color:${hc}">👤 ${hp||'—'}</span> vs <span style="color:${ac}">👤 ${ap||'—'}</span></div></div><div class="score-badge${!sc?' pending':''}">${sc?game.homeScore+' - '+game.awayScore:'vs'}</div></div>`;});
-            h+=`<button class="daily-close-btn" id="dailyCloseBtn">✕ Close</button>`;modal.innerHTML=h;overlay.classList.add('open');
+            else dayGames.forEach(game=>{
+                const sc=game.homeScore!==null&&game.awayScore!==null;
+                const hp=peopleMap[game.home]||'',ap=peopleMap[game.away]||'';
+                const hc=playerColors[hp]||'#6c3bd4',ac=playerColors[ap]||'#6c3bd4';
+                // Determine group display text
+                let groupDisplay = '';
+                if (game.round === 'group') {
+                    groupDisplay = `<span class="group-badge">Group ${game.group}</span>`;
+                } else {
+                    groupDisplay = `<span class="group-badge" style="background:#6c757d;">${game.round}</span>`;
+                }
+                h+=`<div class="daily-game-card" data-game-id="${game.id}">
+                        <div class="match-info">
+                            <div class="teams-line">
+                                ${game.home} vs ${game.away}
+                                ${groupDisplay}
+                            </div>
+                            <div class="details-line">${game.stadium}</div>
+                            <div class="details-line">🕐 ${game.time} (${game.pst})</div>
+                            <div class="player-line"><span style="color:${hc}">👤 ${hp||'—'}</span> vs <span style="color:${ac}">👤 ${ap||'—'}</span></div>
+                        </div>
+                        <div class="score-badge${!sc?' pending':''}">${sc?game.homeScore+' - '+game.awayScore:'vs'}</div>
+                    </div>`;
+            });
+            h+=`<button class="daily-close-btn" id="dailyCloseBtn">✕ Close</button>`;
+            modal.innerHTML=h;
+            overlay.classList.add('open');
             document.getElementById('dailyCloseBtn').addEventListener('click',()=>overlay.classList.remove('open'));
             modal.querySelectorAll('.daily-game-card').forEach(c=>c.addEventListener('click',()=>{overlay.classList.remove('open');openGameModal(c.dataset.gameId);}));
         }
