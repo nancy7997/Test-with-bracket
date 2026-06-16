@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
     <title>⚽ 2026 FIFA World Cup Tracker · Live Sync + Bracket</title>
     <style>
         :root {
@@ -37,11 +37,11 @@
         .content{padding:6px 12px 20px;max-width:1400px;margin:0 auto;}
         .view{display:none;}
         .view.active{display:block;}
-        /* Groups grid: 2-3 columns side by side, responsive */
+        /* FIX: Horizontal grid layout for group cards - side by side, as many as fit */
         .groups-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-            gap: 16px;
+            grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+            gap: 20px;
             align-items: start;
         }
         .group-card{background:#fff;border:1px solid #dee2e6;border-radius:12px;overflow:hidden;box-shadow:var(--shadow);}
@@ -115,7 +115,7 @@
         .clear-filter{cursor:pointer;text-decoration:underline;color:#0d6efd;margin-left:4px;}
         .legend-section{background:#fff;border:2px solid #dee2e6;border-radius:12px;padding:16px;margin:10px 12px 10px;box-shadow:var(--shadow);}
         .legend-section h3{color:#1a1a2e;margin-bottom:12px;font-size:.9em;text-align:center;}
-        .legend-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px;}
+        .legend-grid{display:grid;grid-template-columns:repeat(auto-fill, minmax(260px, 1fr));gap:12px;}
         .legend-player{border:1px solid #e9ecef;border-radius:8px;padding:10px 12px;background:#fafafa;cursor:pointer;transition:all .15s;}
         .legend-player:hover{border-color:var(--accent);background:#fff8e1;transform:translateY(-2px);box-shadow:0 4px 8px rgba(0,0,0,0.05);}
         .legend-player .legend-name{font-weight:700;font-size:.85em;margin-bottom:4px;}
@@ -194,7 +194,7 @@
         .champion-highlight { background: radial-gradient(circle at 30% 10%, #fff3cf, #ffe9b6); border: 2px solid #f5c542; }
         .final-winner { background: #d4af37; color: #1e2a2e; font-weight: bold; text-align: center; padding: 12px; border-radius: 60px; margin-top: 12px; font-size: 0.85rem; }
         
-        @media (max-width: 780px) {
+        @media (max-width: 720px) {
             .groups-grid {
                 grid-template-columns: 1fr;
             }
@@ -202,12 +202,12 @@
                 grid-template-columns: 1fr;
             }
         }
-        @media (min-width: 781px) and (max-width: 1100px) {
+        @media (min-width: 721px) and (max-width: 1080px) {
             .groups-grid {
                 grid-template-columns: repeat(2, 1fr);
             }
         }
-        @media (min-width: 1101px) {
+        @media (min-width: 1081px) {
             .groups-grid {
                 grid-template-columns: repeat(3, 1fr);
             }
@@ -624,7 +624,7 @@
 
         function renderGroups(){
             const grid=document.getElementById('groupsGrid'),filtered=allGames.filter(g=>g.date===selectedDate&&g.round==='group'||!selectedDate&&g.round==='group'),fIds=new Set(filtered.map(g=>g.id));let h='';
-            Object.keys(GROUPS).sort().forEach(gid=>{const st=calculateStandings(gid),games=allGroupGames.filter(g=>g.group===gid);h+=`<div class="group-card"><h3>🏴 Group ${gid}</h3><table class="group-standings"><thead><tr><th>Team</th><th>P</th><th>W</th><th>D</th><th>L</th><th>GF</th><th>GA</th><th>GD</th><th>Pts</th></tr></thead><tbody>`;st.forEach(s=>{const c=playerColors[s.person]||'#6c3bd4';h+=`<tr><td>${s.team}<span class="player-name" style="color:${c}">${s.person}</span></td><td>${s.gp}</td><td>${s.w}</td><td>${s.d}</td><td>${s.l}</td><td>${s.gf}</td><td>${s.ga}</td><td>${s.gd>=0?'+':''}${s.gd}</td><td class="pts">${s.pts}</td></tr>`;});h+=`</tbody><tr><div class="group-games">`;
+            Object.keys(GROUPS).sort().forEach(gid=>{const st=calculateStandings(gid),games=allGroupGames.filter(g=>g.group===gid);h+=`<div class="group-card"><h3>🏴 Group ${gid}</h3><table class="group-standings"><thead><tr><th>Team</th><th>P</th><th>W</th><th>D</th><th>L</th><th>GF</th><th>GA</th><th>GD</th><th>Pts</th></tr></thead><tbody>`;st.forEach(s=>{const c=playerColors[s.person]||'#6c3bd4';h+=`<tr><td>${s.team}<span class="player-name" style="color:${c}">${s.person}</span></td><td>${s.gp}</td><td>${s.w}</td><td>${s.d}</td><td>${s.l}</td><td>${s.gf}</td><td>${s.ga}</td><td>${s.gd>=0?'+':''}${s.gd}</td><td class="pts">${s.pts}</td></tr>`;});h+=`</tbody></table><div class="group-games">`;
             games.forEach(g=>{const hi=fIds.has(g.id)||!selectedDate,sc=g.homeScore!==null&&g.awayScore!==null,hp=peopleMap[g.home]||'',ap=peopleMap[g.away]||'',hc=playerColors[hp]||'#6c3bd4',ac=playerColors[ap]||'#6c3bd4';h+=`<div class="game-row" data-game-id="${g.id}" style="${hi&&selectedDate?'background:#fff8e1;':''}"><span class="teams"><strong>${g.home}</strong> <span class="player-inline" style="color:${hc}">(${hp||'—'})</span> — <strong>${g.away}</strong> <span class="player-inline" style="color:${ac}">(${ap||'—'})</span><br><span style="font-size:.65em;color:#adb5bd;">${g.stadium} · ${g.time} (${g.pst})</span></span><span class="${sc?'score':'score pending'}">${sc?g.homeScore+' - '+g.awayScore:'vs'}</span><span class="date-sm">${g.date.slice(5)}</span></div>`;});h+=`</div></div>`;});
             grid.innerHTML=h;grid.querySelectorAll('.game-row').forEach(r=>r.addEventListener('click',()=>openGameModal(r.dataset.gameId)));
         }
