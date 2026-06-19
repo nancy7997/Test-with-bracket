@@ -5,10 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
     <title>⚽ 2026 FIFA World Cup Tracker · Live Sync + Bracket</title>
     <style>
-        /* ... (all styles unchanged, same as previous version) ... */
-        /* For brevity, I'm including the full style block from previous version */
-        /* The style block is identical to the one in the last working version */
-        :root { --bg:#ffffff; --surface:#f8f9fa; --surface2:#e9ecef; --border:#dee2e6; --text:#212529; --text2:#6c757d; --accent:#e6a817; --accent2:#c98d0a; --win:#198754; --loss:#dc3545; --draw:#6c757d; --highlight:#fff8e1; --shadow:0 1px 3px rgba(0,0,0,0.08); --player-color:#6c3bd4; }
+        :root {
+            --bg:#ffffff; --surface:#f8f9fa; --surface2:#e9ecef;
+            --border:#dee2e6; --text:#212529; --text2:#6c757d;
+            --accent:#e6a817; --accent2:#c98d0a;
+            --win:#198754; --loss:#dc3545; --draw:#6c757d;
+            --highlight:#fff8e1; --shadow:0 1px 3px rgba(0,0,0,0.08);
+            --player-color:#6c3bd4;
+        }
         *{margin:0;padding:0;box-sizing:border-box;}
         body{background:var(--bg);color:var(--text);font-family:'Segoe UI',system-ui,-apple-system,sans-serif;min-height:100vh;line-height:1.5;}
         header{background:#1a1a2e;color:#fff;padding:10px 20px;text-align:center;position:sticky;top:0;z-index:100;box-shadow:0 2px 8px rgba(0,0,0,0.15);}
@@ -33,7 +37,12 @@
         .content{padding:6px 12px 20px;max-width:1400px;margin:0 auto;}
         .view{display:none;}
         .view.active{display:block;}
-        .groups-grid { display:grid; grid-template-columns:repeat(auto-fill, minmax(340px,1fr)); gap:20px; align-items:start; }
+        .groups-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+            gap: 20px;
+            align-items: start;
+        }
         .group-card{background:#fff;border:1px solid #dee2e6;border-radius:12px;overflow:hidden;box-shadow:var(--shadow);}
         .group-card h3{background:#f8f9fa;padding:8px 12px;font-size:.9em;color:#1a1a2e;border-bottom:2px solid var(--accent);font-weight:700;}
         .group-standings{width:100%;border-collapse:collapse;font-size:.75em;}
@@ -98,7 +107,7 @@
         .clear-filter{cursor:pointer;text-decoration:underline;color:#0d6efd;margin-left:4px;}
         .legend-section{background:#fff;border:2px solid #dee2e6;border-radius:12px;padding:16px;margin:10px 12px 10px;box-shadow:var(--shadow);}
         .legend-section h3{color:#1a1a2e;margin-bottom:12px;font-size:.9em;text-align:center;}
-        .legend-grid{display:grid;grid-template-columns:repeat(auto-fill, minmax(260px,1fr));gap:12px;}
+        .legend-grid{display:grid;grid-template-columns:repeat(auto-fill, minmax(260px, 1fr));gap:12px;}
         .legend-player{border:1px solid #e9ecef;border-radius:8px;padding:10px 12px;background:#fafafa;cursor:pointer;transition:all .15s;}
         .legend-player:hover{border-color:var(--accent);background:#fff8e1;transform:translateY(-2px);box-shadow:0 4px 8px rgba(0,0,0,0.05);}
         .legend-player .legend-name{font-weight:700;font-size:.85em;margin-bottom:4px;}
@@ -106,7 +115,6 @@
         .legend-dot{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:6px;}
         
         .bracket-wrapper {
-            position: relative;
             margin-top: 48px;
             margin-bottom: 40px;
             background: #fff;
@@ -188,31 +196,45 @@
             white-space: nowrap;
         }
         .match-card:hover { background: #fff5e3; transform: translateX(2px); }
-        .match-teams { font-weight: 700; font-size:0.7rem; display:flex; justify-content:space-between; color:#1e2f3c; align-items:center; gap:8px; }
-        .team-abbr { white-space:nowrap; }
-        .match-score { font-weight:800; font-family:monospace; font-size:0.7rem; background:#eef2f6; padding:1px 6px; border-radius:30px; color:#2c5a2e; flex-shrink:0; }
-        .match-score.pending { color:#9aaebf; background:#f1f3f7; }
-        .match-meta { font-size:0.5rem; color:#6c86a0; margin-top:4px; text-align:center; }
-        .champion-highlight { background:radial-gradient(circle at 30% 10%, #fff3cf, #ffe9b6); border:2px solid #f5c542; }
-        .final-winner { background:#d4af37; color:#1e2a2e; font-weight:bold; text-align:center; padding:12px; border-radius:60px; margin-top:12px; font-size:0.85rem; }
-        
-        .bracket-svg {
-            position: absolute;
-            pointer-events: none;
-            z-index: 5;
-            top: 0;
-            left: 0;
+        .match-teams {
+            font-weight: 700;
+            font-size: 0.7rem;
+            display: flex;
+            justify-content: space-between;
+            color: #1e2f3c;
+            align-items: center;
+            gap: 8px;
         }
-        .bracket-svg path {
-            stroke: #a0aec0;
-            stroke-width: 2;
-            fill: none;
-            opacity: 0.5;
+        .team-abbr {
+            white-space: nowrap;
         }
+        .match-score {
+            font-weight: 800;
+            font-family: monospace;
+            font-size: 0.7rem;
+            background: #eef2f6;
+            padding: 1px 6px;
+            border-radius: 30px;
+            color: #2c5a2e;
+            flex-shrink: 0;
+        }
+        .match-score.pending { color: #9aaebf; background: #f1f3f7; }
+        .match-meta { font-size: 0.5rem; color: #6c86a0; margin-top: 4px; text-align: center; }
+        .champion-highlight { background: radial-gradient(circle at 30% 10%, #fff3cf, #ffe9b6); border: 2px solid #f5c542; }
+        .final-winner { background: #d4af37; color: #1e2a2e; font-weight: bold; text-align: center; padding: 12px; border-radius: 60px; margin-top: 12px; font-size: 0.85rem; }
         
-        @media (max-width:720px){ .groups-grid { grid-template-columns:1fr; } .legend-grid { grid-template-columns:1fr; } .bracket-round-col { min-width:120px; } .match-teams { font-size:0.6rem; gap:4px; } }
-        @media (min-width:721px) and (max-width:1080px){ .groups-grid { grid-template-columns:repeat(2,1fr); } }
-        @media (min-width:1081px){ .groups-grid { grid-template-columns:repeat(3,1fr); } }
+        @media (max-width: 720px) {
+            .groups-grid { grid-template-columns: 1fr; }
+            .legend-grid { grid-template-columns: 1fr; }
+            .bracket-round-col { min-width: 120px; }
+            .match-teams { font-size: 0.6rem; gap: 4px; }
+        }
+        @media (min-width: 721px) and (max-width: 1080px) {
+            .groups-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+        @media (min-width: 1081px) {
+            .groups-grid { grid-template-columns: repeat(3, 1fr); }
+        }
     </style>
 </head>
 <body>
@@ -242,7 +264,6 @@
             <div class="bracket-note">⚡ Click any match to edit score | Results auto-fill from Round of 32 → Final</div>
         </div>
         <div id="dynamicBracketTree" class="tournament-bracket"></div>
-        <svg class="bracket-svg" id="bracketSvg"></svg>
     </div>
 
     <div class="daily-overlay" id="dailyOverlay"><div class="daily-modal" id="dailyModal"></div></div>
@@ -322,7 +343,6 @@
             return (hrs * 60) + mins;
         }
 
-        // ----- All group games (unchanged) -----
         const allGroupGames=[
             // Group A – PST corrected
             {id:'G1',group:'A',home:'Mexico',away:'South Africa',date:'2026-06-11',time:'1:00 PM CT',pst:'12:00 PM PST',stadium:'Estadio Azteca, Mexico City',homeScore:2,awayScore:0},
@@ -411,7 +431,6 @@
         ];
         allGroupGames.forEach(g=>{g.round='group';});
 
-        // ----- Knockout bracket with official venues (unchanged) -----
         const allKoGames=[
             // Round of 32 (K1 - K16)
             {id:'K1', round:'Round of 32', home:'Runner-up A', away:'Runner-up B', date:'2026-06-28', time:'1:00 PM ET', pst:'10:00 AM PST', stadium:'SoFi Stadium, Inglewood', homeScore:null, awayScore:null, isKo:true},
@@ -430,7 +449,7 @@
             {id:'K14', round:'Round of 32', home:'Runner-up D', away:'Runner-up G', date:'2026-07-01', time:'7:00 PM CT', pst:'5:00 PM PST', stadium:'AT&T Stadium, Arlington', homeScore:null, awayScore:null, isKo:true},
             {id:'K15', round:'Round of 32', home:'Winner J', away:'Runner-up H', date:'2026-07-01', time:'7:00 PM ET', pst:'4:00 PM PST', stadium:'Hard Rock Stadium, Miami Gardens', homeScore:null, awayScore:null, isKo:true},
             {id:'K16', round:'Round of 32', home:'Winner K', away:'3rd Best*', date:'2026-07-01', time:'7:00 PM CT', pst:'5:00 PM PST', stadium:'Arrowhead Stadium, Kansas City', homeScore:null, awayScore:null, isKo:true},
-            // Round of 16 (K17 - K24)
+            // Round of 16
             {id:'K17', round:'Round of 16', home:'W R32-2', away:'W R32-5', date:'2026-07-04', time:'1:00 PM ET', pst:'10:00 AM PST', stadium:'Lincoln Financial Field, Philadelphia', homeScore:null, awayScore:null, isKo:true},
             {id:'K18', round:'Round of 16', home:'W R32-1', away:'W R32-3', date:'2026-07-04', time:'4:00 PM CT', pst:'2:00 PM PST', stadium:'NRG Stadium, Houston', homeScore:null, awayScore:null, isKo:true},
             {id:'K19', round:'Round of 16', home:'W R32-4', away:'W R32-6', date:'2026-07-05', time:'1:00 PM ET', pst:'10:00 AM PST', stadium:'MetLife Stadium, East Rutherford', homeScore:null, awayScore:null, isKo:true},
@@ -439,24 +458,23 @@
             {id:'K22', round:'Round of 16', home:'W R32-10', away:'W R32-12', date:'2026-07-06', time:'1:00 PM CT', pst:'11:00 AM PST', stadium:'AT&T Stadium, Arlington', homeScore:null, awayScore:null, isKo:true},
             {id:'K23', round:'Round of 16', home:'W R32-13', away:'W R32-15', date:'2026-07-06', time:'4:00 PM ET', pst:'1:00 PM PST', stadium:'Mercedes-Benz Stadium, Atlanta', homeScore:null, awayScore:null, isKo:true},
             {id:'K24', round:'Round of 16', home:'W R32-14', away:'W R32-16', date:'2026-07-06', time:'7:00 PM PT', pst:'7:00 PM PST', stadium:'BC Place, Vancouver', homeScore:null, awayScore:null, isKo:true},
-            // Quarter-finals (K25 - K28)
+            // Quarter-finals
             {id:'K25', round:'Quarter-finals', home:'W R16-1', away:'W R16-2', date:'2026-07-09', time:'1:00 PM CT', pst:'11:00 AM PST', stadium:'AT&T Stadium, Arlington', homeScore:null, awayScore:null, isKo:true},
             {id:'K26', round:'Quarter-finals', home:'W R16-3', away:'W R16-4', date:'2026-07-10', time:'1:00 PM PT', pst:'1:00 PM PST', stadium:'SoFi Stadium, Inglewood', homeScore:null, awayScore:null, isKo:true},
             {id:'K27', round:'Quarter-finals', home:'W R16-5', away:'W R16-6', date:'2026-07-11', time:'1:00 PM CT', pst:'11:00 AM PST', stadium:'Arrowhead Stadium, Kansas City', homeScore:null, awayScore:null, isKo:true},
             {id:'K28', round:'Quarter-finals', home:'W R16-7', away:'W R16-8', date:'2026-07-12', time:'1:00 PM ET', pst:'10:00 AM PST', stadium:'Hard Rock Stadium, Miami Gardens', homeScore:null, awayScore:null, isKo:true},
-            // Semi-finals (K29, K30)
+            // Semi-finals
             {id:'K29', round:'Semi-finals', home:'W QF-1', away:'W QF-2', date:'2026-07-14', time:'1:00 PM CT', pst:'11:00 AM PST', stadium:'AT&T Stadium, Arlington', homeScore:null, awayScore:null, isKo:true},
             {id:'K30', round:'Semi-finals', home:'W QF-3', away:'W QF-4', date:'2026-07-15', time:'1:00 PM ET', pst:'10:00 AM PST', stadium:'Mercedes-Benz Stadium, Atlanta', homeScore:null, awayScore:null, isKo:true},
-            // Third Place (K31)
+            // Third Place
             {id:'K31', round:'Third Place', home:'L SF-1', away:'L SF-2', date:'2026-07-18', time:'1:00 PM ET', pst:'10:00 AM PST', stadium:'Hard Rock Stadium, Miami Gardens', homeScore:null, awayScore:null, isKo:true},
-            // Final (K32)
+            // Final
             {id:'K32', round:'Final', home:'W SF-1', away:'W SF-2', date:'2026-07-19', time:'1:00 PM ET', pst:'10:00 AM PST', stadium:'MetLife Stadium, East Rutherford', homeScore:null, awayScore:null, isKo:true}
         ];
 
         const allGames=[...allGroupGames,...allKoGames];
         let selectedDate=null,currentView='groups';
 
-        // ----- Group completeness and auto-fill (unchanged) -----
         function isGroupComplete(gid) {
             const games = allGroupGames.filter(g => g.group === gid);
             return games.every(g => g.homeScore !== null && g.awayScore !== null);
@@ -576,7 +594,6 @@
             }
         }
 
-        // ----- Firebase sync (unchanged) -----
         function syncFromFirebase(){
             const statusEl=document.getElementById('syncStatus');
             statusEl.textContent='🟡 Syncing...';
@@ -597,98 +614,6 @@
             });
         }
 
-        // ----- CORRECTED CONNECTOR DRAWING (now properly aligned) -----
-        function drawConnectors() {
-            const wrapper = document.getElementById('globalBracketContainer');
-            const tree = document.getElementById('dynamicBracketTree');
-            const svg = document.getElementById('bracketSvg');
-            if (!wrapper || !tree || !svg) return;
-
-            // Get wrapper padding
-            const style = getComputedStyle(wrapper);
-            const padLeft = parseFloat(style.paddingLeft) || 0;
-            const padTop = parseFloat(style.paddingTop) || 0;
-
-            // Size SVG to cover the entire scrollable content
-            const scrollWidth = wrapper.scrollWidth;
-            const scrollHeight = wrapper.scrollHeight;
-            svg.setAttribute('width', scrollWidth);
-            svg.setAttribute('height', scrollHeight);
-            // Position SVG at the content origin (accounting for padding)
-            svg.style.left = '-20px'; // match padding-left
-            svg.style.top = '-20px';  // match padding-top
-
-            // Clear previous paths
-            svg.innerHTML = '';
-
-            const sourceMap = {
-                'K17': ['K2', 'K5'],
-                'K18': ['K1', 'K3'],
-                'K19': ['K4', 'K6'],
-                'K20': ['K7', 'K8'],
-                'K21': ['K9', 'K11'],
-                'K22': ['K10', 'K12'],
-                'K23': ['K13', 'K15'],
-                'K24': ['K14', 'K16'],
-                'K25': ['K17', 'K18'],
-                'K26': ['K19', 'K20'],
-                'K27': ['K21', 'K22'],
-                'K28': ['K23', 'K24'],
-                'K29': ['K25', 'K26'],
-                'K30': ['K27', 'K28'],
-                'K32': ['K29', 'K30'],
-                'K31': ['K29', 'K30']
-            };
-
-            const wrappers = tree.querySelectorAll('.match-wrapper');
-            const wrapperMap = {};
-            wrappers.forEach(w => {
-                const id = w.dataset.matchId;
-                if (id) wrapperMap[id] = w;
-            });
-
-            const wrapperRect = wrapper.getBoundingClientRect();
-            const scrollLeft = wrapper.scrollLeft;
-            const scrollTop = wrapper.scrollTop;
-
-            Object.keys(sourceMap).forEach(targetId => {
-                const targetWrapper = wrapperMap[targetId];
-                if (!targetWrapper) return;
-                const targetRect = targetWrapper.getBoundingClientRect();
-                // Compute coordinates relative to wrapper's content origin (including scroll)
-                const targetX = targetRect.left - wrapperRect.left + scrollLeft - padLeft;
-                const targetY = targetRect.top - wrapperRect.top + scrollTop - padTop + targetRect.height/2;
-
-                const sourceIds = sourceMap[targetId];
-                const sourceWrappers = sourceIds.map(id => wrapperMap[id]).filter(w => w);
-                if (sourceWrappers.length < 2) return;
-
-                const sourceRects = sourceWrappers.map(w => w.getBoundingClientRect());
-                const sourceCenters = sourceRects.map(r => ({
-                    x: r.right - wrapperRect.left + scrollLeft - padLeft,
-                    y: r.top - wrapperRect.top + scrollTop - padTop + r.height/2
-                }));
-
-                const midX = (sourceCenters[0].x + sourceCenters[1].x) / 2;
-                const midY = (sourceCenters[0].y + sourceCenters[1].y) / 2;
-
-                let pathD = '';
-                pathD += `M ${sourceCenters[0].x} ${sourceCenters[0].y} `;
-                pathD += `L ${midX} ${sourceCenters[0].y} `;
-                pathD += `L ${midX} ${midY} `;
-                pathD += `M ${sourceCenters[1].x} ${sourceCenters[1].y} `;
-                pathD += `L ${midX} ${sourceCenters[1].y} `;
-                pathD += `L ${midX} ${midY} `;
-                pathD += `L ${targetX} ${midY} `;
-                pathD += `L ${targetX} ${targetY}`;
-
-                const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-                path.setAttribute('d', pathD);
-                svg.appendChild(path);
-            });
-        }
-
-        // ----- Bracket rendering (unchanged) -----
         function renderBracket() {
             updateKnockoutTeams();
             propagateKnockoutResults();
@@ -734,11 +659,8 @@
             container.querySelectorAll('.match-card').forEach(el => {
                 el.addEventListener('click', (e) => { e.stopPropagation(); openGameModal(el.dataset.gameId); });
             });
-
-            requestAnimationFrame(() => drawConnectors());
         }
 
-        // ----- Calendar and other UI (unchanged) -----
         function getTodayPST() {
             const now = new Date();
             const formatter = new Intl.DateTimeFormat('en-CA', { timeZone: 'America/Los_Angeles', year: 'numeric', month: '2-digit', day: '2-digit' });
@@ -926,25 +848,10 @@
 
         document.querySelectorAll('.tab-btn').forEach(btn=>{btn.addEventListener('click',()=>{document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');currentView=btn.dataset.view;document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));document.getElementById('view-'+currentView).classList.add('active');renderAll();});});
 
-        // ----- Resize observer for connectors -----
-        function observeResize() {
-            const wrapper = document.getElementById('globalBracketContainer');
-            if (!wrapper) return;
-            const ro = new ResizeObserver(() => {
-                drawConnectors();
-            });
-            ro.observe(wrapper);
-            // Also update on scroll of the wrapper
-            wrapper.addEventListener('scroll', drawConnectors, { passive: true });
-            // And on window scroll (if wrapper is not the scrollable itself)
-            window.addEventListener('scroll', drawConnectors, { passive: true });
-        }
-
         initializeDefaultScores();
         syncFromFirebase();
         renderCalendar();
         renderAll();
-        observeResize();
     </script>
 </body>
 </html>
