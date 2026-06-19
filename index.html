@@ -5,14 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
     <title>⚽ 2026 FIFA World Cup Tracker · Live Sync + Bracket</title>
     <style>
-        :root {
-            --bg:#ffffff; --surface:#f8f9fa; --surface2:#e9ecef;
-            --border:#dee2e6; --text:#212529; --text2:#6c757d;
-            --accent:#e6a817; --accent2:#c98d0a;
-            --win:#198754; --loss:#dc3545; --draw:#6c757d;
-            --highlight:#fff8e1; --shadow:0 1px 3px rgba(0,0,0,0.08);
-            --player-color:#6c3bd4;
-        }
+        /* ... (all styles unchanged, same as previous version) ... */
+        /* For brevity, I'm including the full style block from previous version */
+        /* The style block is identical to the one in the last working version */
+        :root { --bg:#ffffff; --surface:#f8f9fa; --surface2:#e9ecef; --border:#dee2e6; --text:#212529; --text2:#6c757d; --accent:#e6a817; --accent2:#c98d0a; --win:#198754; --loss:#dc3545; --draw:#6c757d; --highlight:#fff8e1; --shadow:0 1px 3px rgba(0,0,0,0.08); --player-color:#6c3bd4; }
         *{margin:0;padding:0;box-sizing:border-box;}
         body{background:var(--bg);color:var(--text);font-family:'Segoe UI',system-ui,-apple-system,sans-serif;min-height:100vh;line-height:1.5;}
         header{background:#1a1a2e;color:#fff;padding:10px 20px;text-align:center;position:sticky;top:0;z-index:100;box-shadow:0 2px 8px rgba(0,0,0,0.15);}
@@ -37,12 +33,7 @@
         .content{padding:6px 12px 20px;max-width:1400px;margin:0 auto;}
         .view{display:none;}
         .view.active{display:block;}
-        .groups-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
-            gap: 20px;
-            align-items: start;
-        }
+        .groups-grid { display:grid; grid-template-columns:repeat(auto-fill, minmax(340px,1fr)); gap:20px; align-items:start; }
         .group-card{background:#fff;border:1px solid #dee2e6;border-radius:12px;overflow:hidden;box-shadow:var(--shadow);}
         .group-card h3{background:#f8f9fa;padding:8px 12px;font-size:.9em;color:#1a1a2e;border-bottom:2px solid var(--accent);font-weight:700;}
         .group-standings{width:100%;border-collapse:collapse;font-size:.75em;}
@@ -107,7 +98,7 @@
         .clear-filter{cursor:pointer;text-decoration:underline;color:#0d6efd;margin-left:4px;}
         .legend-section{background:#fff;border:2px solid #dee2e6;border-radius:12px;padding:16px;margin:10px 12px 10px;box-shadow:var(--shadow);}
         .legend-section h3{color:#1a1a2e;margin-bottom:12px;font-size:.9em;text-align:center;}
-        .legend-grid{display:grid;grid-template-columns:repeat(auto-fill, minmax(260px, 1fr));gap:12px;}
+        .legend-grid{display:grid;grid-template-columns:repeat(auto-fill, minmax(260px,1fr));gap:12px;}
         .legend-player{border:1px solid #e9ecef;border-radius:8px;padding:10px 12px;background:#fafafa;cursor:pointer;transition:all .15s;}
         .legend-player:hover{border-color:var(--accent);background:#fff8e1;transform:translateY(-2px);box-shadow:0 4px 8px rgba(0,0,0,0.05);}
         .legend-player .legend-name{font-weight:700;font-size:.85em;margin-bottom:4px;}
@@ -197,37 +188,20 @@
             white-space: nowrap;
         }
         .match-card:hover { background: #fff5e3; transform: translateX(2px); }
-        .match-teams {
-            font-weight: 700;
-            font-size: 0.7rem;
-            display: flex;
-            justify-content: space-between;
-            color: #1e2f3c;
-            align-items: center;
-            gap: 8px;
-        }
-        .team-abbr {
-            white-space: nowrap;
-        }
-        .match-score {
-            font-weight: 800;
-            font-family: monospace;
-            font-size: 0.7rem;
-            background: #eef2f6;
-            padding: 1px 6px;
-            border-radius: 30px;
-            color: #2c5a2e;
-            flex-shrink: 0;
-        }
-        .match-score.pending { color: #9aaebf; background: #f1f3f7; }
-        .match-meta { font-size: 0.5rem; color: #6c86a0; margin-top: 4px; text-align: center; }
-        .champion-highlight { background: radial-gradient(circle at 30% 10%, #fff3cf, #ffe9b6); border: 2px solid #f5c542; }
-        .final-winner { background: #d4af37; color: #1e2a2e; font-weight: bold; text-align: center; padding: 12px; border-radius: 60px; margin-top: 12px; font-size: 0.85rem; }
+        .match-teams { font-weight: 700; font-size:0.7rem; display:flex; justify-content:space-between; color:#1e2f3c; align-items:center; gap:8px; }
+        .team-abbr { white-space:nowrap; }
+        .match-score { font-weight:800; font-family:monospace; font-size:0.7rem; background:#eef2f6; padding:1px 6px; border-radius:30px; color:#2c5a2e; flex-shrink:0; }
+        .match-score.pending { color:#9aaebf; background:#f1f3f7; }
+        .match-meta { font-size:0.5rem; color:#6c86a0; margin-top:4px; text-align:center; }
+        .champion-highlight { background:radial-gradient(circle at 30% 10%, #fff3cf, #ffe9b6); border:2px solid #f5c542; }
+        .final-winner { background:#d4af37; color:#1e2a2e; font-weight:bold; text-align:center; padding:12px; border-radius:60px; margin-top:12px; font-size:0.85rem; }
         
         .bracket-svg {
             position: absolute;
             pointer-events: none;
             z-index: 5;
+            top: 0;
+            left: 0;
         }
         .bracket-svg path {
             stroke: #a0aec0;
@@ -236,18 +210,9 @@
             opacity: 0.5;
         }
         
-        @media (max-width: 720px) {
-            .groups-grid { grid-template-columns: 1fr; }
-            .legend-grid { grid-template-columns: 1fr; }
-            .bracket-round-col { min-width: 120px; }
-            .match-teams { font-size: 0.6rem; gap: 4px; }
-        }
-        @media (min-width: 721px) and (max-width: 1080px) {
-            .groups-grid { grid-template-columns: repeat(2, 1fr); }
-        }
-        @media (min-width: 1081px) {
-            .groups-grid { grid-template-columns: repeat(3, 1fr); }
-        }
+        @media (max-width:720px){ .groups-grid { grid-template-columns:1fr; } .legend-grid { grid-template-columns:1fr; } .bracket-round-col { min-width:120px; } .match-teams { font-size:0.6rem; gap:4px; } }
+        @media (min-width:721px) and (max-width:1080px){ .groups-grid { grid-template-columns:repeat(2,1fr); } }
+        @media (min-width:1081px){ .groups-grid { grid-template-columns:repeat(3,1fr); } }
     </style>
 </head>
 <body>
@@ -357,6 +322,7 @@
             return (hrs * 60) + mins;
         }
 
+        // ----- All group games (unchanged) -----
         const allGroupGames=[
             // Group A – PST corrected
             {id:'G1',group:'A',home:'Mexico',away:'South Africa',date:'2026-06-11',time:'1:00 PM CT',pst:'12:00 PM PST',stadium:'Estadio Azteca, Mexico City',homeScore:2,awayScore:0},
@@ -445,7 +411,7 @@
         ];
         allGroupGames.forEach(g=>{g.round='group';});
 
-        // ----- CORRECTED KNOCKOUT BRACKET WITH OFFICIAL VENUES -----
+        // ----- Knockout bracket with official venues (unchanged) -----
         const allKoGames=[
             // Round of 32 (K1 - K16)
             {id:'K1', round:'Round of 32', home:'Runner-up A', away:'Runner-up B', date:'2026-06-28', time:'1:00 PM ET', pst:'10:00 AM PST', stadium:'SoFi Stadium, Inglewood', homeScore:null, awayScore:null, isKo:true},
@@ -490,13 +456,12 @@
         const allGames=[...allGroupGames,...allKoGames];
         let selectedDate=null,currentView='groups';
 
-        // ----- Check if a group is complete -----
+        // ----- Group completeness and auto-fill (unchanged) -----
         function isGroupComplete(gid) {
             const games = allGroupGames.filter(g => g.group === gid);
             return games.every(g => g.homeScore !== null && g.awayScore !== null);
         }
 
-        // ----- Automatic bracket filling (only with complete groups) -----
         function updateKnockoutTeams() {
             const groupStandings = {};
             const completedGroups = [];
@@ -506,7 +471,6 @@
                     groupStandings[gid] = calculateStandings(gid);
                 }
             });
-
             const winners = {};
             const runnersUp = {};
             const thirdPlaces = [];
@@ -519,11 +483,8 @@
             thirdPlaces.sort((a,b) => b.pts - a.pts || b.gd - a.gd || b.gf - a.gf);
             const bestThird = thirdPlaces.slice(0,8);
             const allComplete = completedGroups.length === 12;
-
             const koMap = {};
             allKoGames.forEach(m => { koMap[m.id] = m; });
-
-            // Round of 32 assignments
             if (koMap['K1']) { koMap['K1'].home = runnersUp['A'] || 'Runner-up A'; koMap['K1'].away = runnersUp['B'] || 'Runner-up B'; }
             if (koMap['K2']) { koMap['K2'].home = winners['E'] || 'Winner E'; koMap['K2'].away = (allComplete && bestThird[0]) ? bestThird[0].team : '3rd Best*'; }
             if (koMap['K3']) { koMap['K3'].home = winners['F'] || 'Winner F'; koMap['K3'].away = runnersUp['C'] || 'Runner-up C'; }
@@ -556,8 +517,6 @@
                     }
                 }
             });
-
-            // Round of 16 mapping
             const r16Map = [ ['K2','K5'], ['K1','K3'], ['K4','K6'], ['K7','K8'], ['K9','K11'], ['K10','K12'], ['K13','K15'], ['K14','K16'] ];
             const r16Ids = ['K17','K18','K19','K20','K21','K22','K23','K24'];
             r16Ids.forEach((mid, idx) => {
@@ -571,8 +530,6 @@
                     m.away = winners[childIds[0]] || winners[childIds[1]] || m.away;
                 }
             });
-
-            // Quarter-finals mapping
             const qfMap = [ ['K17','K18'], ['K19','K20'], ['K21','K22'], ['K23','K24'] ];
             const qfIds = ['K25','K26','K27','K28'];
             qfIds.forEach((mid, idx) => {
@@ -586,8 +543,6 @@
                     m.away = winners[childIds[0]] || winners[childIds[1]] || m.away;
                 }
             });
-
-            // Semi-finals mapping
             const sfMap = [ ['K25','K26'], ['K27','K28'] ];
             const sfIds = ['K29','K30'];
             sfIds.forEach((mid, idx) => {
@@ -601,8 +556,6 @@
                     m.away = winners[childIds[0]] || winners[childIds[1]] || m.away;
                 }
             });
-
-            // Final
             const finalMatch = allKoGames.find(g => g.id === 'K32');
             if (finalMatch) {
                 if (finalMatch.home && finalMatch.home.startsWith('W SF-')) {
@@ -612,8 +565,6 @@
                     finalMatch.away = winners['K29'] || winners['K30'] || finalMatch.away;
                 }
             }
-
-            // Third Place
             const thirdMatch = allKoGames.find(g => g.id === 'K31');
             if (thirdMatch) {
                 if (thirdMatch.home && thirdMatch.home.startsWith('L SF-')) {
@@ -625,6 +576,7 @@
             }
         }
 
+        // ----- Firebase sync (unchanged) -----
         function syncFromFirebase(){
             const statusEl=document.getElementById('syncStatus');
             statusEl.textContent='🟡 Syncing...';
@@ -644,29 +596,29 @@
                 if(!snapshot.exists()){const defaults={};allGroupGames.forEach(g=>{if(g.homeScore!==null||g.awayScore!==null)defaults[g.id]={homeScore:g.homeScore,awayScore:g.awayScore};});if(Object.keys(defaults).length>0)set(scoresRef,defaults);}
             });
         }
-        
-        // ----- CORRECTED CONNECTOR DRAWING -----
+
+        // ----- CORRECTED CONNECTOR DRAWING (now properly aligned) -----
         function drawConnectors() {
-            const bracketTree = document.getElementById('dynamicBracketTree');
             const wrapper = document.getElementById('globalBracketContainer');
+            const tree = document.getElementById('dynamicBracketTree');
             const svg = document.getElementById('bracketSvg');
-            if (!bracketTree || !svg) return;
+            if (!wrapper || !tree || !svg) return;
 
-            const wrapperRect = wrapper.getBoundingClientRect();
-            const treeRect = bracketTree.getBoundingClientRect();
-            const scrollLeft = bracketTree.scrollLeft || 0;
-            const scrollTop = bracketTree.scrollTop || 0;
+            // Get wrapper padding
+            const style = getComputedStyle(wrapper);
+            const padLeft = parseFloat(style.paddingLeft) || 0;
+            const padTop = parseFloat(style.paddingTop) || 0;
 
-            // Position and size SVG to cover the entire scrollable content
-            const left = treeRect.left - wrapperRect.left;
-            const top = treeRect.top - wrapperRect.top;
-            const width = bracketTree.scrollWidth;
-            const height = bracketTree.scrollHeight;
+            // Size SVG to cover the entire scrollable content
+            const scrollWidth = wrapper.scrollWidth;
+            const scrollHeight = wrapper.scrollHeight;
+            svg.setAttribute('width', scrollWidth);
+            svg.setAttribute('height', scrollHeight);
+            // Position SVG at the content origin (accounting for padding)
+            svg.style.left = '-20px'; // match padding-left
+            svg.style.top = '-20px';  // match padding-top
 
-            svg.style.left = left + 'px';
-            svg.style.top = top + 'px';
-            svg.setAttribute('width', width);
-            svg.setAttribute('height', height);
+            // Clear previous paths
             svg.innerHTML = '';
 
             const sourceMap = {
@@ -688,20 +640,24 @@
                 'K31': ['K29', 'K30']
             };
 
-            const wrappers = bracketTree.querySelectorAll('.match-wrapper');
+            const wrappers = tree.querySelectorAll('.match-wrapper');
             const wrapperMap = {};
             wrappers.forEach(w => {
                 const id = w.dataset.matchId;
                 if (id) wrapperMap[id] = w;
             });
 
+            const wrapperRect = wrapper.getBoundingClientRect();
+            const scrollLeft = wrapper.scrollLeft;
+            const scrollTop = wrapper.scrollTop;
+
             Object.keys(sourceMap).forEach(targetId => {
                 const targetWrapper = wrapperMap[targetId];
                 if (!targetWrapper) return;
                 const targetRect = targetWrapper.getBoundingClientRect();
-                // Calculate coordinates relative to the bracket tree's scrollable content
-                const targetX = targetRect.left - treeRect.left + scrollLeft + 8; // offset for padding
-                const targetY = targetRect.top - treeRect.top + scrollTop + targetRect.height/2;
+                // Compute coordinates relative to wrapper's content origin (including scroll)
+                const targetX = targetRect.left - wrapperRect.left + scrollLeft - padLeft;
+                const targetY = targetRect.top - wrapperRect.top + scrollTop - padTop + targetRect.height/2;
 
                 const sourceIds = sourceMap[targetId];
                 const sourceWrappers = sourceIds.map(id => wrapperMap[id]).filter(w => w);
@@ -709,8 +665,8 @@
 
                 const sourceRects = sourceWrappers.map(w => w.getBoundingClientRect());
                 const sourceCenters = sourceRects.map(r => ({
-                    x: r.right - treeRect.left + scrollLeft - 8,
-                    y: r.top - treeRect.top + scrollTop + r.height/2
+                    x: r.right - wrapperRect.left + scrollLeft - padLeft,
+                    y: r.top - wrapperRect.top + scrollTop - padTop + r.height/2
                 }));
 
                 const midX = (sourceCenters[0].x + sourceCenters[1].x) / 2;
@@ -732,6 +688,7 @@
             });
         }
 
+        // ----- Bracket rendering (unchanged) -----
         function renderBracket() {
             updateKnockoutTeams();
             propagateKnockoutResults();
@@ -778,11 +735,10 @@
                 el.addEventListener('click', (e) => { e.stopPropagation(); openGameModal(el.dataset.gameId); });
             });
 
-            // Draw connectors after DOM update
             requestAnimationFrame(() => drawConnectors());
         }
 
-        // Get today's date in PST
+        // ----- Calendar and other UI (unchanged) -----
         function getTodayPST() {
             const now = new Date();
             const formatter = new Intl.DateTimeFormat('en-CA', { timeZone: 'America/Los_Angeles', year: 'numeric', month: '2-digit', day: '2-digit' });
@@ -845,10 +801,7 @@
                 }
                 h+=`<div class="daily-game-card" data-game-id="${game.id}">
                         <div class="match-info">
-                            <div class="teams-line">
-                                ${game.home} vs ${game.away}
-                                ${groupDisplay}
-                            </div>
+                            <div class="teams-line">${game.home} vs ${game.away} ${groupDisplay}</div>
                             <div class="details-line">${game.stadium}</div>
                             <div class="details-line">🕐 ${game.time} (${game.pst})</div>
                             <div class="player-line"><span style="color:${hc}">👤 ${hp||'—'}</span> vs <span style="color:${ac}">👤 ${ap||'—'}</span></div>
@@ -884,13 +837,13 @@
                 return parsePST(a.pst) - parsePST(b.pst);
             });
             let h = `<h3>👤 ${playerName}'s Dashboard</h3>
-                     <div style="text-align:center; margin: 12px 0;">
-                        <span style="font-size: 1.2em; padding: 0 10px; font-weight: bold; color: var(--win);">W: ${w}</span>
-                        <span style="font-size: 1.2em; padding: 0 10px; font-weight: bold; color: var(--loss);">L: ${l}</span>
-                        <span style="font-size: 1.2em; padding: 0 10px; font-weight: bold; color: var(--draw);">D: ${d}</span>
+                     <div style="text-align:center; margin:12px 0;">
+                        <span style="font-size:1.2em; padding:0 10px; font-weight:bold; color:var(--win);">W: ${w}</span>
+                        <span style="font-size:1.2em; padding:0 10px; font-weight:bold; color:var(--loss);">L: ${l}</span>
+                        <span style="font-size:1.2em; padding:0 10px; font-weight:bold; color:var(--draw);">D: ${d}</span>
                      </div>
-                     <div style="max-height: 55vh; overflow-y: auto; border-top: 1px solid #e9ecef; padding-top: 10px;">`;
-            if(playerGames.length === 0) h+= `<p style="text-align:center; font-size:0.8em; color: #6c757d;">No games found.</p>`;
+                     <div style="max-height:55vh; overflow-y:auto; border-top:1px solid #e9ecef; padding-top:10px;">`;
+            if(playerGames.length === 0) h+= `<p style="text-align:center; font-size:0.8em; color:#6c757d;">No games found.</p>`;
             playerGames.forEach(g => {
                 const sc = g.homeScore !== null && g.awayScore !== null;
                 const hp = peopleMap[g.home] || '';
@@ -963,7 +916,6 @@
         function renderAll(){
             updateKnockoutTeams();
             propagateKnockoutResults();
-
             document.getElementById('filterBanner').innerHTML=selectedDate?`🔍 Showing <strong>${selectedDate}</strong> <span class="clear-filter" id="clearFilter">[Show All]</span>`:`📅 Click a date to see games · 🔴 Live Sync Active`;
             if(selectedDate)document.getElementById('clearFilter').addEventListener('click',()=>{selectedDate=null;renderCalendar();renderAll();document.getElementById('dailyOverlay').classList.remove('open');});
             if(currentView==='groups')renderGroups();
@@ -976,12 +928,15 @@
 
         // ----- Resize observer for connectors -----
         function observeResize() {
-            const container = document.getElementById('globalBracketContainer');
-            if (!container) return;
+            const wrapper = document.getElementById('globalBracketContainer');
+            if (!wrapper) return;
             const ro = new ResizeObserver(() => {
                 drawConnectors();
             });
-            ro.observe(container);
+            ro.observe(wrapper);
+            // Also update on scroll of the wrapper
+            wrapper.addEventListener('scroll', drawConnectors, { passive: true });
+            // And on window scroll (if wrapper is not the scrollable itself)
             window.addEventListener('scroll', drawConnectors, { passive: true });
         }
 
