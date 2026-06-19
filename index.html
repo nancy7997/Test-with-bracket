@@ -156,7 +156,7 @@
             align-items: stretch;
         }
         .bracket-round-col {
-            flex: 0 1 auto;  /* columns grow with content */
+            flex: 0 1 auto;
             min-width: 140px;
             background: #fefefe;
             border-radius: 20px;
@@ -200,7 +200,7 @@
             transition: 0.1s;
             width: 100%;
             margin: 0 2px;
-            white-space: nowrap;  /* keep each match on one line */
+            white-space: nowrap;
         }
         .match-card:hover { background: #fff5e3; transform: translateX(2px); }
         .match-teams {
@@ -213,8 +213,7 @@
             gap: 8px;
         }
         .team-abbr {
-            white-space: nowrap;   /* prevents wrapping, forces column to expand */
-            /* no max-width, no overflow hidden – text shows in full */
+            white-space: nowrap;
         }
         .match-score {
             font-weight: 800;
@@ -260,12 +259,10 @@
     <div class="tabs">
         <button class="tab-btn active" data-view="groups">📋 Groups</button>
         <button class="tab-btn" data-view="thirdplace">📊 3rd Place</button>
-        <button class="tab-btn" data-view="knockout">🏆 Knockout</button>
     </div>
     <div class="content">
         <div class="view active" id="view-groups"><div class="groups-grid" id="groupsGrid"></div></div>
         <div class="view" id="view-thirdplace"><div id="thirdPlaceContainer"></div></div>
-        <div class="view" id="view-knockout"><div id="knockoutContainer"></div></div>
     </div>
     
     <div id="globalBracketContainer" class="bracket-wrapper">
@@ -865,12 +862,6 @@
 
         function renderThirdPlace(){const container=document.getElementById('thirdPlaceContainer'),thirds=getAllThirdPlaceTeams();let h=`<div class="third-place-section"><h3>📊 Third-Placed Teams Ranking (Top 8 advance)</h3><table class="third-place-table"><thead><tr><th>Pos</th><th>Grp</th><th>Team</th><th>P</th><th>W</th><th>D</th><th>L</th><th>GF</th><th>GA</th><th>GD</th><th>Pts</th><th>Status</th></tr></thead><tbody>`;thirds.forEach((t,i)=>{const q=i<8,c=playerColors[t.person]||'#6c3bd4';h+=`<tr><td>${i+1}</td><td>${t.group}</td><td>${t.team}<span class="player-name" style="color:${c}">${t.person}</span></td><td>${t.gp}</td><td>${t.w}</td><td>${t.d}</td><td>${t.l}</td><td>${t.gf}</td><td>${t.ga}</td><td>${t.gd>=0?'+':''}${t.gd}</td><td class="pts">${t.pts}</td><td class="${q?'qualifies':''}">${q?'✅ Advances':'❌'}</td></tr>`;});h+=`</tbody></table></div>`;container.innerHTML=h;}
 
-        function renderKnockout(){
-            updateKnockoutTeams();
-            propagateKnockoutResults();
-
-            const container=document.getElementById('knockoutContainer'),filtered=allGames.filter(g=>g.isKo&&(g.date===selectedDate||!selectedDate)),fIds=new Set(filtered.map(g=>g.id));const rounds=['Round of 32','Round of 16','Quarter-finals','Semi-finals','Third Place','Final'];let h='';rounds.forEach(rn=>{const games=allKoGames.filter(g=>g.round===rn);if(!games.length)return;h+=`<div class="ko-round"><h3>🏆 ${rn}</h3><div class="ko-games">`;games.forEach(g=>{const hi=fIds.has(g.id),sc=g.homeScore!==null&&g.awayScore!==null;h+=`<div class="ko-game" data-game-id="${g.id}" style="${hi&&selectedDate?'border:2px solid var(--accent);background:#fff8e1;':''}"><span><strong>${g.home}</strong> vs <strong>${g.away}</strong><br><span style="font-size:.55em;color:#adb5bd;">${g.stadium} · ${g.time} (${g.pst})</span></span><span class="${sc?'ko-score':'ko-score pending'}">${sc?g.homeScore+' - '+g.awayScore:'TBD'}</span><span style="font-size:.6em;color:#adb5bd;">${g.date.slice(5)}</span></div>`;});h+=`</div></div>`;});container.innerHTML=h;container.querySelectorAll('.ko-game').forEach(r=>r.addEventListener('click',()=>openGameModal(r.dataset.gameId)));}
-
         function openGameModal(gameId){
             const game=allGames.find(g=>g.id===gameId);if(!game)return;const overlay=document.getElementById('modalOverlay'),modal=document.getElementById('gameModal'),hs=game.homeScore!==null?game.homeScore:'',as=game.awayScore!==null?game.awayScore:'',hp=peopleMap[game.home]||'',ap=peopleMap[game.away]||'',hc=playerColors[hp]||'#6c3bd4',ac=playerColors[ap]||'#6c3bd4';
             modal.innerHTML=`<h3>${game.round==='group'?'Group '+game.group+' · ':''}${game.home} vs ${game.away}</h3><div class="modal-date">📅 ${game.date} | 🏟 ${game.stadium} | 🕐 ${game.time} (${game.pst})</div><div class="matchup"><div class="team-block"><div style="font-size:2em;">⚽</div><div class="country">${game.home}</div><div class="owner" style="color:${hc}">${hp||'—'}</div></div><div class="vs">VS</div><div class="team-block"><div style="font-size:2em;">⚽</div><div class="country">${game.away}</div><div class="owner" style="color:${ac}">${ap||'—'}</div></div></div><div class="score-inputs"><input type="number" id="modalHomeScore" value="${hs}" placeholder="-" min="0" max="99"><span>—</span><input type="number" id="modalAwayScore" value="${as}" placeholder="-" min="0" max="99"></div><div class="btn-row"><button class="btn btn-save" id="modalSave">💾 Save</button><button class="btn btn-reset" id="modalReset">Clear</button><button class="btn btn-close" id="modalClose">Close</button></div>`;
@@ -906,7 +897,6 @@
             if(selectedDate)document.getElementById('clearFilter').addEventListener('click',()=>{selectedDate=null;renderCalendar();renderAll();document.getElementById('dailyOverlay').classList.remove('open');});
             if(currentView==='groups')renderGroups();
             else if(currentView==='thirdplace')renderThirdPlace();
-            else if(currentView==='knockout')renderKnockout();
             renderLegend();
             renderBracket();
         }
