@@ -480,74 +480,70 @@
             const koMap = {};
             allKoGames.forEach(m => { koMap[m.id] = m; });
 
-            const getTeam = (teamMap, gid, placeholder) => {
-                return teamMap[gid] || placeholder;
-            };
-
-            // Round of 32 assignments
+            // Round of 32 assignments – show group source (Winner A, Runner-up D, 3rd Best*) when team not yet known
             if (koMap['K1']) {
-                koMap['K1'].home = getTeam(winners, 'A', 'Winner A');
-                koMap['K1'].away = (allComplete && bestThird[0]) ? bestThird[0].team : 'TBD';
+                koMap['K1'].home = winners['A'] || 'Winner A';
+                koMap['K1'].away = (allComplete && bestThird[0]) ? bestThird[0].team : '3rd Best*';
             }
             if (koMap['K2']) {
-                koMap['K2'].home = getTeam(winners, 'B', 'Winner B');
-                koMap['K2'].away = (allComplete && bestThird[1]) ? bestThird[1].team : 'TBD';
+                koMap['K2'].home = winners['B'] || 'Winner B';
+                koMap['K2'].away = (allComplete && bestThird[1]) ? bestThird[1].team : '3rd Best*';
             }
             if (koMap['K3']) {
-                koMap['K3'].home = getTeam(winners, 'C', 'Winner C');
-                koMap['K3'].away = getTeam(runnersUp, 'D', 'TBD');
+                koMap['K3'].home = winners['C'] || 'Winner C';
+                koMap['K3'].away = runnersUp['D'] || 'Runner-up D';
             }
             if (koMap['K4']) {
-                koMap['K4'].home = getTeam(winners, 'D', 'Winner D');
-                koMap['K4'].away = getTeam(runnersUp, 'C', 'TBD');
+                koMap['K4'].home = winners['D'] || 'Winner D';
+                koMap['K4'].away = runnersUp['C'] || 'Runner-up C';
             }
             if (koMap['K5']) {
-                koMap['K5'].home = getTeam(winners, 'E', 'Winner E');
-                koMap['K5'].away = getTeam(runnersUp, 'F', 'TBD');
+                koMap['K5'].home = winners['E'] || 'Winner E';
+                koMap['K5'].away = runnersUp['F'] || 'Runner-up F';
             }
             if (koMap['K6']) {
-                koMap['K6'].home = getTeam(winners, 'F', 'Winner F');
-                koMap['K6'].away = getTeam(runnersUp, 'E', 'TBD');
+                koMap['K6'].home = winners['F'] || 'Winner F';
+                koMap['K6'].away = runnersUp['E'] || 'Runner-up E';
             }
             if (koMap['K7']) {
-                koMap['K7'].home = getTeam(winners, 'G', 'Winner G');
-                koMap['K7'].away = getTeam(runnersUp, 'H', 'TBD');
+                koMap['K7'].home = winners['G'] || 'Winner G';
+                koMap['K7'].away = runnersUp['H'] || 'Runner-up H';
             }
             if (koMap['K8']) {
-                koMap['K8'].home = getTeam(winners, 'H', 'Winner H');
-                koMap['K8'].away = getTeam(runnersUp, 'G', 'TBD');
+                koMap['K8'].home = winners['H'] || 'Winner H';
+                koMap['K8'].away = runnersUp['G'] || 'Runner-up G';
             }
             if (koMap['K9']) {
-                koMap['K9'].home = getTeam(winners, 'I', 'Winner I');
-                koMap['K9'].away = getTeam(runnersUp, 'J', 'TBD');
+                koMap['K9'].home = winners['I'] || 'Winner I';
+                koMap['K9'].away = runnersUp['J'] || 'Runner-up J';
             }
             if (koMap['K10']) {
-                koMap['K10'].home = getTeam(winners, 'J', 'Winner J');
-                koMap['K10'].away = getTeam(runnersUp, 'I', 'TBD');
+                koMap['K10'].home = winners['J'] || 'Winner J';
+                koMap['K10'].away = runnersUp['I'] || 'Runner-up I';
             }
             if (koMap['K11']) {
-                koMap['K11'].home = getTeam(winners, 'K', 'Winner K');
-                koMap['K11'].away = getTeam(runnersUp, 'L', 'TBD');
+                koMap['K11'].home = winners['K'] || 'Winner K';
+                koMap['K11'].away = runnersUp['L'] || 'Runner-up L';
             }
             if (koMap['K12']) {
-                koMap['K12'].home = getTeam(winners, 'L', 'Winner L');
-                koMap['K12'].away = getTeam(runnersUp, 'K', 'TBD');
+                koMap['K12'].home = winners['L'] || 'Winner L';
+                koMap['K12'].away = runnersUp['K'] || 'Runner-up K';
             }
             if (koMap['K13']) {
-                koMap['K13'].home = getTeam(runnersUp, 'A', 'TBD');
-                koMap['K13'].away = getTeam(runnersUp, 'B', 'TBD');
+                koMap['K13'].home = runnersUp['A'] || 'Runner-up A';
+                koMap['K13'].away = runnersUp['B'] || 'Runner-up B';
             }
             if (koMap['K14']) {
-                koMap['K14'].home = (allComplete && bestThird[2]) ? bestThird[2].team : 'TBD';
-                koMap['K14'].away = (allComplete && bestThird[3]) ? bestThird[3].team : 'TBD';
+                koMap['K14'].home = (allComplete && bestThird[2]) ? bestThird[2].team : '3rd Best*';
+                koMap['K14'].away = (allComplete && bestThird[3]) ? bestThird[3].team : '3rd Best*';
             }
             if (koMap['K15']) {
-                koMap['K15'].home = (allComplete && bestThird[4]) ? bestThird[4].team : 'TBD';
-                koMap['K15'].away = (allComplete && bestThird[5]) ? bestThird[5].team : 'TBD';
+                koMap['K15'].home = (allComplete && bestThird[4]) ? bestThird[4].team : '3rd Best*';
+                koMap['K15'].away = (allComplete && bestThird[5]) ? bestThird[5].team : '3rd Best*';
             }
             if (koMap['K16']) {
-                koMap['K16'].home = (allComplete && bestThird[6]) ? bestThird[6].team : 'TBD';
-                koMap['K16'].away = (allComplete && bestThird[7]) ? bestThird[7].team : 'TBD';
+                koMap['K16'].home = (allComplete && bestThird[6]) ? bestThird[6].team : '3rd Best*';
+                koMap['K16'].away = (allComplete && bestThird[7]) ? bestThird[7].team : '3rd Best*';
             }
         }
 
