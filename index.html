@@ -226,10 +226,6 @@
         
         .bracket-svg {
             position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
             pointer-events: none;
             z-index: 5;
         }
@@ -649,12 +645,28 @@
             });
         }
         
+        // ----- CORRECTED CONNECTOR DRAWING -----
         function drawConnectors() {
-            const container = document.getElementById('dynamicBracketTree');
+            const bracketTree = document.getElementById('dynamicBracketTree');
+            const wrapper = document.getElementById('globalBracketContainer');
             const svg = document.getElementById('bracketSvg');
-            if (!container || !svg) return;
+            if (!bracketTree || !svg) return;
 
-            const containerRect = container.getBoundingClientRect();
+            const wrapperRect = wrapper.getBoundingClientRect();
+            const treeRect = bracketTree.getBoundingClientRect();
+            const scrollLeft = bracketTree.scrollLeft || 0;
+            const scrollTop = bracketTree.scrollTop || 0;
+
+            // Position and size SVG to cover the entire scrollable content
+            const left = treeRect.left - wrapperRect.left;
+            const top = treeRect.top - wrapperRect.top;
+            const width = bracketTree.scrollWidth;
+            const height = bracketTree.scrollHeight;
+
+            svg.style.left = left + 'px';
+            svg.style.top = top + 'px';
+            svg.setAttribute('width', width);
+            svg.setAttribute('height', height);
             svg.innerHTML = '';
 
             const sourceMap = {
@@ -676,7 +688,7 @@
                 'K31': ['K29', 'K30']
             };
 
-            const wrappers = container.querySelectorAll('.match-wrapper');
+            const wrappers = bracketTree.querySelectorAll('.match-wrapper');
             const wrapperMap = {};
             wrappers.forEach(w => {
                 const id = w.dataset.matchId;
@@ -687,8 +699,9 @@
                 const targetWrapper = wrapperMap[targetId];
                 if (!targetWrapper) return;
                 const targetRect = targetWrapper.getBoundingClientRect();
-                const targetLeft = targetRect.left - containerRect.left + 8;
-                const targetCenterY = targetRect.top + targetRect.height / 2 - containerRect.top;
+                // Calculate coordinates relative to the bracket tree's scrollable content
+                const targetX = targetRect.left - treeRect.left + scrollLeft + 8; // offset for padding
+                const targetY = targetRect.top - treeRect.top + scrollTop + targetRect.height/2;
 
                 const sourceIds = sourceMap[targetId];
                 const sourceWrappers = sourceIds.map(id => wrapperMap[id]).filter(w => w);
@@ -696,8 +709,8 @@
 
                 const sourceRects = sourceWrappers.map(w => w.getBoundingClientRect());
                 const sourceCenters = sourceRects.map(r => ({
-                    x: r.right - containerRect.left - 8,
-                    y: r.top + r.height / 2 - containerRect.top
+                    x: r.right - treeRect.left + scrollLeft - 8,
+                    y: r.top - treeRect.top + scrollTop + r.height/2
                 }));
 
                 const midX = (sourceCenters[0].x + sourceCenters[1].x) / 2;
@@ -710,17 +723,13 @@
                 pathD += `M ${sourceCenters[1].x} ${sourceCenters[1].y} `;
                 pathD += `L ${midX} ${sourceCenters[1].y} `;
                 pathD += `L ${midX} ${midY} `;
-                pathD += `L ${targetLeft} ${midY} `;
-                pathD += `L ${targetLeft} ${targetCenterY}`;
+                pathD += `L ${targetX} ${midY} `;
+                pathD += `L ${targetX} ${targetY}`;
 
                 const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
                 path.setAttribute('d', pathD);
                 svg.appendChild(path);
             });
-
-            // Update SVG size to match container
-            svg.setAttribute('width', containerRect.width);
-            svg.setAttribute('height', containerRect.height);
         }
 
         function renderBracket() {
@@ -728,7 +737,6 @@
             propagateKnockoutResults();
 
             const container = document.getElementById('dynamicBracketTree');
-            const svg = document.getElementById('bracketSvg');
             if (!container) return;
 
             const rounds = ['Round of 32', 'Round of 16', 'Quarter-finals', 'Semi-finals', 'Final', 'Third Place'];
@@ -770,10 +778,11 @@
                 el.addEventListener('click', (e) => { e.stopPropagation(); openGameModal(el.dataset.gameId); });
             });
 
+            // Draw connectors after DOM update
             requestAnimationFrame(() => drawConnectors());
         }
 
-        // ----- Get today's date in PST -----
+        // Get today's date in PST
         function getTodayPST() {
             const now = new Date();
             const formatter = new Intl.DateTimeFormat('en-CA', { timeZone: 'America/Los_Angeles', year: 'numeric', month: '2-digit', day: '2-digit' });
