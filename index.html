@@ -3,8 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>⚽ 2026 FIFA World Cup Tracker · Live Sync + Bracket</title>
+    <title>⚽ 2026 FIFA World Cup Tracker</title>
     <style>
+        /* ---------- Global Styles ---------- */
         :root {
             --bg:#ffffff; --surface:#f8f9fa; --surface2:#e9ecef;
             --border:#dee2e6; --text:#212529; --text2:#6c757d;
@@ -114,7 +115,7 @@
         .legend-player .legend-teams{font-size:.7em;color:#6c757d;line-height:1.4;}
         .legend-dot{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:6px;}
         
-        /* ---------- VERTICAL BRACKET ---------- */
+        /* ---------- HORIZONTAL BRACKET ---------- */
         .bracket-wrapper {
             margin-top: 48px;
             margin-bottom: 40px;
@@ -125,6 +126,7 @@
             padding: 20px 20px;
             width: 100%;
             overflow-x: auto;
+            overflow-y: visible;
         }
         .bracket-header {
             display: flex;
@@ -138,105 +140,129 @@
         .bracket-header h2 { font-size: 1.5rem; background: linear-gradient(135deg, #1e2a3a, #2c3e50); background-clip: text; -webkit-background-clip: text; color: transparent; }
         .bracket-note { font-size: 0.7rem; background: #f1f5f9; padding: 5px 12px; border-radius: 30px; color: #3a5468; }
 
-        .vertical-bracket {
+        /* The main bracket container – flex row */
+        .tournament-bracket {
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: stretch;
+            gap: 12px;
+            min-width: fit-content;
+            width: max-content;
+            padding: 10px 4px;
+        }
+
+        /* Each round column */
+        .bracket-round-col {
             display: flex;
             flex-direction: column;
-            align-items: center;
-            gap: 6px;
-            padding: 0 10px;
-            min-width: fit-content;
-        }
-
-        .champion-row {
-            width: 100%;
-            text-align: center;
-            margin-bottom: 10px;
-            font-size: 1.2rem;
-            font-weight: 700;
-            color: var(--accent2);
-            background: var(--highlight);
-            padding: 8px 0;
-            border-radius: 40px;
-            border: 2px solid var(--accent);
-        }
-        .champion-row span { font-size: 1.4rem; }
-
-        .round-row {
-            display: flex;
-            align-items: flex-start;
-            justify-content: center;
-            width: 100%;
-            gap: 4px;
+            justify-content: space-evenly;
+            flex: 0 0 auto;
+            min-width: 150px;
+            max-width: 220px;
+            padding: 4px 6px;
+            border-radius: 12px;
+            background: #fafcfe;
+            border: 1px solid #eef2f8;
         }
         .round-label {
             font-weight: 700;
-            font-size: 0.7rem;
+            font-size: 0.65rem;
+            text-align: center;
             color: #6c86a0;
             background: #f1f5f9;
-            padding: 4px 10px;
+            padding: 4px 8px;
             border-radius: 20px;
-            white-space: nowrap;
-            flex-shrink: 0;
-            margin-right: 8px;
-            align-self: center;
-        }
-        .round-matches {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 6px;
-            flex: 1;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
-        .v-match {
+        .bracket-matches {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-evenly;
+            flex: 1;
+            gap: 4px;
+        }
+
+        /* Match card */
+        .match-card {
             background: #f8fafc;
             border-radius: 10px;
-            padding: 4px 8px;
+            padding: 6px 8px;
             border-left: 4px solid var(--accent);
             box-shadow: 0 1px 4px rgba(0,0,0,0.04);
             cursor: pointer;
             transition: 0.1s;
-            min-width: 110px;
-            max-width: 180px;
+            white-space: nowrap;
+            font-size: 0.7rem;
+            font-weight: 600;
+            color: #1e2f3c;
             display: flex;
             flex-direction: column;
             align-items: center;
-            white-space: nowrap;
-            font-size: 0.65rem;
-            font-weight: 600;
-            color: #1e2f3c;
         }
-        .v-match:hover { background: #fff5e3; transform: translateY(-1px); }
-        .v-match .teams {
+        .match-card:hover { background: #fff5e3; transform: translateX(2px); }
+        .match-teams {
             display: flex;
             justify-content: space-between;
             width: 100%;
-            gap: 4px;
+            gap: 6px;
+            align-items: center;
         }
-        .v-match .team {
+        .team-abbr {
             overflow: hidden;
             text-overflow: ellipsis;
             max-width: 70px;
         }
-        .v-match .score {
+        .match-score {
             font-weight: 800;
-            color: var(--accent2);
+            font-family: monospace;
+            font-size: 0.7rem;
+            background: #eef2f6;
+            padding: 0 6px;
+            border-radius: 30px;
+            color: #2c5a2e;
             flex-shrink: 0;
         }
-        .v-match .score.pending { color: #adb5bd; font-weight: 400; }
-        .v-match .match-date {
-            font-size: 0.5rem;
-            color: #6c86a0;
-            margin-top: 2px;
+        .match-score.pending { color: #9aaebf; background: #f1f3f7; font-weight: 400; }
+        .match-meta { font-size: 0.5rem; color: #6c86a0; margin-top: 2px; }
+
+        /* Champion / final column */
+        .champion-col {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-width: 140px;
+            padding: 10px 6px;
+            border-radius: 16px;
+            background: radial-gradient(circle at 30% 10%, #fff3cf, #ffe9b6);
+            border: 2px solid #f5c542;
+        }
+        .champion-col .round-label {
+            background: #f5c542;
+            color: #1e2a2e;
+        }
+        .champion-col .match-card {
+            border-left-color: #f5c542;
+            background: #fffdf5;
+        }
+        .champion-col .final-winner {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--accent2);
+            text-align: center;
+            margin-top: 6px;
         }
 
         @media (max-width: 720px) {
             .groups-grid { grid-template-columns: 1fr; }
             .legend-grid { grid-template-columns: 1fr; }
-            .round-row { flex-wrap: wrap; justify-content: center; }
-            .round-label { width: 100%; text-align: center; margin-bottom: 4px; }
-            .round-matches { justify-content: center; }
-            .v-match { min-width: 80px; max-width: 140px; font-size: 0.6rem; }
+            .bracket-round-col { min-width: 120px; max-width: 160px; }
+            .team-abbr { max-width: 45px; }
+            .match-card { font-size: 0.6rem; padding: 4px 6px; }
         }
         @media (min-width: 721px) and (max-width: 1080px) {
             .groups-grid { grid-template-columns: repeat(2, 1fr); }
@@ -272,7 +298,7 @@
             <h2>🏆 WORLD CUP 2026 · KNOCKOUT BRACKET</h2>
             <div class="bracket-note">⚡ Click any match to edit score | Results auto-fill from Round of 32 → Final</div>
         </div>
-        <div id="dynamicBracketTree" class="vertical-bracket"></div>
+        <div id="dynamicBracketTree" class="tournament-bracket"></div>
     </div>
 
     <div class="daily-overlay" id="dailyOverlay"><div class="daily-modal" id="dailyModal"></div></div>
@@ -352,8 +378,9 @@
             return (hrs * 60) + mins;
         }
 
+        // ----- Group games (unchanged, full list) -----
         const allGroupGames=[
-            // Group A – PST corrected
+            // Group A
             {id:'G1',group:'A',home:'Mexico',away:'South Africa',date:'2026-06-11',time:'1:00 PM CT',pst:'12:00 PM PST',stadium:'Estadio Azteca, Mexico City',homeScore:2,awayScore:0},
             {id:'G2',group:'A',home:'South Korea',away:'Czech Republic',date:'2026-06-11',time:'8:00 PM CT',pst:'7:00 PM PST',stadium:'Estadio Akron, Zapopan',homeScore:2,awayScore:1},
             {id:'G25',group:'A',home:'Czech Republic',away:'South Africa',date:'2026-06-18',time:'12:00 PM ET',pst:'9:00 AM PST',stadium:'Mercedes-Benz Stadium, Atlanta',homeScore:null,awayScore:null},
@@ -440,6 +467,7 @@
         ];
         allGroupGames.forEach(g=>{g.round='group';});
 
+        // ----- Knockout games (unchanged) -----
         const allKoGames=[
             // Round of 32 (K1 - K16)
             {id:'K1', round:'Round of 32', home:'Runner-up A', away:'Runner-up B', date:'2026-06-28', time:'1:00 PM ET', pst:'10:00 AM PST', stadium:'SoFi Stadium, Inglewood', homeScore:null, awayScore:null, isKo:true},
@@ -627,60 +655,164 @@
             });
         }
 
-        // ----- VERTICAL BRACKET RENDER (full, always shows) -----
+        // ----- RENDER HORIZONTAL BRACKET (split left/right) -----
         function renderBracket() {
-            // Always update team names from group standings (even if incomplete)
             updateKnockoutTeams();
             propagateKnockoutResults();
 
             const container = document.getElementById('dynamicBracketTree');
             if (!container) return;
 
-            // Build round map
+            // Define round order from outside to center
+            // Left side: round of 32, round of 16, quarter-finals, semi-finals
+            // Center: final
+            // Right side: semi-finals, quarter-finals, round of 16, round of 32 (mirrored)
+
+            // We'll build columns for each round on each side
+            // Left side: matches that feed into the final from the left
+            // Right side: matches that feed into the final from the right
+
+            // Map match IDs to their round
             const roundMap = {};
-            allKoGames.forEach(m => {
-                if (!roundMap[m.round]) roundMap[m.round] = [];
-                roundMap[m.round].push(m);
-            });
+            allKoGames.forEach(m => { roundMap[m.id] = m; });
 
-            const displayOrder = ['Final', 'Third Place', 'Semi-finals', 'Quarter-finals', 'Round of 16', 'Round of 32'];
+            // Define the bracket structure
+            // Left side (matches that go to the final from the left)
+            const leftR32 = ['K1','K2','K3','K4','K5','K6','K7','K8'];
+            const leftR16 = ['K17','K18','K19','K20'];
+            const leftQF = ['K25','K26'];
+            const leftSF = ['K29'];
+            const rightR32 = ['K9','K10','K11','K12','K13','K14','K15','K16'];
+            const rightR16 = ['K21','K22','K23','K24'];
+            const rightQF = ['K27','K28'];
+            const rightSF = ['K30'];
+            const finalMatch = ['K32'];
+            const thirdPlace = ['K31'];
+
+            // Build columns
+            const columns = [];
+
+            // Left side (left to right: R32, R16, QF, SF)
+            columns.push({ label: 'Round of 32 (L)', matches: leftR32.map(id => roundMap[id]) });
+            columns.push({ label: 'Round of 16 (L)', matches: leftR16.map(id => roundMap[id]) });
+            columns.push({ label: 'Quarter-finals (L)', matches: leftQF.map(id => roundMap[id]) });
+            columns.push({ label: 'Semi-finals (L)', matches: leftSF.map(id => roundMap[id]) });
+
+            // Center: Final + Third Place
+            columns.push({ label: 'Final', matches: finalMatch.map(id => roundMap[id]) });
+
+            // Right side (right to left: SF, QF, R16, R32)
+            columns.push({ label: 'Semi-finals (R)', matches: rightSF.map(id => roundMap[id]) });
+            columns.push({ label: 'Quarter-finals (R)', matches: rightQF.map(id => roundMap[id]) });
+            columns.push({ label: 'Round of 16 (R)', matches: rightR16.map(id => roundMap[id]) });
+            columns.push({ label: 'Round of 32 (R)', matches: rightR32.map(id => roundMap[id]) });
+
+            // Build HTML
             let html = '';
-
-            // Champion row
-            const finalMatch = allKoGames.find(g => g.id === 'K32');
-            if (finalMatch && finalMatch.homeScore !== null && finalMatch.awayScore !== null && finalMatch.homeScore !== finalMatch.awayScore) {
-                const champ = finalMatch.homeScore > finalMatch.awayScore ? finalMatch.home : finalMatch.away;
-                html += `<div class="champion-row">🏆 CHAMPION: <span>${champ}</span></div>`;
-            } else {
-                html += `<div class="champion-row" style="color:#adb5bd;">🏆 Champion: TBD</div>`;
-            }
-
-            displayOrder.forEach(roundName => {
-                const matches = roundMap[roundName] || [];
-                if (matches.length === 0) return;
-                html += `<div class="round-row">`;
-                html += `<div class="round-label">${roundName}</div>`;
-                html += `<div class="round-matches">`;
-                matches.forEach(m => {
+            columns.forEach((col, colIdx) => {
+                const isCenter = col.label === 'Final';
+                const isThird = col.label === 'Third Place';
+                const colClass = isCenter ? 'bracket-round-col champion-col' : 'bracket-round-col';
+                html += `<div class="${colClass}" style="${isCenter ? 'min-width:160px;' : ''}">`;
+                html += `<div class="round-label">${col.label}</div>`;
+                html += `<div class="bracket-matches">`;
+                col.matches.forEach(m => {
+                    if (!m) return;
                     const hasScore = (m.homeScore !== null && m.awayScore !== null);
                     const scoreText = hasScore ? `${m.homeScore} - ${m.awayScore}` : '—';
                     const dateStr = m.date.slice(5);
-                    html += `<div class="v-match" data-game-id="${m.id}">
-                                <div class="teams">
-                                    <span class="team">${m.home}</span>
-                                    <span class="score ${!hasScore ? 'pending' : ''}">${scoreText}</span>
-                                    <span class="team">${m.away}</span>
+                    html += `<div class="match-card" data-game-id="${m.id}">
+                                <div class="match-teams">
+                                    <span class="team-abbr">${m.home}</span>
+                                    <span class="match-score ${!hasScore ? 'pending' : ''}">${scoreText}</span>
+                                    <span class="team-abbr">${m.away}</span>
                                 </div>
-                                <div class="match-date">${dateStr}</div>
+                                <div class="match-meta">${dateStr}</div>
                              </div>`;
                 });
-                html += `</div></div>`;
+                html += `</div>`;
+
+                // If center, show champion if final is decided
+                if (isCenter) {
+                    const finalGame = roundMap['K32'];
+                    if (finalGame && finalGame.homeScore !== null && finalGame.awayScore !== null && finalGame.homeScore !== finalGame.awayScore) {
+                        const champ = finalGame.homeScore > finalGame.awayScore ? finalGame.home : finalGame.away;
+                        html += `<div class="final-winner">🏆 ${champ}</div>`;
+                    } else {
+                        html += `<div class="final-winner" style="color:#adb5bd;font-size:0.8rem;">TBD</div>`;
+                    }
+                }
+                html += `</div>`;
             });
 
-            container.innerHTML = html;
+            // Add third place separately (below or as an extra column)
+            // We'll add it as a small column after the center
+            // Actually, we can add it as a separate column after the final
+            // But to keep it clean, we'll add it as an extra column on the right side of center
+            // Let's insert it after the final column but before the right side
+            // For simplicity, I'll add it as a separate column after the final
+            // We'll re-insert it manually.
+
+            // Rebuild: we'll insert third place after final
+            // Let's just add it as a small column after the final
+            // I'll rebuild the columns array with third place included
+
+            // Rebuild columns with third place
+            const columns2 = [];
+            columns2.push({ label: 'Round of 32 (L)', matches: leftR32.map(id => roundMap[id]) });
+            columns2.push({ label: 'Round of 16 (L)', matches: leftR16.map(id => roundMap[id]) });
+            columns2.push({ label: 'Quarter-finals (L)', matches: leftQF.map(id => roundMap[id]) });
+            columns2.push({ label: 'Semi-finals (L)', matches: leftSF.map(id => roundMap[id]) });
+            columns2.push({ label: 'Final', matches: finalMatch.map(id => roundMap[id]) });
+            columns2.push({ label: 'Third Place', matches: thirdPlace.map(id => roundMap[id]) });
+            columns2.push({ label: 'Semi-finals (R)', matches: rightSF.map(id => roundMap[id]) });
+            columns2.push({ label: 'Quarter-finals (R)', matches: rightQF.map(id => roundMap[id]) });
+            columns2.push({ label: 'Round of 16 (R)', matches: rightR16.map(id => roundMap[id]) });
+            columns2.push({ label: 'Round of 32 (R)', matches: rightR32.map(id => roundMap[id]) });
+
+            // Rebuild HTML with columns2
+            let html2 = '';
+            columns2.forEach((col, colIdx) => {
+                const isCenter = col.label === 'Final';
+                const isThird = col.label === 'Third Place';
+                const colClass = isCenter ? 'bracket-round-col champion-col' : 'bracket-round-col';
+                const extraStyle = isCenter ? 'min-width:160px;' : (isThird ? 'min-width:130px;' : '');
+                html2 += `<div class="${colClass}" style="${extraStyle}">`;
+                html2 += `<div class="round-label">${col.label}</div>`;
+                html2 += `<div class="bracket-matches">`;
+                col.matches.forEach(m => {
+                    if (!m) return;
+                    const hasScore = (m.homeScore !== null && m.awayScore !== null);
+                    const scoreText = hasScore ? `${m.homeScore} - ${m.awayScore}` : '—';
+                    const dateStr = m.date.slice(5);
+                    html2 += `<div class="match-card" data-game-id="${m.id}">
+                                <div class="match-teams">
+                                    <span class="team-abbr">${m.home}</span>
+                                    <span class="match-score ${!hasScore ? 'pending' : ''}">${scoreText}</span>
+                                    <span class="team-abbr">${m.away}</span>
+                                </div>
+                                <div class="match-meta">${dateStr}</div>
+                             </div>`;
+                });
+                html2 += `</div>`;
+
+                // If center, show champion
+                if (isCenter) {
+                    const finalGame = roundMap['K32'];
+                    if (finalGame && finalGame.homeScore !== null && finalGame.awayScore !== null && finalGame.homeScore !== finalGame.awayScore) {
+                        const champ = finalGame.homeScore > finalGame.awayScore ? finalGame.home : finalGame.away;
+                        html2 += `<div class="final-winner">🏆 ${champ}</div>`;
+                    } else {
+                        html2 += `<div class="final-winner" style="color:#adb5bd;font-size:0.8rem;">TBD</div>`;
+                    }
+                }
+                html2 += `</div>`;
+            });
+
+            container.innerHTML = html2;
 
             // Attach click listeners
-            container.querySelectorAll('.v-match').forEach(el => {
+            container.querySelectorAll('.match-card').forEach(el => {
                 el.addEventListener('click', (e) => { e.stopPropagation(); openGameModal(el.dataset.gameId); });
             });
         }
@@ -816,7 +948,7 @@
         }
         document.getElementById('playerOverlay').addEventListener('click',function(e){if(e.target===this)this.classList.remove('open');});
 
-        // ----- Standings and group functions (unchanged) -----
+        // ----- Standings and group functions -----
         function calculateStandings(gid){
             const teams=GROUPS[gid],stats={};teams.forEach(t=>{stats[t]={team:t,person:peopleMap[t]||'',gp:0,w:0,d:0,l:0,gf:0,ga:0,gd:0,pts:0};});
             allGroupGames.filter(g=>g.group===gid).forEach(g=>{if(g.homeScore!==null&&g.awayScore!==null&&stats[g.home]&&stats[g.away]){stats[g.home].gp++;stats[g.away].gp++;stats[g.home].gf+=g.homeScore;stats[g.home].ga+=g.awayScore;stats[g.away].gf+=g.awayScore;stats[g.away].ga+=g.homeScore;if(g.homeScore>g.awayScore){stats[g.home].w++;stats[g.home].pts+=3;stats[g.away].l++;}else if(g.homeScore<g.awayScore){stats[g.away].w++;stats[g.away].pts+=3;stats[g.home].l++;}else{stats[g.home].d++;stats[g.away].d++;stats[g.home].pts+=1;stats[g.away].pts+=1;}}});
@@ -834,7 +966,7 @@
 
         function renderThirdPlace(){const container=document.getElementById('thirdPlaceContainer'),thirds=getAllThirdPlaceTeams();let h=`<div class="third-place-section"><h3>📊 Third-Placed Teams Ranking (Top 8 advance)</h3><table class="third-place-table"><thead><tr><th>Pos</th><th>Grp</th><th>Team</th><th>P</th><th>W</th><th>D</th><th>L</th><th>GF</th><th>GA</th><th>GD</th><th>Pts</th><th>Status</th></tr></thead><tbody>`;thirds.forEach((t,i)=>{const q=i<8,c=playerColors[t.person]||'#6c3bd4';h+=`<tr><td>${i+1}</td><td>${t.group}</td><td>${t.team}<span class="player-name" style="color:${c}">${t.person}</span></td><td>${t.gp}</td><td>${t.w}</td><td>${t.d}</td><td>${t.l}</td><td>${t.gf}</td><td>${t.ga}</td><td>${t.gd>=0?'+':''}${t.gd}</td><td class="pts">${t.pts}</td><td class="${q?'qualifies':''}">${q?'✅ Advances':'❌'}</td></tr>`;});h+=`</tbody></table></div>`;container.innerHTML=h;}
 
-        // ----- Game modal (unchanged) -----
+        // ----- Game modal -----
         function openGameModal(gameId){
             const game=allGames.find(g=>g.id===gameId);if(!game)return;const overlay=document.getElementById('modalOverlay'),modal=document.getElementById('gameModal'),hs=game.homeScore!==null?game.homeScore:'',as=game.awayScore!==null?game.awayScore:'',hp=peopleMap[game.home]||'',ap=peopleMap[game.away]||'',hc=playerColors[hp]||'#6c3bd4',ac=playerColors[ap]||'#6c3bd4';
             modal.innerHTML=`<h3>${game.round==='group'?'Group '+game.group+' · ':''}${game.home} vs ${game.away}</h3><div class="modal-date">📅 ${game.date} | 🏟 ${game.stadium} | 🕐 ${game.time} (${game.pst})</div><div class="matchup"><div class="team-block"><div style="font-size:2em;">⚽</div><div class="country">${game.home}</div><div class="owner" style="color:${hc}">${hp||'—'}</div></div><div class="vs">VS</div><div class="team-block"><div style="font-size:2em;">⚽</div><div class="country">${game.away}</div><div class="owner" style="color:${ac}">${ap||'—'}</div></div></div><div class="score-inputs"><input type="number" id="modalHomeScore" value="${hs}" placeholder="-" min="0" max="99"><span>—</span><input type="number" id="modalAwayScore" value="${as}" placeholder="-" min="0" max="99"></div><div class="btn-row"><button class="btn btn-save" id="modalSave">💾 Save</button><button class="btn btn-reset" id="modalReset">Clear</button><button class="btn btn-close" id="modalClose">Close</button></div>`;
