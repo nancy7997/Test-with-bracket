@@ -114,7 +114,7 @@
         .legend-player .legend-teams{font-size:.7em;color:#6c757d;line-height:1.4;}
         .legend-dot{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:6px;}
         
-        /* ---------- NEW VERTICAL BRACKET ---------- */
+        /* ---------- VERTICAL BRACKET ---------- */
         .bracket-wrapper {
             margin-top: 48px;
             margin-bottom: 40px;
@@ -466,9 +466,9 @@
             {id:'K21', round:'Round of 16', home:'W R32-9', away:'W R32-11', date:'2026-07-05', time:'7:00 PM PT', pst:'7:00 PM PST', stadium:'Lumen Field, Seattle', homeScore:null, awayScore:null, isKo:true},
             {id:'K22', round:'Round of 16', home:'W R32-10', away:'W R32-12', date:'2026-07-06', time:'1:00 PM CT', pst:'11:00 AM PST', stadium:'AT&T Stadium, Arlington', homeScore:null, awayScore:null, isKo:true},
             {id:'K23', round:'Round of 16', home:'W R32-13', away:'W R32-15', date:'2026-07-06', time:'4:00 PM ET', pst:'1:00 PM PST', stadium:'Mercedes-Benz Stadium, Atlanta', homeScore:null, awayScore:null, isKo:true},
-            {id:'K24', round:'Round of 16', home:'W R32-14', away:'W R32-16', date:'2026-07-06', time:'7:00 PM PT', pst:'7:00 PM PST', stadium:'BC Place, Vancouver', homeScore:null, awayScore:null, isKo:true},
+            {id:'K24',Quarter round:'Round of 16', home:'W-finals R32-14', away',:'W R32-16', date:'2026-07-06', time:'7:00 PM PT', pst:'7:00 PM PST', stadium:'BC Place, Vancouver', homeScore:null, awayScore:null, isKo:true},
             // Quarter-finals
-            {id:'K25', round:'Quarter-finals', home:'W R16-1', away:'W R16-2', date:'2026-07-09', time:'1:00 PM CT', pst:'11:00 AM PST', stadium:'AT&T Stadium, Arlington', homeScore:null, awayScore:null, isKo:true},
+            {id:'K25', round:' home:'W R16-1', away:'W R16-2', date:'2026-07-09', time:'1:00 PM CT', pst:'11:00 AM PST', stadium:'AT&T Stadium, Arlington', homeScore:null, awayScore:null, isKo:true},
             {id:'K26', round:'Quarter-finals', home:'W R16-3', away:'W R16-4', date:'2026-07-10', time:'1:00 PM PT', pst:'1:00 PM PST', stadium:'SoFi Stadium, Inglewood', homeScore:null, awayScore:null, isKo:true},
             {id:'K27', round:'Quarter-finals', home:'W R16-5', away:'W R16-6', date:'2026-07-11', time:'1:00 PM CT', pst:'11:00 AM PST', stadium:'Arrowhead Stadium, Kansas City', homeScore:null, awayScore:null, isKo:true},
             {id:'K28', round:'Quarter-finals', home:'W R16-7', away:'W R16-8', date:'2026-07-12', time:'1:00 PM ET', pst:'10:00 AM PST', stadium:'Hard Rock Stadium, Miami Gardens', homeScore:null, awayScore:null, isKo:true},
@@ -623,7 +623,7 @@
             });
         }
 
-        // ----- NEW VERTICAL BRACKET RENDER -----
+        // ----- VERTICAL BRACKET RENDER -----
         function renderBracket() {
             updateKnockoutTeams();
             propagateKnockoutResults();
@@ -682,20 +682,206 @@
             });
         }
 
-        // ----- All other functions (calendar, groups, third place, modals, etc.) remain unchanged -----
-        // I'll include them but omit them here for brevity, as they are identical to the previous version.
-        // In the final code, they are all present.
+        // ----- Calendar functions -----
+        function getTodayPST() {
+            const now = new Date();
+            const formatter = new Intl.DateTimeFormat('en-CA', { timeZone: 'America/Los_Angeles', year: 'numeric', month: '2-digit', day: '2-digit' });
+            return formatter.format(now);
+        }
 
-        // For completeness, I'll include the rest of the functions (they are unchanged).
+        function scrollCalendarToDate(dateStr) {
+            const container = document.querySelector('.calendar-wrap');
+            if (!container) return;
+            const target = container.querySelector(`.cal-day[data-date="${dateStr}"]`);
+            if (!target) return;
+            const containerWidth = container.clientWidth;
+            const targetOffsetLeft = target.offsetLeft;
+            const targetWidth = target.offsetWidth || 52;
+            const scrollPos = targetOffsetLeft - (containerWidth / 2) + (targetWidth / 2);
+            container.scrollLeft = Math.max(0, scrollPos);
+        }
 
-        // ... (all helper functions: getTodayPST, scrollCalendarToDate, renderCalendar, openDailyModal, openPlayerModal, calculateStandings, getAllThirdPlaceTeams, renderGroups, renderThirdPlace, openGameModal, renderLegend) ...
+        function renderCalendar(){
+            const strip=document.getElementById('calendarStrip');
+            const dates=new Set(allGames.map(g=>g.date));
+            const s=new Date(2026,5,11),e=new Date(2026,6,19),m=['Jun','Jul'];
+            let h='';
+            const c=new Date(s);
+            const todayPST = getTodayPST();
+            const weekdays = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+            while(c<=e){
+                const ds=c.toISOString().split('T')[0];
+                const isToday = (ds === todayPST);
+                const weekdayAbbr = weekdays[c.getUTCDay()];
+                h+=`<div class="cal-day${dates.has(ds)?' has-games':''}${selectedDate===ds?' selected':''}${isToday?' today':''}" data-date="${ds}">
+                        <div class="month-text">${m[c.getMonth()-5]}</div>
+                        <div class="day-num">${c.getDate()}</div>
+                        <div class="weekday-text">${weekdayAbbr}</div>
+                    </div>`;
+                c.setDate(c.getDate()+1);
+            }
+            strip.innerHTML=h;
+            strip.querySelectorAll('.cal-day').forEach(el=>el.addEventListener('click',()=>{const d=el.dataset.date;if(selectedDate===d){selectedDate=null;renderCalendar();renderAll();document.getElementById('dailyOverlay').classList.remove('open');}else{selectedDate=d;renderCalendar();renderAll();openDailyModal(d);}}));
+            const focusDate = selectedDate || todayPST;
+            setTimeout(() => scrollCalendarToDate(focusDate), 50);
+        }
 
-        // I'll copy the remaining functions from the previous working version to ensure everything works.
-        // Since I already have them in the original, I'll keep them.
+        // ----- Daily modal -----
+        function openDailyModal(dateStr){
+            const overlay=document.getElementById('dailyOverlay'),modal=document.getElementById('dailyModal');
+            const dayGames = allGames.filter(g => g.date === dateStr).sort((a,b) => parsePST(a.pst) - parsePST(b.pst));
+            const dateObj=new Date(dateStr+'T00:00:00');
+            const dn=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'],mn=['January','February','March','April','May','June','July'];
+            let h=`<h3>📅 ${dn[dateObj.getUTCDay()]}, ${mn[dateObj.getUTCMonth()]} ${dateObj.getUTCDate()}, 2026</h3><div class="daily-date">${dayGames.length} match${dayGames.length!==1?'es':''}</div>`;
+            if(dayGames.length===0)h+=`<div class="daily-empty">No matches today.</div>`;
+            else dayGames.forEach(game=>{
+                const sc=game.homeScore!==null&&game.awayScore!==null;
+                const hp=peopleMap[game.home]||'',ap=peopleMap[game.away]||'';
+                const hc=playerColors[hp]||'#6c3bd4',ac=playerColors[ap]||'#6c3bd4';
+                let groupDisplay = '';
+                if (game.round === 'group') {
+                    groupDisplay = `<span class="group-badge">Group ${game.group}</span>`;
+                } else {
+                    groupDisplay = `<span class="group-badge" style="background:#6c757d;">${game.round}</span>`;
+                }
+                h+=`<div class="daily-game-card" data-game-id="${game.id}">
+                        <div class="match-info">
+                            <div class="teams-line">${game.home} vs ${game.away} ${groupDisplay}</div>
+                            <div class="details-line">${game.stadium}</div>
+                            <div class="details-line">🕐 ${game.time} (${game.pst})</div>
+                            <div class="player-line"><span style="color:${hc}">👤 ${hp||'—'}</span> vs <span style="color:${ac}">👤 ${ap||'—'}</span></div>
+                        </div>
+                        <div class="score-badge${!sc?' pending':''}">${sc?game.homeScore+' - '+game.awayScore:'vs'}</div>
+                    </div>`;
+            });
+            h+=`<button class="daily-close-btn" id="dailyCloseBtn">✕ Close</button>`;
+            modal.innerHTML=h;
+            overlay.classList.add('open');
+            document.getElementById('dailyCloseBtn').addEventListener('click',()=>overlay.classList.remove('open'));
+            modal.querySelectorAll('.daily-game-card').forEach(c=>c.addEventListener('click',()=>{overlay.classList.remove('open');openGameModal(c.dataset.gameId);}));
+        }
+        document.getElementById('dailyOverlay').addEventListener('click',function(e){if(e.target===this)this.classList.remove('open');});
 
-        // For the final answer, I'll provide the complete code with all functions.
-        // I'll just note that the renderBracket is the only changed part.
+        // ----- Player modal -----
+        function openPlayerModal(playerName) {
+            const overlay = document.getElementById('playerOverlay');
+            const modal = document.getElementById('playerModal');
+            let w = 0, l = 0, d = 0;
+            const playerGames = allGames.filter(g => {
+                const isHome = peopleMap[g.home] === playerName;
+                const isAway = peopleMap[g.away] === playerName;
+                if (g.homeScore !== null && g.awayScore !== null && (isHome || isAway)) {
+                    if (g.homeScore === g.awayScore) { d++; } 
+                    else if (isHome && g.homeScore > g.awayScore) { w++; } 
+                    else if (isAway && g.awayScore > g.homeScore) { w++; } 
+                    else { l++; }
+                }
+                return isHome || isAway;
+            });
+            playerGames.sort((a,b) => {
+                if(a.date !== b.date) return a.date.localeCompare(b.date);
+                return parsePST(a.pst) - parsePST(b.pst);
+            });
+            let h = `<h3>👤 ${playerName}'s Dashboard</h3>
+                     <div style="text-align:center; margin:12px 0;">
+                        <span style="font-size:1.2em; padding:0 10px; font-weight:bold; color:var(--win);">W: ${w}</span>
+                        <span style="font-size:1.2em; padding:0 10px; font-weight:bold; color:var(--loss);">L: ${l}</span>
+                        <span style="font-size:1.2em; padding:0 10px; font-weight:bold; color:var(--draw);">D: ${d}</span>
+                     </div>
+                     <div style="max-height:55vh; overflow-y:auto; border-top:1px solid #e9ecef; padding-top:10px;">`;
+            if(playerGames.length === 0) h+= `<p style="text-align:center; font-size:0.8em; color:#6c757d;">No games found.</p>`;
+            playerGames.forEach(g => {
+                const sc = g.homeScore !== null && g.awayScore !== null;
+                const hp = peopleMap[g.home] || '';
+                const ap = peopleMap[g.away] || '';
+                const hColor = hp === playerName ? 'font-weight:900;text-decoration:underline;' : 'color:#6c757d;';
+                const aColor = ap === playerName ? 'font-weight:900;text-decoration:underline;' : 'color:#6c757d;';
+                h += `<div class="daily-game-card" style="cursor:default;">
+                        <div class="match-info">
+                            <div class="teams-line">${g.home} vs ${g.away}</div>
+                            <div class="details-line">📅 ${g.date} | 🕐 ${g.time} (${g.pst})</div>
+                            <div class="player-line">
+                                <span style="${hColor}">${hp || '—'}</span> vs 
+                                <span style="${aColor}">${ap || '—'}</span>
+                            </div>
+                        </div>
+                        <div class="score-badge${!sc?' pending':''}">${sc ? g.homeScore + ' - ' + g.awayScore : 'vs'}</div>
+                      </div>`;
+            });
+            h += `</div><button class="daily-close-btn" id="playerCloseBtn">✕ Close Dashboard</button>`;
+            modal.innerHTML = h;
+            overlay.classList.add('open');
+            document.getElementById('playerCloseBtn').addEventListener('click', () => overlay.classList.remove('open'));
+        }
+        document.getElementById('playerOverlay').addEventListener('click',function(e){if(e.target===this)this.classList.remove('open');});
 
+        // ----- Standings and group functions -----
+        function calculateStandings(gid){
+            const teams=GROUPS[gid],stats={};teams.forEach(t=>{stats[t]={team:t,person:peopleMap[t]||'',gp:0,w:0,d:0,l:0,gf:0,ga:0,gd:0,pts:0};});
+            allGroupGames.filter(g=>g.group===gid).forEach(g=>{if(g.homeScore!==null&&g.awayScore!==null&&stats[g.home]&&stats[g.away]){stats[g.home].gp++;stats[g.away].gp++;stats[g.home].gf+=g.homeScore;stats[g.home].ga+=g.awayScore;stats[g.away].gf+=g.awayScore;stats[g.away].ga+=g.homeScore;if(g.homeScore>g.awayScore){stats[g.home].w++;stats[g.home].pts+=3;stats[g.away].l++;}else if(g.homeScore<g.awayScore){stats[g.away].w++;stats[g.away].pts+=3;stats[g.home].l++;}else{stats[g.home].d++;stats[g.away].d++;stats[g.home].pts+=1;stats[g.away].pts+=1;}}});
+            Object.values(stats).forEach(s=>{s.gd=s.gf-s.ga;});return Object.values(stats).sort((a,b)=>b.pts-a.pts||b.gd-a.gd||b.gf-a.gf);
+        }
+
+        function getAllThirdPlaceTeams(){const thirds=[];Object.keys(GROUPS).forEach(gid=>{const s=calculateStandings(gid);if(s.length>=3)thirds.push({...s[2],group:gid});});return thirds.sort((a,b)=>b.pts-a.pts||b.gd-a.gd||b.gf-a.gf);}
+
+        function renderGroups(){
+            const grid=document.getElementById('groupsGrid'),filtered=allGames.filter(g=>g.date===selectedDate&&g.round==='group'||!selectedDate&&g.round==='group'),fIds=new Set(filtered.map(g=>g.id));let h='';
+            Object.keys(GROUPS).sort().forEach(gid=>{const st=calculateStandings(gid),games=allGroupGames.filter(g=>g.group===gid);h+=`<div class="group-card"><h3>🏴 Group ${gid}</h3><table class="group-standings"><thead><tr><th>Team</th><th>P</th><th>W</th><th>D</th><th>L</th><th>GF</th><th>GA</th><th>GD</th><th>Pts</th></tr></thead><tbody>`;st.forEach(s=>{const c=playerColors[s.person]||'#6c3bd4';h+=`<tr><td>${s.team}<span class="player-name" style="color:${c}">${s.person}</span></td><td>${s.gp}</td><td>${s.w}</td><td>${s.d}</td><td>${s.l}</td><td>${s.gf}</td><td>${s.ga}</td><td>${s.gd>=0?'+':''}${s.gd}</td><td class="pts">${s.pts}</td></tr>`;});h+=`</tbody></table><div class="group-games">`;
+            games.forEach(g=>{const hi=fIds.has(g.id)||!selectedDate,sc=g.homeScore!==null&&g.awayScore!==null,hp=peopleMap[g.home]||'',ap=peopleMap[g.away]||'',hc=playerColors[hp]||'#6c3bd4',ac=playerColors[ap]||'#6c3bd4';h+=`<div class="game-row" data-game-id="${g.id}" style="${hi&&selectedDate?'background:#fff8e1;':''}"><span class="teams"><strong>${g.home}</strong> <span class="player-inline" style="color:${hc}">(${hp||'—'})</span> — <strong>${g.away}</strong> <span class="player-inline" style="color:${ac}">(${ap||'—'})</span><br><span style="font-size:.65em;color:#adb5bd;">${g.stadium} · ${g.time} (${g.pst})</span></span><span class="${sc?'score':'score pending'}">${sc?g.homeScore+' - '+g.awayScore:'vs'}</span><span class="date-sm">${g.date.slice(5)}</span></div>`;});h+=`</div></div>`;});
+            grid.innerHTML=h;grid.querySelectorAll('.game-row').forEach(r=>r.addEventListener('click',()=>openGameModal(r.dataset.gameId)));
+        }
+
+        function renderThirdPlace(){const container=document.getElementById('thirdPlaceContainer'),thirds=getAllThirdPlaceTeams();let h=`<div class="third-place-section"><h3>📊 Third-Placed Teams Ranking (Top 8 advance)</h3><table class="third-place-table"><thead><tr><th>Pos</th><th>Grp</th><th>Team</th><th>P</th><th>W</th><th>D</th><th>L</th><th>GF</th><th>GA</th><th>GD</th><th>Pts</th><th>Status</th></tr></thead><tbody>`;thirds.forEach((t,i)=>{const q=i<8,c=playerColors[t.person]||'#6c3bd4';h+=`<tr><td>${i+1}</td><td>${t.group}</td><td>${t.team}<span class="player-name" style="color:${c}">${t.person}</span></td><td>${t.gp}</td><td>${t.w}</td><td>${t.d}</td><td>${t.l}</td><td>${t.gf}</td><td>${t.ga}</td><td>${t.gd>=0?'+':''}${t.gd}</td><td class="pts">${t.pts}</td><td class="${q?'qualifies':''}">${q?'✅ Advances':'❌'}</td></tr>`;});h+=`</tbody></table></div>`;container.innerHTML=h;}
+
+        // ----- Game modal -----
+        function openGameModal(gameId){
+            const game=allGames.find(g=>g.id===gameId);if(!game)return;const overlay=document.getElementById('modalOverlay'),modal=document.getElementById('gameModal'),hs=game.homeScore!==null?game.homeScore:'',as=game.awayScore!==null?game.awayScore:'',hp=peopleMap[game.home]||'',ap=peopleMap[game.away]||'',hc=playerColors[hp]||'#6c3bd4',ac=playerColors[ap]||'#6c3bd4';
+            modal.innerHTML=`<h3>${game.round==='group'?'Group '+game.group+' · ':''}${game.home} vs ${game.away}</h3><div class="modal-date">📅 ${game.date} | 🏟 ${game.stadium} | 🕐 ${game.time} (${game.pst})</div><div class="matchup"><div class="team-block"><div style="font-size:2em;">⚽</div><div class="country">${game.home}</div><div class="owner" style="color:${hc}">${hp||'—'}</div></div><div class="vs">VS</div><div class="team-block"><div style="font-size:2em;">⚽</div><div class="country">${game.away}</div><div class="owner" style="color:${ac}">${ap||'—'}</div></div></div><div class="score-inputs"><input type="number" id="modalHomeScore" value="${hs}" placeholder="-" min="0" max="99"><span>—</span><input type="number" id="modalAwayScore" value="${as}" placeholder="-" min="0" max="99"></div><div class="btn-row"><button class="btn btn-save" id="modalSave">💾 Save</button><button class="btn btn-reset" id="modalReset">Clear</button><button class="btn btn-close" id="modalClose">Close</button></div>`;
+            overlay.classList.add('open');
+            document.getElementById('modalSave').addEventListener('click',()=>{const hv=document.getElementById('modalHomeScore').value,av=document.getElementById('modalAwayScore').value;if(hv!==''&&av!==''&&!isNaN(hv)&&!isNaN(av)){game.homeScore=parseInt(hv);game.awayScore=parseInt(av);}else if(hv===''&&av===''){game.homeScore=null;game.awayScore=null;}saveToFirebase(game.id,game.homeScore,game.awayScore);overlay.classList.remove('open');renderBracket();});
+            document.getElementById('modalReset').addEventListener('click',()=>{game.homeScore=null;game.awayScore=null;saveToFirebase(game.id,null,null);overlay.classList.remove('open');renderBracket();});
+            document.getElementById('modalClose').addEventListener('click',()=>overlay.classList.remove('open'));
+        }
+        document.getElementById('modalOverlay').addEventListener('click',function(e){if(e.target===this)this.classList.remove('open');});
+
+        // ----- Legend -----
+        function renderLegend(){
+            const legendEl=document.getElementById('playerLegend');if(!legendEl)return;
+            const order=['Moni','Grampa','Grama','Anthony','Nancy','Irma','Mari','Michael'];
+            let h=`<div class="legend-section"><h3>👥 Player Legend</h3><div class="legend-grid">`;
+            order.forEach(person=>{
+                if(legendData[person]){
+                    const c=legendData[person].color;
+                    h+=`<div class="legend-player" data-player="${person}"><div class="legend-name"><span class="legend-dot" style="background:${c}"></span>${person}</div><div class="legend-teams">${legendData[person].teams.join(', ')}</div></div>`;
+                }
+            });
+            h+=`</div></div>`;
+            legendEl.innerHTML=h;
+            legendEl.querySelectorAll('.legend-player').forEach(el => {
+                el.addEventListener('click', () => openPlayerModal(el.dataset.player));
+            });
+        }
+
+        // ----- Render all -----
+        function renderAll(){
+            updateKnockoutTeams();
+            propagateKnockoutResults();
+            document.getElementById('filterBanner').innerHTML=selectedDate?`🔍 Showing <strong>${selectedDate}</strong> <span class="clear-filter" id="clearFilter">[Show All]</span>`:`📅 Click a date to see games · 🔴 Live Sync Active`;
+            if(selectedDate)document.getElementById('clearFilter').addEventListener('click',()=>{selectedDate=null;renderCalendar();renderAll();document.getElementById('dailyOverlay').classList.remove('open');});
+            if(currentView==='groups')renderGroups();
+            else if(currentView==='thirdplace')renderThirdPlace();
+            renderLegend();
+            renderBracket();
+        }
+
+        // ----- Tab switching -----
+        document.querySelectorAll('.tab-btn').forEach(btn=>{btn.addEventListener('click',()=>{document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');currentView=btn.dataset.view;document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));document.getElementById('view-'+currentView).classList.add('active');renderAll();});});
+
+        // ----- Initialise -----
+        initializeDefaultScores();
+        syncFromFirebase();
+        renderCalendar();
+        renderAll();
     </script>
 </body>
 </html>
