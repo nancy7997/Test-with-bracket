@@ -1624,9 +1624,6 @@
         }
 
         document.getElementById('celebrationCloseBtn').addEventListener('click', hideCelebration);
-        // Also close on overlay click (but we want to keep pointer events on the content only)
-        // Actually we set pointer-events on content to none and button to auto, so clicking overlay won't close.
-        // We'll add a click on overlay background to close if needed, but we'll keep it simple.
 
         // ---- Firebase sync and other functions ----
         function syncFromFirebase() {
@@ -1640,7 +1637,6 @@
                 statusEl.className = 'sync-status';
                 renderAll();
                 renderBracket();
-                // Check for final winner
                 checkAndCelebrate();
             }, () => { statusEl.textContent = '🔴 Sync Error';
                 statusEl.className = 'sync-status offline';
@@ -1689,7 +1685,6 @@
         }
 
         function checkAndCelebrate() {
-            // Check final match (K32)
             const finalMatch = allKoGames.find(g => g.id === 'K32');
             if (!finalMatch) return;
             if (finalMatch.homeScore !== null && finalMatch.awayScore !== null && finalMatch.homeScore !== finalMatch
@@ -1823,6 +1818,7 @@
             setTimeout(() => scrollCalendarToDate(focusDate), 50);
         }
 
+        // ---- UPDATED DAILY MODAL to show match number ----
         function openDailyModal(dateStr) {
             const overlay = document.getElementById('dailyOverlay'),
                 modal = document.getElementById('dailyModal');
@@ -1847,11 +1843,19 @@
                 }
                 const displayTime = game.time || game.pst || '';
                 const displayPST = game.pst || game.time || '';
+                // Match number or group
+                let matchLine = '';
+                if (game.matchNumber) {
+                    matchLine = `Match ${game.matchNumber}`;
+                } else if (game.group) {
+                    matchLine = `Group ${game.group}`;
+                }
                 h +=
                     `<div class="daily-game-card" data-game-id="${game.id}">
                             <div class="match-info">
                                 <div class="teams-line">${game.home} vs ${game.away} ${groupDisplay}</div>
                                 <div class="details-line">${game.stadium}</div>
+                                ${matchLine ? `<div class="details-line">${matchLine}</div>` : ''}
                                 <div class="details-line">🕐 ${displayTime}${displayPST && displayPST !== displayTime ? ' (' + displayPST + ')' : ''}</div>
                                 <div class="player-line"><span style="color:${hc}">👤 ${hp || '—'}</span> vs <span style="color:${ac}">👤 ${ap || '—'}</span></div>
                             </div>
