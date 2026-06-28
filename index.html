@@ -350,7 +350,7 @@
             text-align: center;
             font-size: .7em;
             color: #6c757d;
-            margin-bottom: 12px;
+            margin-bottom: 6px;
         }
         .legend-grid {
             display: grid;
@@ -389,6 +389,15 @@
         .legend-player .legend-teams .team-active {
             font-weight: 500;
         }
+        .legend-player .legend-record {
+            font-size: .7em;
+            font-weight: 600;
+            margin-top: 2px;
+            color: #495057;
+        }
+        .legend-player .legend-record .wins { color: var(--win); }
+        .legend-player .legend-record .losses { color: var(--loss); }
+        .legend-player .legend-record .draws { color: var(--draw); }
         .legend-dot {
             display: inline-block;
             width: 10px;
@@ -511,7 +520,6 @@
             gap: 6px;
             font-size: 1rem;
             white-space: nowrap;
-            /* force single line */
             overflow: hidden;
             text-overflow: ellipsis;
         }
@@ -1439,18 +1447,7 @@
                 }
             });
 
-            // Final
-            const finalMatch = allKoGames.find(g => g.id === 'K32');
-            if (finalMatch) {
-                if (finalMatch.home && finalMatch.home.startsWith('W SF-')) {
-                    finalMatch.home = winners['K29'] || winners['K30'] || finalMatch.home;
-                }
-                if (finalMatch.away && finalMatch.away.startsWith('W SF-')) {
-                    finalMatch.away = winners['K29'] || winners['K30'] || finalMatch.away;
-                }
-            }
-
-            // Third Place
+            // Third Place – K31 uses losers of K29 and K30
             const thirdMatch = allKoGames.find(g => g.id === 'K31');
             if (thirdMatch) {
                 if (thirdMatch.home && thirdMatch.home.startsWith('L SF-')) {
@@ -1458,6 +1455,17 @@
                 }
                 if (thirdMatch.away && thirdMatch.away.startsWith('L SF-')) {
                     thirdMatch.away = losers['K29'] || losers['K30'] || thirdMatch.away;
+                }
+            }
+
+            // Final – K32 uses winners of K29 and K30
+            const finalMatch = allKoGames.find(g => g.id === 'K32');
+            if (finalMatch) {
+                if (finalMatch.home && finalMatch.home.startsWith('W SF-')) {
+                    finalMatch.home = winners['K29'] || winners['K30'] || finalMatch.home;
+                }
+                if (finalMatch.away && finalMatch.away.startsWith('W SF-')) {
+                    finalMatch.away = winners['K29'] || winners['K30'] || finalMatch.away;
                 }
             }
         }
@@ -1495,13 +1503,41 @@
             });
         }
 
+        // ---- Function to get player W/L/D ----
+        function getPlayerRecord(playerName) {
+            let wins = 0,
+                losses = 0,
+                draws = 0;
+            allGames.forEach(g => {
+                // Only consider games with scores
+                if (g.homeScore === null || g.awayScore === null) return;
+                const isHome = peopleMap[g.home] === playerName;
+                const isAway = peopleMap[g.away] === playerName;
+                if (!isHome && !isAway) return;
+                // Determine result relative to this player
+                let playerScore, opponentScore;
+                if (isHome) {
+                    playerScore = g.homeScore;
+                    opponentScore = g.awayScore;
+                } else {
+                    playerScore = g.awayScore;
+                    opponentScore = g.homeScore;
+                }
+                if (playerScore > opponentScore) wins++;
+                else if (playerScore < opponentScore) losses++;
+                else draws++;
+            });
+            return { wins, losses, draws };
+        }
+
         function renderBracket() {
             // Ensure winners propagate before rendering
             propagateKnockoutResults();
             const container = document.getElementById('dynamicBracketTree');
             if (!container) return;
-            const rounds = ['Round of 32', 'Round of 16', 'Quarter-finals', 'Semi-finals', 'Final', 'Third Place'];
-            const factors = [1, 2, 4, 8, 16, 16];
+            // Order: Round of 32, Round of 16, Quarter-finals, Semi-finals, Third Place, Final
+            const rounds = ['Round of 32', 'Round of 16', 'Quarter-finals', 'Semi-finals', 'Third Place', 'Final'];
+            const factors = [1, 2, 4, 8, 16, 16]; // flex factors for sizing
             let html = '';
             rounds.forEach((rnd, idx) => {
                 const matches = allKoGames.filter(m => m.round === rnd);
@@ -1512,13 +1548,12 @@
                 matches.forEach(m => {
                     const hasScore = (m.homeScore !== null && m.awayScore !== null);
                     const scoreText = hasScore ? `${m.homeScore} – ${m.awayScore}` : '—';
-                    // Format date as m/d (no year)
+                    // Format date as m/d
                     const dateObj = new Date(m.date + 'T00:00:00');
-                    const month = dateObj.getMonth() + 1; // no leading zero
+                    const month = dateObj.getMonth() + 1;
                     const day = dateObj.getDate();
                     const formattedDate = `${month}/${day}`;
-                    // Time is already in PST (e.g., "12:00 PM PST")
-                    const timePST = m.pst || m.time; // use pst field if available
+                    const timePST = m.pst || m.time;
                     const stadium = m.stadium || '';
                     html +=
                         `<div class="match-wrapper" style="flex: ${factor};" data-match-id="${m.id}">
@@ -1537,6 +1572,8 @@
                 });
                 html += `</div></div>`;
             });
+
+            // Champion column
             const finalMatch = allKoGames.find(g => g.round === 'Final');
             let champHtml = '';
             if (finalMatch && finalMatch.homeScore !== null && finalMatch.awayScore !== null && finalMatch.homeScore !==
@@ -1659,16 +1696,14 @@
         function openPlayerModal(playerName) {
             const overlay = document.getElementById('playerOverlay');
             const modal = document.getElementById('playerModal');
-            let w = 0,
-                l = 0,
-                d = 0;
+            // Get record using the function
+            const record = getPlayerRecord(playerName);
+            const w = record.wins,
+                l = record.losses,
+                d = record.draws;
             const playerGames = allGames.filter(g => {
                 const isHome = peopleMap[g.home] === playerName;
                 const isAway = peopleMap[g.away] === playerName;
-                if (g.homeScore !== null && g.awayScore !== null && (isHome || isAway)) {
-                    if (g.homeScore === g.awayScore) { d++; } else if (isHome && g.homeScore > g.awayScore) { w
-                        ; } else if (isAway && g.awayScore > g.homeScore) { w; } else { l; }
-                }
                 return isHome || isAway;
             });
             playerGames.sort((a, b) => {
@@ -1815,6 +1850,7 @@
         document.getElementById('modalOverlay').addEventListener('click', function(e) { if (e.target === this) this
                 .classList.remove('open'); });
 
+        // ---- RENDER LEGEND with record and sorted teams ----
         function renderLegend() {
             const legendEl = document.getElementById('playerLegend');
             if (!legendEl) return;
@@ -1825,6 +1861,9 @@
                 if (legendData[person]) {
                     const c = legendData[person].color;
                     const teams = legendData[person].teams;
+                    // Get record
+                    const record = getPlayerRecord(person);
+                    // Split into active and eliminated
                     const active = [],
                         eliminated = [];
                     teams.forEach(team => {
@@ -1846,8 +1885,15 @@
                     });
                     h +=
                         `<div class="legend-player" data-player="${person}">
-                                <div class="legend-name"><span class="legend-dot" style="background:${c}"></span>${person}</div>
+                                <div class="legend-name">
+                                    <span class="legend-dot" style="background:${c}"></span>${person}
+                                </div>
                                 <div class="legend-teams">${teamsHtml}</div>
+                                <div class="legend-record">
+                                    <span class="wins">W: ${record.wins}</span> ·
+                                    <span class="losses">L: ${record.losses}</span> ·
+                                    <span class="draws">D: ${record.draws}</span>
+                                </div>
                             </div>`;
                 }
             });
@@ -1859,8 +1905,6 @@
         }
 
         function renderAll() {
-            // No need to update knockout teams dynamically – all are hardcoded
-            // Just propagate results
             propagateKnockoutResults();
             document.getElementById('filterBanner').innerHTML = selectedDate ?
                 `🔍 Showing <strong>${selectedDate}</strong> <span class="clear-filter" id="clearFilter">[Show All]</span>` :
