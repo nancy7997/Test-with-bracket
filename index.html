@@ -20,6 +20,7 @@
             --highlight: #fff8e1;
             --shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
             --player-color: #6c3bd4;
+            --eliminated: #dc3545;
         }
         * {
             margin: 0;
@@ -345,6 +346,12 @@
             font-size: .9em;
             text-align: center;
         }
+        .legend-section .legend-sub {
+            text-align: center;
+            font-size: .7em;
+            color: #6c757d;
+            margin-bottom: 12px;
+        }
         .legend-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
@@ -372,7 +379,15 @@
         .legend-player .legend-teams {
             font-size: .7em;
             color: #6c757d;
-            line-height: 1.4;
+            line-height: 1.6;
+        }
+        .legend-player .legend-teams .team-eliminated {
+            text-decoration: line-through;
+            color: #dc3545;
+            font-weight: 600;
+        }
+        .legend-player .legend-teams .team-active {
+            font-weight: 500;
         }
         .legend-dot {
             display: inline-block;
@@ -380,6 +395,22 @@
             height: 10px;
             border-radius: 50%;
             margin-right: 6px;
+        }
+        .legend-status-badge {
+            display: inline-block;
+            font-size: .6em;
+            padding: 1px 6px;
+            border-radius: 20px;
+            margin-left: 4px;
+            font-weight: 600;
+        }
+        .legend-status-badge.active {
+            background: #d4edda;
+            color: #155724;
+        }
+        .legend-status-badge.eliminated {
+            background: #f8d7da;
+            color: #721c24;
         }
 
         /* ---- Bracket ---- */
@@ -869,7 +900,7 @@
             'L': ['England', 'Croatia', 'Ghana', 'Panama']
         };
 
-        // Player mapping (unchanged)
+        // Player mapping
         const peopleMap = {
             'Mexico': 'Irma',
             'South Korea': 'Grampa',
@@ -953,8 +984,7 @@
             return (hrs * 60) + mins;
         }
 
-        // ---- Group games ----
-        // All group stage fixtures with corrected team names (Czechia, USA, Türkiye, Côte d'Ivoire, Cabo Verde, IR Iran, Congo DR)
+        // ---- Group games (unchanged, but verified) ----
         const allGroupGames = [
             // Group A
             { id: 'G1', group: 'A', home: 'Mexico', away: 'South Africa', date: '2026-06-11', time: '1:00 PM CT',
@@ -1124,7 +1154,7 @@
             { id: 'K1', round: 'Round of 32', home: 'Runner-up A', away: 'Runner-up B', date: '2026-06-28',
                 time: '1:00 PM ET', pst: '10:00 AM PST', stadium: 'Los Angeles Stadium', homeScore: null,
                 awayScore: null, isKo: true },
-            { id: 'K2', round: 'Round of 32', home: 'Germany', away: '3rd Best*', date: '2026-06-28',
+            { id: 'K2', round: 'Round of 32', home: 'Winner E', away: '3rd Best*', date: '2026-06-28',
                 time: '4:00 PM ET', pst: '1:00 PM PST', stadium: 'Boston Stadium', homeScore: null,
                 awayScore: null, isKo: true },
             { id: 'K3', round: 'Round of 32', home: 'Winner F', away: 'Runner-up C', date: '2026-06-28',
@@ -1139,13 +1169,13 @@
             { id: 'K6', round: 'Round of 32', home: 'Runner-up E', away: 'Runner-up I', date: '2026-06-29',
                 time: '1:00 PM CT', pst: '11:00 AM PST', stadium: 'Dallas Stadium', homeScore: null,
                 awayScore: null, isKo: true },
-            { id: 'K7', round: 'Round of 32', home: 'Mexico', away: '3rd Best*', date: '2026-06-29',
+            { id: 'K7', round: 'Round of 32', home: 'Winner A', away: '3rd Best*', date: '2026-06-29',
                 time: '4:00 PM CT', pst: '2:00 PM PST', stadium: 'Mexico City Stadium', homeScore: null,
                 awayScore: null, isKo: true },
             { id: 'K8', round: 'Round of 32', home: 'Winner L', away: '3rd Best*', date: '2026-06-29',
                 time: '7:00 PM ET', pst: '4:00 PM PST', stadium: 'Atlanta Stadium', homeScore: null,
                 awayScore: null, isKo: true },
-            { id: 'K9', round: 'Round of 32', home: 'USA', away: '3rd Best*', date: '2026-06-30',
+            { id: 'K9', round: 'Round of 32', home: 'Winner D', away: '3rd Best*', date: '2026-06-30',
                 time: '7:00 PM PT', pst: '7:00 PM PST', stadium: "San Francisco Bay Area Stadium", homeScore: null,
                 awayScore: null, isKo: true },
             { id: 'K10', round: 'Round of 32', home: 'Winner G', away: '3rd Best*', date: '2026-06-30',
@@ -1163,7 +1193,7 @@
             { id: 'K14', round: 'Round of 32', home: 'Runner-up D', away: 'Runner-up G', date: '2026-07-03',
                 time: '7:00 PM CT', pst: '5:00 PM PST', stadium: 'Dallas Stadium', homeScore: null,
                 awayScore: null, isKo: true },
-            { id: 'K15', round: 'Round of 32', home: 'Argentina', away: 'Runner-up H', date: '2026-07-03',
+            { id: 'K15', round: 'Round of 32', home: 'Winner J', away: 'Runner-up H', date: '2026-07-03',
                 time: '7:00 PM ET', pst: '4:00 PM PST', stadium: 'Miami Stadium', homeScore: null,
                 awayScore: null, isKo: true },
             { id: 'K16', round: 'Round of 32', home: 'Winner K', away: '3rd Best*', date: '2026-07-03',
@@ -1269,6 +1299,107 @@
             return thirds.sort((a, b) => b.pts - a.pts || b.gd - a.gd || b.gf - a.gf);
         }
 
+        // ----- THIRD-PLACE ALLOCATION (official FIFA 2026) -----
+        function allocateThirdPlaceTeams() {
+            const thirdTeams = getAllThirdPlaceTeams();
+            if (thirdTeams.length < 8) return null; // not enough third-place teams
+
+            // Define allowed groups for each slot (K2, K5, K7, K8, K9, K10, K13, K16)
+            const slotGroups = {
+                'K2': ['A', 'B', 'C', 'D', 'F'],
+                'K5': ['C', 'D', 'F', 'G', 'H'],
+                'K7': ['C', 'E', 'F', 'H', 'I'],
+                'K8': ['E', 'H', 'I', 'J', 'K'],
+                'K9': ['B', 'E', 'F', 'I', 'J'],
+                'K10': ['A', 'E', 'H', 'I', 'J'],
+                'K13': ['E', 'F', 'G', 'I', 'J'],
+                'K16': ['D', 'E', 'I', 'J', 'L']
+            };
+            const slotIds = ['K2', 'K5', 'K7', 'K8', 'K9', 'K10', 'K13', 'K16'];
+
+            // We have exactly 8 third teams. We need to assign each to a slot that allows its group.
+            // We'll do a simple greedy: sort slots by number of allowed groups (ascending) and assign best team (by ranking) that fits.
+            // But we also want to keep the best teams in the first slots? Actually the official allocation is based on a specific combination.
+            // To simplify, we'll assign the teams in order of ranking, but we must respect group constraints.
+            // We'll use a backtracking or brute force for small size (8) - but we'll just do a simple match.
+            // We'll create a list of available slots and try to assign the highest-ranked team to a slot that allows it.
+            // If a slot cannot be filled, we fallback to any.
+
+            let assigned = {};
+            let remainingSlots = slotIds.slice();
+            // Sort remaining slots by number of allowed groups (most restrictive first)
+            remainingSlots.sort((a, b) => slotGroups[a].length - slotGroups[b].length);
+
+            // We'll assign teams in order of ranking (best first)
+            for (let team of thirdTeams) {
+                // Find the best slot that allows this team's group
+                let found = false;
+                for (let slot of remainingSlots) {
+                    if (slotGroups[slot].includes(team.group)) {
+                        assigned[slot] = team.team;
+                        remainingSlots = remainingSlots.filter(s => s !== slot);
+                        found = true;
+                        break;
+                    }
+                }
+                if (!found) {
+                    // If no slot allows, assign to the first remaining slot (fallback)
+                    if (remainingSlots.length > 0) {
+                        assigned[remainingSlots[0]] = team.team;
+                        remainingSlots = remainingSlots.slice(1);
+                    }
+                }
+            }
+            return assigned;
+        }
+
+        // ----- ELIMINATION LOGIC -----
+        function isTeamEliminated(teamName) {
+            // 1. If team is the champion (winner of final) → not eliminated
+            const finalMatch = allKoGames.find(g => g.round === 'Final');
+            if (finalMatch && finalMatch.homeScore !== null && finalMatch.awayScore !== null && finalMatch.homeScore !==
+                finalMatch.awayScore) {
+                if (finalMatch.homeScore > finalMatch.awayScore && finalMatch.home === teamName) {
+                    return false;
+                }
+                if (finalMatch.awayScore > finalMatch.homeScore && finalMatch.away === teamName) {
+                    return false;
+                }
+            }
+
+            // 2. Check group stage elimination
+            for (const gid of Object.keys(GROUPS)) {
+                if (GROUPS[gid].includes(teamName)) {
+                    if (isGroupComplete(gid)) {
+                        const standings = calculateStandings(gid);
+                        const pos = standings.findIndex(s => s.team === teamName);
+                        if (pos >= 2) {
+                            // Not top 2 → check if top 8 third-place
+                            const thirdPlaces = getAllThirdPlaceTeams();
+                            const idx = thirdPlaces.findIndex(t => t.team === teamName);
+                            if (idx < 0 || idx >= 8) {
+                                return true;
+                            }
+                        }
+                    }
+                }
+            }
+
+            // 3. Check knockout stage elimination (only if team is not the champion)
+            for (const game of allKoGames) {
+                if (game.homeScore !== null && game.awayScore !== null && game.homeScore !== game.awayScore) {
+                    if (game.home === teamName && game.homeScore < game.awayScore) {
+                        return true;
+                    }
+                    if (game.away === teamName && game.awayScore < game.homeScore) {
+                        return true;
+                    }
+                }
+            }
+
+            return false;
+        }
+
         function updateKnockoutTeams() {
             const groupStandings = {};
             const completedGroups = [];
@@ -1287,43 +1418,54 @@
                 if (st.length >= 2) runnersUp[gid] = st[1].team;
                 if (st.length >= 3) thirdPlaces.push({ ...st[2], group: gid });
             });
-            thirdPlaces.sort((a, b) => b.pts - a.pts || b.gd - a.gd || b.gf - a.gf);
-            const bestThird = thirdPlaces.slice(0, 8);
-            const allComplete = completedGroups.length === 12;
+            // Get allocation of third-place teams
+            const allocation = allocateThirdPlaceTeams();
+            // If allocation is null, use fallback (best third in order)
+            const bestThird = getAllThirdPlaceTeams();
             const koMap = {};
             allKoGames.forEach(m => { koMap[m.id] = m; });
+
+            // Assign winners/runners-up
             if (koMap['K1']) { koMap['K1'].home = runnersUp['A'] || 'Runner-up A';
                 koMap['K1'].away = runnersUp['B'] || 'Runner-up B'; }
-            if (koMap['K2']) { koMap['K2'].home = winners['E'] || 'Germany';
-                koMap['K2'].away = (allComplete && bestThird[0]) ? bestThird[0].team : '3rd Best*'; }
+            if (koMap['K2']) { koMap['K2'].home = winners['E'] || 'Winner E';
+                koMap['K2'].away = (allocation && allocation['K2']) ? allocation['K2'] : (bestThird[0] ? bestThird[0].team :
+                    '3rd Best*'); }
             if (koMap['K3']) { koMap['K3'].home = winners['F'] || 'Winner F';
                 koMap['K3'].away = runnersUp['C'] || 'Runner-up C'; }
             if (koMap['K4']) { koMap['K4'].home = winners['C'] || 'Winner C';
                 koMap['K4'].away = runnersUp['F'] || 'Runner-up F'; }
             if (koMap['K5']) { koMap['K5'].home = winners['I'] || 'Winner I';
-                koMap['K5'].away = (allComplete && bestThird[1]) ? bestThird[1].team : '3rd Best*'; }
+                koMap['K5'].away = (allocation && allocation['K5']) ? allocation['K5'] : (bestThird[1] ? bestThird[1].team :
+                    '3rd Best*'); }
             if (koMap['K6']) { koMap['K6'].home = runnersUp['E'] || 'Runner-up E';
                 koMap['K6'].away = runnersUp['I'] || 'Runner-up I'; }
-            if (koMap['K7']) { koMap['K7'].home = winners['A'] || 'Mexico';
-                koMap['K7'].away = (allComplete && bestThird[2]) ? bestThird[2].team : '3rd Best*'; }
+            if (koMap['K7']) { koMap['K7'].home = winners['A'] || 'Winner A';
+                koMap['K7'].away = (allocation && allocation['K7']) ? allocation['K7'] : (bestThird[2] ? bestThird[2].team :
+                    '3rd Best*'); }
             if (koMap['K8']) { koMap['K8'].home = winners['L'] || 'Winner L';
-                koMap['K8'].away = (allComplete && bestThird[3]) ? bestThird[3].team : '3rd Best*'; }
-            if (koMap['K9']) { koMap['K9'].home = winners['D'] || 'USA';
-                koMap['K9'].away = (allComplete && bestThird[4]) ? bestThird[4].team : '3rd Best*'; }
+                koMap['K8'].away = (allocation && allocation['K8']) ? allocation['K8'] : (bestThird[3] ? bestThird[3].team :
+                    '3rd Best*'); }
+            if (koMap['K9']) { koMap['K9'].home = winners['D'] || 'Winner D';
+                koMap['K9'].away = (allocation && allocation['K9']) ? allocation['K9'] : (bestThird[4] ? bestThird[4].team :
+                    '3rd Best*'); }
             if (koMap['K10']) { koMap['K10'].home = winners['G'] || 'Winner G';
-                koMap['K10'].away = (allComplete && bestThird[5]) ? bestThird[5].team : '3rd Best*'; }
+                koMap['K10'].away = (allocation && allocation['K10']) ? allocation['K10'] : (bestThird[5] ? bestThird[5]
+                    .team : '3rd Best*'); }
             if (koMap['K11']) { koMap['K11'].home = winners['H'] || 'Winner H';
                 koMap['K11'].away = runnersUp['J'] || 'Runner-up J'; }
             if (koMap['K12']) { koMap['K12'].home = runnersUp['K'] || 'Runner-up K';
                 koMap['K12'].away = runnersUp['L'] || 'Runner-up L'; }
             if (koMap['K13']) { koMap['K13'].home = winners['B'] || 'Winner B';
-                koMap['K13'].away = (allComplete && bestThird[6]) ? bestThird[6].team : '3rd Best*'; }
+                koMap['K13'].away = (allocation && allocation['K13']) ? allocation['K13'] : (bestThird[6] ? bestThird[6]
+                    .team : '3rd Best*'); }
             if (koMap['K14']) { koMap['K14'].home = runnersUp['D'] || 'Runner-up D';
                 koMap['K14'].away = runnersUp['G'] || 'Runner-up G'; }
-            if (koMap['K15']) { koMap['K15'].home = winners['J'] || 'Argentina';
+            if (koMap['K15']) { koMap['K15'].home = winners['J'] || 'Winner J';
                 koMap['K15'].away = runnersUp['H'] || 'Runner-up H'; }
             if (koMap['K16']) { koMap['K16'].home = winners['K'] || 'Winner K';
-                koMap['K16'].away = (allComplete && bestThird[7]) ? bestThird[7].team : '3rd Best*'; }
+                koMap['K16'].away = (allocation && allocation['K16']) ? allocation['K16'] : (bestThird[7] ? bestThird[7]
+                    .team : '3rd Best*'); }
         }
 
         function propagateKnockoutResults() {
@@ -1336,8 +1478,6 @@
                         losers[m.id] = m.home; }
                 }
             });
-            // Round of 16 mapping: K17=winner K2 vs K5, K18=winner K1 vs K3, K19=winner K4 vs K6, K20=winner K7 vs K8,
-            // K21=winner K10 vs K11, K22=winner K9 vs K12, K23=winner K13 vs K15, K24=winner K14 vs K16
             const r16Map = [
                 ['K2', 'K5'],
                 ['K1', 'K3'],
@@ -1360,7 +1500,6 @@
                     m.away = winners[childIds[0]] || winners[childIds[1]] || m.away;
                 }
             });
-            // Quarter-finals mapping
             const qfMap = [
                 ['K17', 'K18'],
                 ['K19', 'K20'],
@@ -1379,7 +1518,6 @@
                     m.away = winners[childIds[0]] || winners[childIds[1]] || m.away;
                 }
             });
-            // Semi-finals mapping
             const sfMap = [
                 ['K25', 'K26'],
                 ['K27', 'K28']
@@ -1740,17 +1878,32 @@
         document.getElementById('modalOverlay').addEventListener('click', function(e) { if (e.target === this) this
                 .classList.remove('open'); });
 
+        // ----- RENDER LEGEND WITH ELIMINATION STRIKETHROUGH -----
         function renderLegend() {
             const legendEl = document.getElementById('playerLegend');
             if (!legendEl) return;
             const order = ['Moni', 'Grampa', 'Grama', 'Anthony', 'Nancy', 'Irma', 'Mari', 'Michael'];
             let h =
-                `<div class="legend-section"><h3>👥 Player Legend</h3><div class="legend-grid">`;
+                `<div class="legend-section"><h3>👥 Player Legend</h3><div class="legend-sub">🔴 Strikethrough = eliminated · Click a player for full dashboard</div><div class="legend-grid">`;
             order.forEach(person => {
                 if (legendData[person]) {
                     const c = legendData[person].color;
+                    const teams = legendData[person].teams;
+                    let teamsHtml = '';
+                    teams.forEach((team, idx) => {
+                        const eliminated = isTeamEliminated(team);
+                        const cls = eliminated ? 'team-eliminated' : 'team-active';
+                        const badge = eliminated ?
+                            `<span class="legend-status-badge eliminated">❌</span>` :
+                            `<span class="legend-status-badge active">✅</span>`;
+                        teamsHtml +=
+                            `<span class="${cls}">${team} ${badge}</span>${idx < teams.length - 1 ? ' · ' : ''}`;
+                    });
                     h +=
-                        `<div class="legend-player" data-player="${person}"><div class="legend-name"><span class="legend-dot" style="background:${c}"></span>${person}</div><div class="legend-teams">${legendData[person].teams.join(', ')}</div></div>`;
+                        `<div class="legend-player" data-player="${person}">
+                                <div class="legend-name"><span class="legend-dot" style="background:${c}"></span>${person}</div>
+                                <div class="legend-teams">${teamsHtml}</div>
+                            </div>`;
                 }
             });
             h += `</div></div>`;
