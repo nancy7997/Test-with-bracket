@@ -1335,7 +1335,7 @@
             return false;
         }
 
-        // --- Propagation with reordered IDs (now K2 and K5 for 89, etc.) ----
+        // --- FIXED PROPAGATION: correctly assign home/away from respective child winners ---
         function propagateKnockoutResults() {
             const winners = {},
                 losers = {};
@@ -1363,11 +1363,12 @@
                 const m = allKoGames.find(g => g.id === mid);
                 if (!m) return;
                 const childIds = r16Map[idx];
+                // Home = winner of first child, Away = winner of second child
                 if (m.home && m.home.startsWith('Winner Match')) {
-                    m.home = winners[childIds[0]] || winners[childIds[1]] || m.home;
+                    m.home = winners[childIds[0]] || m.home; // keep placeholder if no winner yet
                 }
                 if (m.away && m.away.startsWith('Winner Match')) {
-                    m.away = winners[childIds[0]] || winners[childIds[1]] || m.away;
+                    m.away = winners[childIds[1]] || m.away;
                 }
             });
 
@@ -1384,10 +1385,10 @@
                 if (!m) return;
                 const childIds = qfMap[idx];
                 if (m.home && m.home.startsWith('Winner Match')) {
-                    m.home = winners[childIds[0]] || winners[childIds[1]] || m.home;
+                    m.home = winners[childIds[0]] || m.home;
                 }
                 if (m.away && m.away.startsWith('Winner Match')) {
-                    m.away = winners[childIds[0]] || winners[childIds[1]] || m.away;
+                    m.away = winners[childIds[1]] || m.away;
                 }
             });
 
@@ -1402,10 +1403,10 @@
                 if (!m) return;
                 const childIds = sfMap[idx];
                 if (m.home && m.home.startsWith('Winner Match')) {
-                    m.home = winners[childIds[0]] || winners[childIds[1]] || m.home;
+                    m.home = winners[childIds[0]] || m.home;
                 }
                 if (m.away && m.away.startsWith('Winner Match')) {
-                    m.away = winners[childIds[0]] || winners[childIds[1]] || m.away;
+                    m.away = winners[childIds[1]] || m.away;
                 }
             });
 
@@ -1413,10 +1414,10 @@
             const thirdMatch = allKoGames.find(g => g.id === 'K31');
             if (thirdMatch) {
                 if (thirdMatch.home && thirdMatch.home.startsWith('Runner-up Match')) {
-                    thirdMatch.home = losers['K29'] || losers['K30'] || thirdMatch.home;
+                    thirdMatch.home = losers['K29'] || thirdMatch.home;
                 }
                 if (thirdMatch.away && thirdMatch.away.startsWith('Runner-up Match')) {
-                    thirdMatch.away = losers['K29'] || losers['K30'] || thirdMatch.away;
+                    thirdMatch.away = losers['K30'] || thirdMatch.away;
                 }
             }
 
@@ -1424,15 +1425,15 @@
             const finalMatch = allKoGames.find(g => g.id === 'K32');
             if (finalMatch) {
                 if (finalMatch.home && finalMatch.home.startsWith('Winner Match')) {
-                    finalMatch.home = winners['K29'] || winners['K30'] || finalMatch.home;
+                    finalMatch.home = winners['K29'] || finalMatch.home;
                 }
                 if (finalMatch.away && finalMatch.away.startsWith('Winner Match')) {
-                    finalMatch.away = winners['K29'] || winners['K30'] || finalMatch.away;
+                    finalMatch.away = winners['K30'] || finalMatch.away;
                 }
             }
         }
 
-        // --- Firebase sync and other functions (unchanged from previous) ---
+        // --- Firebase sync and other functions (unchanged) ---
         function syncFromFirebase() {
             const statusEl = document.getElementById('syncStatus');
             statusEl.textContent = '🟡 Syncing...';
