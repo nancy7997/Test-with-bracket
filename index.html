@@ -1161,7 +1161,7 @@
         ];
         allGroupGames.forEach(g => { g.round = 'group'; });
 
-        // ---- KNOCKOUT GAMES with corrected times ----
+        // ---- KNOCKOUT GAMES with final corrected times ----
         const allKoGames = [
             // Round of 32 (73–88)
             { id: 'K2', round: 'Round of 32', home: 'Netherlands', away: 'Morocco', date: '2026-06-29',
@@ -1241,7 +1241,7 @@
 
             // Quarter-finals (97–100)
             { id: 'K25', round: 'Quarter-finals', home: 'Winner Match 89', away: 'Winner Match 90', date: '2026-07-09',
-                time: '12:00 PM PST', pst: '12:00 PM PST', stadium: 'AT&T Stadium, Arlington', matchNumber: '97',
+                time: '1:00 PM PST', pst: '1:00 PM PST', stadium: 'AT&T Stadium, Arlington', matchNumber: '97',
                 homeScore: null, awayScore: null, isKo: true },
             { id: 'K26', round: 'Quarter-finals', home: 'Winner Match 93', away: 'Winner Match 94', date: '2026-07-10',
                 time: '12:00 PM PST', pst: '12:00 PM PST', stadium: 'SoFi Stadium, Inglewood', matchNumber: '98',
@@ -1261,9 +1261,9 @@
                 time: '12:00 PM PST', pst: '12:00 PM PST', stadium: 'Mercedes-Benz Stadium, Atlanta', matchNumber: '102',
                 homeScore: null, awayScore: null, isKo: true },
 
-            // Third Place (103)
-            { id: 'K31', round: 'Third Place', home: 'Loser Match 101', away: 'Loser Match 102', date: '2026-07-18',
-                time: '10:00 AM PST', pst: '10:00 AM PST', stadium: 'Hard Rock Stadium, Miami Gardens', matchNumber: '103',
+            // Third Place (103) – changed to "Runner-up" and time to 12:00 PM PST
+            { id: 'K31', round: 'Third Place', home: 'Runner-up Match 101', away: 'Runner-up Match 102', date: '2026-07-18',
+                time: '12:00 PM PST', pst: '12:00 PM PST', stadium: 'Hard Rock Stadium, Miami Gardens', matchNumber: '103',
                 homeScore: null, awayScore: null, isKo: true },
 
             // Final (104)
@@ -1419,13 +1419,13 @@
                 }
             });
 
-            // Third Place
+            // Third Place – now "Runner-up" instead of "Loser"
             const thirdMatch = allKoGames.find(g => g.id === 'K31');
             if (thirdMatch) {
-                if (thirdMatch.home && thirdMatch.home.startsWith('Loser Match')) {
+                if (thirdMatch.home && thirdMatch.home.startsWith('Runner-up Match')) {
                     thirdMatch.home = losers['K29'] || losers['K30'] || thirdMatch.home;
                 }
-                if (thirdMatch.away && thirdMatch.away.startsWith('Loser Match')) {
+                if (thirdMatch.away && thirdMatch.away.startsWith('Runner-up Match')) {
                     thirdMatch.away = losers['K29'] || losers['K30'] || thirdMatch.away;
                 }
             }
