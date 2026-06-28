@@ -1264,7 +1264,7 @@
         let selectedDate = null,
             currentView = 'bracket';
 
-        // --- Helper functions (unchanged) ---
+        // --- Helper functions ---
         function isGroupComplete(gid) {
             const games = allGroupGames.filter(g => g.group === gid);
             return games.every(g => g.homeScore !== null && g.awayScore !== null);
@@ -1363,16 +1363,15 @@
                 const m = allKoGames.find(g => g.id === mid);
                 if (!m) return;
                 const childIds = r16Map[idx];
-                // Home = winner of first child, Away = winner of second child
                 if (m.home && m.home.startsWith('Winner Match')) {
-                    m.home = winners[childIds[0]] || m.home; // keep placeholder if no winner yet
+                    m.home = winners[childIds[0]] || m.home;
                 }
                 if (m.away && m.away.startsWith('Winner Match')) {
                     m.away = winners[childIds[1]] || m.away;
                 }
             });
 
-            // Quarter-finals: 97 = winner 89 vs winner 90, 98 = winner 93 vs winner 94, etc.
+            // Quarter-finals
             const qfMap = [
                 ['K17', 'K18'],
                 ['K21', 'K22'],
@@ -1392,7 +1391,7 @@
                 }
             });
 
-            // Semi-finals: 101 = winner 97 vs winner 98, 102 = winner 99 vs winner 100
+            // Semi-finals
             const sfMap = [
                 ['K25', 'K26'],
                 ['K27', 'K28']
@@ -1433,7 +1432,6 @@
             }
         }
 
-        // --- Firebase sync and other functions (unchanged) ---
         function syncFromFirebase() {
             const statusEl = document.getElementById('syncStatus');
             statusEl.textContent = '🟡 Syncing...';
@@ -1491,7 +1489,7 @@
             return { wins, losses, draws };
         }
 
-        // --- Render bracket ---
+        // --- Render bracket with proper time fallbacks ---
         function renderBracket() {
             propagateKnockoutResults();
             const container = document.getElementById('dynamicBracketTree');
@@ -1512,7 +1510,8 @@
                     const month = dateObj.getMonth() + 1;
                     const day = dateObj.getDate();
                     const formattedDate = `${month}/${day}`;
-                    const timePST = m.time;
+                    // FIX: Use time with fallback to pst, then to empty string (never show undefined)
+                    const timePST = m.time || m.pst || '';
                     const stadium = m.stadium || '';
                     const matchNum = m.matchNumber || '';
                     html +=
@@ -1525,7 +1524,7 @@
                                         </div>
                                         <div class="match-meta">
                                             <div class="left">
-                                                <div class="date-time">${formattedDate} · ${timePST}</div>
+                                                <div class="date-time">${formattedDate}${timePST ? ' · ' + timePST : ''}</div>
                                                 <div class="stadium">${stadium}</div>
                                             </div>
                                             <div class="match-number">Match ${matchNum}</div>
@@ -1554,7 +1553,7 @@
             });
         }
 
-        // ---- Calendar and modal functions (unchanged) ----
+        // ---- Calendar and modal functions ----
         function getTodayPST() {
             const now = new Date();
             const formatter = new Intl.DateTimeFormat('en-CA', { timeZone: 'America/Los_Angeles', year: 'numeric',
@@ -1634,12 +1633,15 @@
                 } else {
                     groupDisplay = `<span class="group-badge" style="background:#6c757d;">${game.round}</span>`;
                 }
+                // FIX: Use time with fallback to pst, never show undefined
+                const displayTime = game.time || game.pst || '';
+                const displayPST = game.pst || game.time || '';
                 h +=
                     `<div class="daily-game-card" data-game-id="${game.id}">
                             <div class="match-info">
                                 <div class="teams-line">${game.home} vs ${game.away} ${groupDisplay}</div>
                                 <div class="details-line">${game.stadium}</div>
-                                <div class="details-line">🕐 ${game.time} (${game.pst})</div>
+                                <div class="details-line">🕐 ${displayTime}${displayPST && displayPST !== displayTime ? ' (' + displayPST + ')' : ''}</div>
                                 <div class="player-line"><span style="color:${hc}">👤 ${hp || '—'}</span> vs <span style="color:${ac}">👤 ${ap || '—'}</span></div>
                             </div>
                             <div class="score-badge${!sc ? ' pending' : ''}">${sc ? game.homeScore + ' - ' + game.awayScore : 'vs'}</div>
@@ -1689,11 +1691,12 @@
                 'color:#6c757d;';
                 const aColor = ap === playerName ? 'font-weight:900;text-decoration:underline;' :
                 'color:#6c757d;';
+                const displayTime = g.time || g.pst || '';
                 h +=
                     `<div class="daily-game-card" style="cursor:default;">
                             <div class="match-info">
                                 <div class="teams-line">${g.home} vs ${g.away}</div>
-                                <div class="details-line">📅 ${g.date} | 🕐 ${g.time} (${g.pst})</div>
+                                <div class="details-line">📅 ${g.date} | 🕐 ${displayTime}</div>
                                 <div class="player-line">
                                     <span style="${hColor}">${hp || '—'}</span> vs 
                                     <span style="${aColor}">${ap || '—'}</span>
@@ -1785,8 +1788,9 @@
                 ap = peopleMap[game.away] || '',
                 hc = playerColors[hp] || '#6c3bd4',
                 ac = playerColors[ap] || '#6c3bd4';
+            const displayTime = game.time || game.pst || '';
             modal.innerHTML =
-                `<h3>${game.round === 'group' ? 'Group ' + game.group + ' · ' : ''}${game.home} vs ${game.away}</h3><div class="modal-date">📅 ${game.date} | 🏟 ${game.stadium} | 🕐 ${game.time} (${game.pst})</div><div class="matchup"><div class="team-block"><div style="font-size:2em;">⚽</div><div class="country">${game.home}</div><div class="owner" style="color:${hc}">${hp || '—'}</div></div><div class="vs">VS</div><div class="team-block"><div style="font-size:2em;">⚽</div><div class="country">${game.away}</div><div class="owner" style="color:${ac}">${ap || '—'}</div></div></div><div class="score-inputs"><input type="number" id="modalHomeScore" value="${hs}" placeholder="-" min="0" max="99"><span>—</span><input type="number" id="modalAwayScore" value="${as}" placeholder="-" min="0" max="99"></div><div class="btn-row"><button class="btn btn-save" id="modalSave">💾 Save</button><button class="btn btn-reset" id="modalReset">Clear</button><button class="btn btn-close" id="modalClose">Close</button></div>`;
+                `<h3>${game.round === 'group' ? 'Group ' + game.group + ' · ' : ''}${game.home} vs ${game.away}</h3><div class="modal-date">📅 ${game.date} | 🏟 ${game.stadium} | 🕐 ${displayTime}</div><div class="matchup"><div class="team-block"><div style="font-size:2em;">⚽</div><div class="country">${game.home}</div><div class="owner" style="color:${hc}">${hp || '—'}</div></div><div class="vs">VS</div><div class="team-block"><div style="font-size:2em;">⚽</div><div class="country">${game.away}</div><div class="owner" style="color:${ac}">${ap || '—'}</div></div></div><div class="score-inputs"><input type="number" id="modalHomeScore" value="${hs}" placeholder="-" min="0" max="99"><span>—</span><input type="number" id="modalAwayScore" value="${as}" placeholder="-" min="0" max="99"></div><div class="btn-row"><button class="btn btn-save" id="modalSave">💾 Save</button><button class="btn btn-reset" id="modalReset">Clear</button><button class="btn btn-close" id="modalClose">Close</button></div>`;
             overlay.classList.add('open');
             document.getElementById('modalSave').addEventListener('click', () => {
                 const hv = document.getElementById('modalHomeScore').value,
