@@ -169,7 +169,6 @@
             display: block;
         }
 
-        /* ---- Groups grid ---- */
         .groups-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
@@ -288,7 +287,6 @@
             margin-top: 2px;
         }
 
-        /* ---- Third place ---- */
         .third-place-section {
             background: #fff;
             border: 2px solid var(--accent);
@@ -331,7 +329,6 @@
             font-weight: 700;
         }
 
-        /* ---- Legend ---- */
         .legend-section {
             background: #fff;
             border: 2px solid #dee2e6;
@@ -395,9 +392,15 @@
             margin-top: 2px;
             color: #495057;
         }
-        .legend-player .legend-record .wins { color: var(--win); }
-        .legend-player .legend-record .losses { color: var(--loss); }
-        .legend-player .legend-record .draws { color: var(--draw); }
+        .legend-player .legend-record .wins {
+            color: var(--win);
+        }
+        .legend-player .legend-record .losses {
+            color: var(--loss);
+        }
+        .legend-player .legend-record .draws {
+            color: var(--draw);
+        }
         .legend-dot {
             display: inline-block;
             width: 10px;
@@ -406,7 +409,6 @@
             margin-right: 6px;
         }
 
-        /* ---- Bracket ---- */
         .bracket-wrapper {
             margin-top: 0;
             margin-bottom: 16px;
@@ -587,7 +589,6 @@
             font-size: 0.85rem;
         }
 
-        /* ---- Modal overlays ---- */
         .daily-overlay {
             display: none;
             position: fixed;
@@ -1022,18 +1023,8 @@
             return (hrs * 60) + mins;
         }
 
-        // ---- Group games (unchanged) ----
+        // ---- GROUP GAMES (FULL) ----
         const allGroupGames = [
-            // ... (full group games array, kept as before) ...
-            // For brevity, I'm including only a few here, but the full array is in the final output.
-            // In the actual delivered code, all group games are present.
-        ];
-
-        // For the purpose of this response, we'll include the full allGroupGames array.
-        // Since the full code is large, I'm showing the structure. In the final answer, all games are included.
-
-        // ---- Full group games ----
-        allGroupGames = [
             // Group A
             { id: 'G1', group: 'A', home: 'Mexico', away: 'South Africa', date: '2026-06-11', time: '1:00 PM CT',
                 pst: '12:00 PM PST', stadium: 'Mexico City Stadium', homeScore: 2, awayScore: 0 },
@@ -1196,9 +1187,9 @@
         ];
         allGroupGames.forEach(g => { g.round = 'group'; });
 
-        // ---- Knockout games with match numbers and proper placeholders ----
+        // ---- KNOCKOUT GAMES (Match numbers 73–104) ----
         const allKoGames = [
-            // Round of 32 (Matches 73-88)
+            // Round of 32 (73–88)
             { id: 'K1', round: 'Round of 32', home: 'South Africa', away: 'Canada', date: '2026-06-28',
                 time: '12:00 PM PST', pst: '12:00 PM PST', stadium: 'SoFi Stadium, Inglewood', matchNumber: '73',
                 homeScore: null, awayScore: null, isKo: true },
@@ -1247,8 +1238,7 @@
             { id: 'K16', round: 'Round of 32', home: 'Argentina', away: 'Cabo Verde', date: '2026-07-03',
                 time: '3:00 PM PST', pst: '3:00 PM PST', stadium: 'Estadio Akron, Zapopan', matchNumber: '88',
                 homeScore: null, awayScore: null, isKo: true },
-
-            // Round of 16 (Matches 89-96) – placeholders
+            // Round of 16 (89–96)
             { id: 'K17', round: 'Round of 16', home: 'Winner Match 73', away: 'Winner Match 74', date: '2026-07-04',
                 time: '10:00 AM PST', pst: '10:00 AM PST', stadium: 'NRG Stadium, Houston', matchNumber: '89',
                 homeScore: null, awayScore: null, isKo: true },
@@ -1273,8 +1263,7 @@
             { id: 'K24', round: 'Round of 16', home: 'Winner Match 87', away: 'Winner Match 88', date: '2026-07-07',
                 time: '1:00 PM PST', pst: '1:00 PM PST', stadium: 'BC Place, Vancouver', matchNumber: '96',
                 homeScore: null, awayScore: null, isKo: true },
-
-            // Quarter-finals (Matches 97-100)
+            // Quarter-finals (97–100)
             { id: 'K25', round: 'Quarter-finals', home: 'Winner Match 89', away: 'Winner Match 90', date: '2026-07-09',
                 time: '1:00 PM PST', pst: '1:00 PM PST', stadium: 'AT&T Stadium, Arlington', matchNumber: '97',
                 homeScore: null, awayScore: null, isKo: true },
@@ -1287,21 +1276,18 @@
             { id: 'K28', round: 'Quarter-finals', home: 'Winner Match 95', away: 'Winner Match 96', date: '2026-07-12',
                 time: '10:00 AM PST', pst: '10:00 AM PST', stadium: 'Hard Rock Stadium, Miami Gardens', matchNumber: '100',
                 homeScore: null, awayScore: null, isKo: true },
-
-            // Semi-finals (Matches 101-102)
+            // Semi-finals (101–102)
             { id: 'K29', round: 'Semi-finals', home: 'Winner Match 97', away: 'Winner Match 98', date: '2026-07-14',
                 time: '1:00 PM PST', pst: '1:00 PM PST', stadium: 'AT&T Stadium, Arlington', matchNumber: '101',
                 homeScore: null, awayScore: null, isKo: true },
             { id: 'K30', round: 'Semi-finals', home: 'Winner Match 99', away: 'Winner Match 100', date: '2026-07-15',
                 time: '10:00 AM PST', pst: '10:00 AM PST', stadium: 'Mercedes-Benz Stadium, Atlanta', matchNumber: '102',
                 homeScore: null, awayScore: null, isKo: true },
-
-            // Third Place (Match 103)
+            // Third Place (103)
             { id: 'K31', round: 'Third Place', home: 'Loser Match 101', away: 'Loser Match 102', date: '2026-07-18',
                 time: '10:00 AM PST', pst: '10:00 AM PST', stadium: 'Hard Rock Stadium, Miami Gardens', matchNumber: '103',
                 homeScore: null, awayScore: null, isKo: true },
-
-            // Final (Match 104)
+            // Final (104)
             { id: 'K32', round: 'Final', home: 'Winner Match 101', away: 'Winner Match 102', date: '2026-07-19',
                 time: '12:00 PM PST', pst: '12:00 PM PST', stadium: 'MetLife Stadium, East Rutherford', matchNumber: '104',
                 homeScore: null, awayScore: null, isKo: true }
@@ -1392,8 +1378,7 @@
                 }
             });
 
-            // Map match IDs to the match numbers used in placeholder strings
-            // For round of 16: K17 gets winners from K1 and K2 (Match 73 and 74)
+            // Round of 16
             const r16Map = [
                 ['K1', 'K2'],
                 ['K3', 'K4'],
@@ -1409,7 +1394,6 @@
                 const m = allKoGames.find(g => g.id === mid);
                 if (!m) return;
                 const childIds = r16Map[idx];
-                // Replace placeholder "Winner Match X" with actual winner if known
                 if (m.home && m.home.startsWith('Winner Match')) {
                     m.home = winners[childIds[0]] || winners[childIds[1]] || m.home;
                 }
@@ -1418,7 +1402,7 @@
                 }
             });
 
-            // Quarter-finals: K25 from K17,K18; K26 from K19,K20; etc.
+            // Quarter-finals
             const qfMap = [
                 ['K17', 'K18'],
                 ['K19', 'K20'],
@@ -1438,7 +1422,7 @@
                 }
             });
 
-            // Semi-finals: K29 from K25,K26; K30 from K27,K28
+            // Semi-finals
             const sfMap = [
                 ['K25', 'K26'],
                 ['K27', 'K28']
@@ -1456,7 +1440,7 @@
                 }
             });
 
-            // Third Place: K31 uses losers of K29 and K30
+            // Third Place
             const thirdMatch = allKoGames.find(g => g.id === 'K31');
             if (thirdMatch) {
                 if (thirdMatch.home && thirdMatch.home.startsWith('Loser Match')) {
@@ -1467,7 +1451,7 @@
                 }
             }
 
-            // Final: K32 uses winners of K29 and K30
+            // Final
             const finalMatch = allKoGames.find(g => g.id === 'K32');
             if (finalMatch) {
                 if (finalMatch.home && finalMatch.home.startsWith('Winner Match')) {
