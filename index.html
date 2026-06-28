@@ -396,22 +396,6 @@
             border-radius: 50%;
             margin-right: 6px;
         }
-        .legend-status-badge {
-            display: inline-block;
-            font-size: .6em;
-            padding: 1px 6px;
-            border-radius: 20px;
-            margin-left: 4px;
-            font-weight: 600;
-        }
-        .legend-status-badge.active {
-            background: #d4edda;
-            color: #155724;
-        }
-        .legend-status-badge.eliminated {
-            background: #f8d7da;
-            color: #721c24;
-        }
 
         /* ---- Bracket ---- */
         .bracket-wrapper {
@@ -1317,14 +1301,7 @@
             };
             const slotIds = ['K2', 'K5', 'K7', 'K8', 'K9', 'K10', 'K13', 'K16'];
 
-            // We have exactly 8 third teams. We need to assign each to a slot that allows its group.
-            // We'll do a simple greedy: sort slots by number of allowed groups (ascending) and assign best team (by ranking) that fits.
-            // But we also want to keep the best teams in the first slots? Actually the official allocation is based on a specific combination.
-            // To simplify, we'll assign the teams in order of ranking, but we must respect group constraints.
-            // We'll use a backtracking or brute force for small size (8) - but we'll just do a simple match.
-            // We'll create a list of available slots and try to assign the highest-ranked team to a slot that allows it.
-            // If a slot cannot be filled, we fallback to any.
-
+            // We'll assign teams in order of ranking, respecting group constraints
             let assigned = {};
             let remainingSlots = slotIds.slice();
             // Sort remaining slots by number of allowed groups (most restrictive first)
@@ -1878,7 +1855,7 @@
         document.getElementById('modalOverlay').addEventListener('click', function(e) { if (e.target === this) this
                 .classList.remove('open'); });
 
-        // ----- RENDER LEGEND WITH ELIMINATION STRIKETHROUGH -----
+        // ----- RENDER LEGEND with sorted teams (active first, then eliminated) -----
         function renderLegend() {
             const legendEl = document.getElementById('playerLegend');
             if (!legendEl) return;
@@ -1889,15 +1866,27 @@
                 if (legendData[person]) {
                     const c = legendData[person].color;
                     const teams = legendData[person].teams;
+                    // Split into active and eliminated
+                    const active = [],
+                        eliminated = [];
+                    teams.forEach(team => {
+                        if (isTeamEliminated(team)) {
+                            eliminated.push(team);
+                        } else {
+                            active.push(team);
+                        }
+                    });
+                    // Sort alphabetically (optional)
+                    active.sort();
+                    eliminated.sort();
+                    // Build teams HTML: active first, then eliminated with strikethrough
                     let teamsHtml = '';
-                    teams.forEach((team, idx) => {
-                        const eliminated = isTeamEliminated(team);
-                        const cls = eliminated ? 'team-eliminated' : 'team-active';
-                        const badge = eliminated ?
-                            `<span class="legend-status-badge eliminated">❌</span>` :
-                            `<span class="legend-status-badge active">✅</span>`;
-                        teamsHtml +=
-                            `<span class="${cls}">${team} ${badge}</span>${idx < teams.length - 1 ? ' · ' : ''}`;
+                    const allTeams = [...active, ...eliminated];
+                    allTeams.forEach((team, idx) => {
+                        const isElim = eliminated.includes(team);
+                        const cls = isElim ? 'team-eliminated' : 'team-active';
+                        teamsHtml += `<span class="${cls}">${team}</span>`;
+                        if (idx < allTeams.length - 1) teamsHtml += ' · ';
                     });
                     h +=
                         `<div class="legend-player" data-player="${person}">
