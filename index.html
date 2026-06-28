@@ -815,6 +815,88 @@
             color: #0d6efd;
             margin-left: 4px;
         }
+
+        /* Celebration overlay */
+        #celebrationOverlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            z-index: 1000;
+            background: rgba(0, 0, 0, 0.75);
+            pointer-events: none;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+        #celebrationOverlay.show {
+            display: flex;
+            pointer-events: auto;
+        }
+        #celebrationOverlay canvas {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+        .celebration-content {
+            position: relative;
+            z-index: 10;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: #fff;
+            text-align: center;
+            padding: 20px;
+            pointer-events: none;
+            text-shadow: 0 0 30px rgba(255, 215, 0, 0.8);
+        }
+        .celebration-content .champ-title {
+            font-size: 4rem;
+            animation: pulse 1s infinite alternate;
+            margin-bottom: 20px;
+        }
+        .celebration-content .champ-team {
+            font-size: 5rem;
+            font-weight: 900;
+            margin: 10px 0;
+            animation: flash 0.6s infinite alternate;
+            color: #f0c040;
+        }
+        .celebration-content .champ-player {
+            font-size: 3rem;
+            font-weight: 700;
+            color: #ffdd57;
+            animation: pulse 1.5s infinite alternate;
+            margin-bottom: 20px;
+        }
+        .celebration-content .champ-btn {
+            pointer-events: auto;
+            margin-top: 30px;
+            padding: 14px 40px;
+            background: var(--accent);
+            border: none;
+            border-radius: 50px;
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: #fff;
+            cursor: pointer;
+            box-shadow: 0 0 30px rgba(255, 215, 0, 0.6);
+            transition: transform 0.2s;
+        }
+        .celebration-content .champ-btn:hover {
+            transform: scale(1.05);
+        }
+        @keyframes pulse {
+            0% { transform: scale(1); opacity: 0.9; }
+            100% { transform: scale(1.05); opacity: 1; }
+        }
+        @keyframes flash {
+            0% { transform: scale(1); color: #f0c040; }
+            100% { transform: scale(1.1); color: #ffea7a; }
+        }
+
         @media (max-width: 720px) {
             .groups-grid {
                 grid-template-columns: 1fr;
@@ -841,6 +923,15 @@
             }
             .match-meta .match-number {
                 font-size: 0.5rem;
+            }
+            .celebration-content .champ-title {
+                font-size: 2.5rem;
+            }
+            .celebration-content .champ-team {
+                font-size: 3rem;
+            }
+            .celebration-content .champ-player {
+                font-size: 2rem;
             }
         }
         @media (min-width: 721px) and (max-width: 1080px) {
@@ -889,6 +980,18 @@
             <div id="thirdPlaceContainer"></div>
         </div>
     </div>
+
+    <!-- Celebration Overlay -->
+    <div id="celebrationOverlay">
+        <canvas id="confettiCanvas"></canvas>
+        <div class="celebration-content">
+            <div class="champ-title">🏆 CHAMPIONS! 🏆</div>
+            <div class="champ-team" id="championTeam"></div>
+            <div class="champ-player" id="championPlayer"></div>
+            <button class="champ-btn" id="celebrationCloseBtn">🎉 Celebrate! 🎉</button>
+        </div>
+    </div>
+
     <div class="daily-overlay" id="dailyOverlay"><div class="daily-modal" id="dailyModal"></div></div>
     <div class="modal-overlay" id="modalOverlay"><div class="modal" id="gameModal"></div></div>
     <div class="modal-overlay" id="playerOverlay"><div class="modal" id="playerModal"></div></div>
@@ -1263,6 +1366,9 @@
         const allGames = [...allGroupGames, ...allKoGames];
         let selectedDate = null,
             currentView = 'bracket';
+        let celebrationShown = false;
+        let confettiAnimationId = null;
+        let confettiPieces = [];
 
         // --- Helper functions ---
         function isGroupComplete(gid) {
@@ -1432,6 +1538,97 @@
             }
         }
 
+        // ---- CONFETTI ANIMATION ----
+        function startConfetti() {
+            const canvas = document.getElementById('confettiCanvas');
+            const ctx = canvas.getContext('2d');
+            const W = window.innerWidth;
+            const H = window.innerHeight;
+            canvas.width = W;
+            canvas.height = H;
+
+            const colors = ['#f44336', '#e91e63', '#9c27b0', '#3f51b5', '#03a9f4', '#009688', '#8bc34a', '#ffeb3b', '#ff9800',
+                '#ff5722'
+            ];
+            const pieces = [];
+            const NUM_PIECES = 250;
+
+            for (let i = 0; i < NUM_PIECES; i++) {
+                pieces.push({
+                    x: Math.random() * W,
+                    y: Math.random() * H - H,
+                    w: Math.random() * 12 + 4,
+                    h: Math.random() * 8 + 4,
+                    color: colors[Math.floor(Math.random() * colors.length)],
+                    vx: (Math.random() - 0.5) * 3,
+                    vy: Math.random() * 4 + 2,
+                    rot: Math.random() * 360,
+                    rotSpeed: (Math.random() - 0.5) * 10,
+                    opacity: Math.random() * 0.7 + 0.3
+                });
+            }
+            confettiPieces = pieces;
+
+            function draw() {
+                ctx.clearRect(0, 0, W, H);
+                pieces.forEach(p => {
+                    p.x += p.vx;
+                    p.y += p.vy;
+                    p.rot += p.rotSpeed;
+                    if (p.y > H) {
+                        p.y = -20;
+                        p.x = Math.random() * W;
+                        p.vy = Math.random() * 4 + 2;
+                        p.vx = (Math.random() - 0.5) * 3;
+                    }
+                    ctx.save();
+                    ctx.translate(p.x, p.y);
+                    ctx.rotate((p.rot * Math.PI) / 180);
+                    ctx.globalAlpha = p.opacity;
+                    ctx.fillStyle = p.color;
+                    ctx.fillRect(-p.w / 2, -p.h / 2, p.w, p.h);
+                    ctx.restore();
+                });
+                confettiAnimationId = requestAnimationFrame(draw);
+            }
+            draw();
+        }
+
+        function stopConfetti() {
+            if (confettiAnimationId) {
+                cancelAnimationFrame(confettiAnimationId);
+                confettiAnimationId = null;
+            }
+            const canvas = document.getElementById('confettiCanvas');
+            const ctx = canvas.getContext('2d');
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+        }
+
+        // ---- CELEBRATION ----
+        function showCelebration(team, player) {
+            if (celebrationShown) return;
+            celebrationShown = true;
+            const overlay = document.getElementById('celebrationOverlay');
+            const teamEl = document.getElementById('championTeam');
+            const playerEl = document.getElementById('championPlayer');
+            teamEl.textContent = team;
+            playerEl.textContent = '👤 ' + player;
+            overlay.classList.add('show');
+            startConfetti();
+        }
+
+        function hideCelebration() {
+            const overlay = document.getElementById('celebrationOverlay');
+            overlay.classList.remove('show');
+            stopConfetti();
+        }
+
+        document.getElementById('celebrationCloseBtn').addEventListener('click', hideCelebration);
+        // Also close on overlay click (but we want to keep pointer events on the content only)
+        // Actually we set pointer-events on content to none and button to auto, so clicking overlay won't close.
+        // We'll add a click on overlay background to close if needed, but we'll keep it simple.
+
+        // ---- Firebase sync and other functions ----
         function syncFromFirebase() {
             const statusEl = document.getElementById('syncStatus');
             statusEl.textContent = '🟡 Syncing...';
@@ -1443,6 +1640,8 @@
                 statusEl.className = 'sync-status';
                 renderAll();
                 renderBracket();
+                // Check for final winner
+                checkAndCelebrate();
             }, () => { statusEl.textContent = '🔴 Sync Error';
                 statusEl.className = 'sync-status offline';
                 renderAll(); });
@@ -1489,6 +1688,20 @@
             return { wins, losses, draws };
         }
 
+        function checkAndCelebrate() {
+            // Check final match (K32)
+            const finalMatch = allKoGames.find(g => g.id === 'K32');
+            if (!finalMatch) return;
+            if (finalMatch.homeScore !== null && finalMatch.awayScore !== null && finalMatch.homeScore !== finalMatch
+                .awayScore) {
+                const championTeam = finalMatch.homeScore > finalMatch.awayScore ? finalMatch.home : finalMatch.away;
+                const player = peopleMap[championTeam];
+                if (player && !celebrationShown) {
+                    showCelebration(championTeam, player);
+                }
+            }
+        }
+
         // --- Render bracket with proper time fallbacks ---
         function renderBracket() {
             propagateKnockoutResults();
@@ -1510,7 +1723,6 @@
                     const month = dateObj.getMonth() + 1;
                     const day = dateObj.getDate();
                     const formattedDate = `${month}/${day}`;
-                    // FIX: Use time with fallback to pst, then to empty string (never show undefined)
                     const timePST = m.time || m.pst || '';
                     const stadium = m.stadium || '';
                     const matchNum = m.matchNumber || '';
@@ -1633,7 +1845,6 @@
                 } else {
                     groupDisplay = `<span class="group-badge" style="background:#6c757d;">${game.round}</span>`;
                 }
-                // FIX: Use time with fallback to pst, never show undefined
                 const displayTime = game.time || game.pst || '';
                 const displayPST = game.pst || game.time || '';
                 h +=
