@@ -1161,59 +1161,51 @@
         ];
         allGroupGames.forEach(g => { g.round = 'group'; });
 
-        // ---- KNOCKOUT GAMES (reordered Round of 32 to feed into Round of 16) ----
+        // ---- KNOCKOUT GAMES with corrected times ----
         const allKoGames = [
-            // Round of 32 – ordered in pairs that feed into each Round of 16 match
-            // Match 89: Winner 74 vs Winner 77
+            // Round of 32 (73–88)
             { id: 'K2', round: 'Round of 32', home: 'Netherlands', away: 'Morocco', date: '2026-06-29',
                 time: '6:00 PM PST', pst: '6:00 PM PST', stadium: 'Gillette Stadium, Foxborough', matchNumber: '74',
                 homeScore: null, awayScore: null, isKo: true },
             { id: 'K5', round: 'Round of 32', home: 'Belgium', away: 'Senegal', date: '2026-07-01',
                 time: '1:00 PM PST', pst: '1:00 PM PST', stadium: 'MetLife Stadium, East Rutherford', matchNumber: '77',
                 homeScore: null, awayScore: null, isKo: true },
-            // Match 90: Winner 73 vs Winner 75
             { id: 'K1', round: 'Round of 32', home: 'South Africa', away: 'Canada', date: '2026-06-28',
                 time: '12:00 PM PST', pst: '12:00 PM PST', stadium: 'SoFi Stadium, Inglewood', matchNumber: '73',
                 homeScore: null, awayScore: null, isKo: true },
             { id: 'K3', round: 'Round of 32', home: 'Germany', away: 'Paraguay', date: '2026-06-29',
                 time: '1:30 PM PST', pst: '1:30 PM PST', stadium: 'Estadio BBVA, Guadalupe', matchNumber: '75',
                 homeScore: null, awayScore: null, isKo: true },
-            // Match 91: Winner 76 vs Winner 78
             { id: 'K4', round: 'Round of 32', home: 'France', away: 'Sweden', date: '2026-06-30',
                 time: '2:00 PM PST', pst: '2:00 PM PST', stadium: 'NRG Stadium, Houston', matchNumber: '76',
                 homeScore: null, awayScore: null, isKo: true },
             { id: 'K6', round: 'Round of 32', home: 'USA', away: 'Bosnia and Herzegovina', date: '2026-07-01',
                 time: '5:00 PM PST', pst: '5:00 PM PST', stadium: "AT&T Stadium, Arlington", matchNumber: '78',
                 homeScore: null, awayScore: null, isKo: true },
-            // Match 92: Winner 79 vs Winner 80
             { id: 'K7', round: 'Round of 32', home: 'Spain', away: 'Austria', date: '2026-07-02',
                 time: '12:00 PM PST', pst: '12:00 PM PST', stadium: 'Estadio Azteca, Mexico City', matchNumber: '79',
                 homeScore: null, awayScore: null, isKo: true },
             { id: 'K8', round: 'Round of 32', home: 'Portugal', away: 'Croatia', date: '2026-07-02',
                 time: '4:00 PM PST', pst: '4:00 PM PST', stadium: 'Mercedes-Benz Stadium, Atlanta', matchNumber: '80',
                 homeScore: null, awayScore: null, isKo: true },
-            // Match 93: Winner 83 vs Winner 84
             { id: 'K11', round: 'Round of 32', home: 'Mexico', away: 'Ecuador', date: '2026-06-30',
                 time: '6:00 PM PST', pst: '6:00 PM PST', stadium: 'SoFi Stadium, Inglewood', matchNumber: '83',
                 homeScore: null, awayScore: null, isKo: true },
             { id: 'K12', round: 'Round of 32', home: 'England', away: 'Congo DR', date: '2026-07-01',
                 time: '9:00 AM PST', pst: '9:00 AM PST', stadium: 'BMO Field, Toronto', matchNumber: '84',
                 homeScore: null, awayScore: null, isKo: true },
-            // Match 94: Winner 81 vs Winner 82
             { id: 'K9', round: 'Round of 32', home: 'Brazil', away: 'Japan', date: '2026-06-29',
                 time: '10:00 AM PST', pst: '10:00 AM PST', stadium: "Levi's Stadium, Santa Clara", matchNumber: '81',
                 homeScore: null, awayScore: null, isKo: true },
             { id: 'K10', round: 'Round of 32', home: 'Côte d\'Ivoire', away: 'Norway', date: '2026-06-30',
                 time: '10:00 AM PST', pst: '10:00 AM PST', stadium: 'Lumen Field, Seattle', matchNumber: '82',
                 homeScore: null, awayScore: null, isKo: true },
-            // Match 95: Winner 86 vs Winner 88
             { id: 'K14', round: 'Round of 32', home: 'Colombia', away: 'Ghana', date: '2026-07-03',
                 time: '6:30 PM PST', pst: '6:30 PM PST', stadium: 'Arrowhead Stadium, Kansas City', matchNumber: '86',
                 homeScore: null, awayScore: null, isKo: true },
             { id: 'K16', round: 'Round of 32', home: 'Argentina', away: 'Cabo Verde', date: '2026-07-03',
                 time: '3:00 PM PST', pst: '3:00 PM PST', stadium: 'Estadio Akron, Zapopan', matchNumber: '88',
                 homeScore: null, awayScore: null, isKo: true },
-            // Match 96: Winner 85 vs Winner 87
             { id: 'K13', round: 'Round of 32', home: 'Switzerland', away: 'Algeria', date: '2026-07-02',
                 time: '8:00 PM PST', pst: '8:00 PM PST', stadium: 'BC Place, Vancouver', matchNumber: '85',
                 homeScore: null, awayScore: null, isKo: true },
@@ -1221,7 +1213,7 @@
                 time: '11:00 AM PST', pst: '11:00 AM PST', stadium: 'Hard Rock Stadium, Miami Gardens', matchNumber: '87',
                 homeScore: null, awayScore: null, isKo: true },
 
-            // Round of 16 (89–96)
+            // Round of 16 (89–96) - Corrected PST times
             { id: 'K17', round: 'Round of 16', home: 'Winner Match 74', away: 'Winner Match 77', date: '2026-07-04',
                 time: '10:00 AM PST', pst: '10:00 AM PST', stadium: 'NRG Stadium, Houston', matchNumber: '89',
                 homeScore: null, awayScore: null, isKo: true },
@@ -1229,44 +1221,44 @@
                 time: '2:00 PM PST', pst: '2:00 PM PST', stadium: 'Lincoln Financial Field, Philadelphia',
                 matchNumber: '90', homeScore: null, awayScore: null, isKo: true },
             { id: 'K19', round: 'Round of 16', home: 'Winner Match 76', away: 'Winner Match 78', date: '2026-07-05',
-                time: '1:00 PM PST', pst: '1:00 PM PST', stadium: 'MetLife Stadium, East Rutherford', matchNumber: '91',
+                time: '10:00 AM PST', pst: '10:00 AM PST', stadium: 'MetLife Stadium, East Rutherford', matchNumber: '91',
                 homeScore: null, awayScore: null, isKo: true },
             { id: 'K20', round: 'Round of 16', home: 'Winner Match 79', away: 'Winner Match 80', date: '2026-07-05',
-                time: '5:00 PM PST', pst: '5:00 PM PST', stadium: 'Estadio Azteca, Mexico City', matchNumber: '92',
+                time: '2:00 PM PST', pst: '2:00 PM PST', stadium: 'Estadio Azteca, Mexico City', matchNumber: '92',
                 homeScore: null, awayScore: null, isKo: true },
             { id: 'K21', round: 'Round of 16', home: 'Winner Match 83', away: 'Winner Match 84', date: '2026-07-06',
-                time: '12:00 PM PST', pst: '12:00 PM PST', stadium: 'Lumen Field, Seattle', matchNumber: '93',
+                time: '10:00 AM PST', pst: '10:00 AM PST', stadium: 'Lumen Field, Seattle', matchNumber: '93',
                 homeScore: null, awayScore: null, isKo: true },
             { id: 'K22', round: 'Round of 16', home: 'Winner Match 81', away: 'Winner Match 82', date: '2026-07-06',
-                time: '5:00 PM PST', pst: '5:00 PM PST', stadium: 'AT&T Stadium, Arlington', matchNumber: '94',
+                time: '2:00 PM PST', pst: '2:00 PM PST', stadium: 'AT&T Stadium, Arlington', matchNumber: '94',
                 homeScore: null, awayScore: null, isKo: true },
             { id: 'K23', round: 'Round of 16', home: 'Winner Match 86', away: 'Winner Match 88', date: '2026-07-07',
-                time: '9:00 AM PST', pst: '9:00 AM PST', stadium: 'Mercedes-Benz Stadium, Atlanta', matchNumber: '95',
+                time: '10:00 AM PST', pst: '10:00 AM PST', stadium: 'Mercedes-Benz Stadium, Atlanta', matchNumber: '95',
                 homeScore: null, awayScore: null, isKo: true },
             { id: 'K24', round: 'Round of 16', home: 'Winner Match 85', away: 'Winner Match 87', date: '2026-07-07',
-                time: '1:00 PM PST', pst: '1:00 PM PST', stadium: 'BC Place, Vancouver', matchNumber: '96',
+                time: '2:00 PM PST', pst: '2:00 PM PST', stadium: 'BC Place, Vancouver', matchNumber: '96',
                 homeScore: null, awayScore: null, isKo: true },
 
-            // Quarter-finals (97–100)
+            // Quarter-finals (97–100) - Corrected times per user
             { id: 'K25', round: 'Quarter-finals', home: 'Winner Match 89', away: 'Winner Match 90', date: '2026-07-09',
-                time: '1:00 PM PST', pst: '1:00 PM PST', stadium: 'AT&T Stadium, Arlington', matchNumber: '97',
+                time: '12:00 PM PST', pst: '12:00 PM PST', stadium: 'AT&T Stadium, Arlington', matchNumber: '97',
                 homeScore: null, awayScore: null, isKo: true },
             { id: 'K26', round: 'Quarter-finals', home: 'Winner Match 93', away: 'Winner Match 94', date: '2026-07-10',
                 time: '12:00 PM PST', pst: '12:00 PM PST', stadium: 'SoFi Stadium, Inglewood', matchNumber: '98',
                 homeScore: null, awayScore: null, isKo: true },
             { id: 'K27', round: 'Quarter-finals', home: 'Winner Match 91', away: 'Winner Match 92', date: '2026-07-11',
-                time: '1:00 PM PST', pst: '1:00 PM PST', stadium: 'Arrowhead Stadium, Kansas City', matchNumber: '99',
+                time: '2:00 PM PST', pst: '2:00 PM PST', stadium: 'Arrowhead Stadium, Kansas City', matchNumber: '99',
                 homeScore: null, awayScore: null, isKo: true },
             { id: 'K28', round: 'Quarter-finals', home: 'Winner Match 95', away: 'Winner Match 96', date: '2026-07-11',
-                time: '10:00 AM PST', pst: '10:00 AM PST', stadium: 'Hard Rock Stadium, Miami Gardens', matchNumber: '100',
+                time: '6:00 PM PST', pst: '6:00 PM PST', stadium: 'Hard Rock Stadium, Miami Gardens', matchNumber: '100',
                 homeScore: null, awayScore: null, isKo: true },
 
-            // Semi-finals (101–102)
+            // Semi-finals (101–102) - Corrected times per user
             { id: 'K29', round: 'Semi-finals', home: 'Winner Match 97', away: 'Winner Match 98', date: '2026-07-14',
-                time: '1:00 PM PST', pst: '1:00 PM PST', stadium: 'AT&T Stadium, Arlington', matchNumber: '101',
+                time: '2:00 PM PST', pst: '2:00 PM PST', stadium: 'AT&T Stadium, Arlington', matchNumber: '101',
                 homeScore: null, awayScore: null, isKo: true },
             { id: 'K30', round: 'Semi-finals', home: 'Winner Match 99', away: 'Winner Match 100', date: '2026-07-15',
-                time: '10:00 AM PST', pst: '10:00 AM PST', stadium: 'Mercedes-Benz Stadium, Atlanta', matchNumber: '102',
+                time: '2:00 PM PST', pst: '2:00 PM PST', stadium: 'Mercedes-Benz Stadium, Atlanta', matchNumber: '102',
                 homeScore: null, awayScore: null, isKo: true },
 
             // Third Place (103)
@@ -1365,16 +1357,16 @@
                 }
             });
 
-            // Round of 16: K17 (89) = Winner 74 vs Winner 77, K18 (90) = Winner 73 vs Winner 75, etc.
+            // Round of 16
             const r16Map = [
-                ['K2', 'K5'], // 89 = Winner 74 vs Winner 77
-                ['K1', 'K3'], // 90 = Winner 73 vs Winner 75
-                ['K4', 'K6'], // 91 = Winner 76 vs Winner 78
-                ['K7', 'K8'], // 92 = Winner 79 vs Winner 80
-                ['K11', 'K12'], // 93 = Winner 83 vs Winner 84
-                ['K9', 'K10'], // 94 = Winner 81 vs Winner 82
-                ['K14', 'K16'], // 95 = Winner 86 vs Winner 88
-                ['K13', 'K15'] // 96 = Winner 85 vs Winner 87
+                ['K2', 'K5'],
+                ['K1', 'K3'],
+                ['K4', 'K6'],
+                ['K7', 'K8'],
+                ['K11', 'K12'],
+                ['K9', 'K10'],
+                ['K14', 'K16'],
+                ['K13', 'K15']
             ];
             const r16Ids = ['K17', 'K18', 'K19', 'K20', 'K21', 'K22', 'K23', 'K24'];
             r16Ids.forEach((mid, idx) => {
@@ -1389,7 +1381,7 @@
                 }
             });
 
-            // Quarter-finals: 97 = Winner 89 vs Winner 90, 98 = Winner 93 vs Winner 94, 99 = Winner 91 vs Winner 92, 100 = Winner 95 vs Winner 96
+            // Quarter-finals
             const qfMap = [
                 ['K17', 'K18'],
                 ['K21', 'K22'],
@@ -1409,7 +1401,7 @@
                 }
             });
 
-            // Semi-finals: 101 = Winner 97 vs Winner 98, 102 = Winner 99 vs Winner 100
+            // Semi-finals
             const sfMap = [
                 ['K25', 'K26'],
                 ['K27', 'K28']
@@ -1427,7 +1419,7 @@
                 }
             });
 
-            // Third Place: 103 = Loser 101 vs Loser 102
+            // Third Place
             const thirdMatch = allKoGames.find(g => g.id === 'K31');
             if (thirdMatch) {
                 if (thirdMatch.home && thirdMatch.home.startsWith('Loser Match')) {
@@ -1438,7 +1430,7 @@
                 }
             }
 
-            // Final: 104 = Winner 101 vs Winner 102
+            // Final
             const finalMatch = allKoGames.find(g => g.id === 'K32');
             if (finalMatch) {
                 if (finalMatch.home && finalMatch.home.startsWith('Winner Match')) {
