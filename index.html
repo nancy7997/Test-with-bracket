@@ -1009,8 +1009,9 @@
             return (hrs * 60) + mins;
         }
 
-        // ---- GROUP GAMES ----
+        // ---- GROUP GAMES (all 72 matches) ----
         const allGroupGames = [
+            // Group A
             { id: 'G1', group: 'A', home: 'Mexico', away: 'South Africa', date: '2026-06-11', time: '1:00 PM CT',
                 pst: '12:00 PM PST', stadium: 'Mexico City Stadium', homeScore: 2, awayScore: 0 },
             { id: 'G2', group: 'A', home: 'South Korea', away: 'Czechia', date: '2026-06-11', time: '8:00 PM CT',
@@ -1024,6 +1025,7 @@
                 pst: '6:00 PM PST', stadium: 'Mexico City Stadium', homeScore: null, awayScore: null },
             { id: 'G54', group: 'A', home: 'South Africa', away: 'South Korea', date: '2026-06-24', time: '7:00 PM CT',
                 pst: '6:00 PM PST', stadium: 'Estadio Monterrey', homeScore: null, awayScore: null },
+            // Group B
             { id: 'G3', group: 'B', home: 'Canada', away: 'Bosnia and Herzegovina', date: '2026-06-12',
                 time: '3:00 PM ET', pst: '12:00 PM PST', stadium: 'Toronto Stadium', homeScore: 1, awayScore: 1 },
             { id: 'G8', group: 'B', home: 'Qatar', away: 'Switzerland', date: '2026-06-13', time: '12:00 PM PT',
@@ -1038,6 +1040,7 @@
             { id: 'G52', group: 'B', home: 'Bosnia and Herzegovina', away: 'Qatar', date: '2026-06-24',
                 time: '12:00 PM PT', pst: '12:00 PM PST', stadium: 'Seattle Stadium', homeScore: null,
                 awayScore: null },
+            // Group C
             { id: 'G7', group: 'C', home: 'Brazil', away: 'Morocco', date: '2026-06-13', time: '6:00 PM ET',
                 pst: '3:00 PM PST', stadium: 'New York New Jersey Stadium', homeScore: null, awayScore: null },
             { id: 'G5', group: 'C', home: 'Haiti', away: 'Scotland', date: '2026-06-13', time: '9:00 PM ET',
@@ -1050,6 +1053,7 @@
                 pst: '3:00 PM PST', stadium: 'Miami Stadium', homeScore: null, awayScore: null },
             { id: 'G50', group: 'C', home: 'Morocco', away: 'Haiti', date: '2026-06-24', time: '6:00 PM ET',
                 pst: '3:00 PM PST', stadium: 'Atlanta Stadium', homeScore: null, awayScore: null },
+            // Group D
             { id: 'G4', group: 'D', home: 'USA', away: 'Paraguay', date: '2026-06-12', time: '6:00 PM PT',
                 pst: '6:00 PM PST', stadium: 'Los Angeles Stadium', homeScore: 4, awayScore: 1 },
             { id: 'G6', group: 'D', home: 'Australia', away: 'Türkiye', date: '2026-06-13', time: '9:00 PM PT',
@@ -1062,6 +1066,7 @@
                 pst: '7:00 PM PST', stadium: 'Los Angeles Stadium', homeScore: null, awayScore: null },
             { id: 'G60', group: 'D', home: 'Paraguay', away: 'Australia', date: '2026-06-25', time: '7:00 PM PT',
                 pst: '7:00 PM PST', stadium: "San Francisco Bay Area Stadium", homeScore: null, awayScore: null },
+            // Group E
             { id: 'G10', group: 'E', home: 'Germany', away: 'Curaçao', date: '2026-06-14', time: '12:00 PM CT',
                 pst: '10:00 AM PST', stadium: 'Houston Stadium', homeScore: null, awayScore: null },
             { id: 'G9', group: 'E', home: 'Côte d\'Ivoire', away: 'Ecuador', date: '2026-06-14', time: '7:00 PM ET',
@@ -1074,6 +1079,7 @@
                 pst: '1:00 PM PST', stadium: 'Philadelphia Stadium', homeScore: null, awayScore: null },
             { id: 'G56', group: 'E', home: 'Ecuador', away: 'Germany', date: '2026-06-25', time: '4:00 PM ET',
                 pst: '1:00 PM PST', stadium: 'New York New Jersey Stadium', homeScore: null, awayScore: null },
+            // Group F
             { id: 'G11', group: 'F', home: 'Netherlands', away: 'Japan', date: '2026-06-14', time: '3:00 PM CT',
                 pst: '1:00 PM PST', stadium: 'Dallas Stadium', homeScore: null, awayScore: null },
             { id: 'G12', group: 'F', home: 'Sweden', away: 'Tunisia', date: '2026-06-14', time: '7:00 PM PT',
@@ -1086,6 +1092,7 @@
                 pst: '4:00 PM PST', stadium: 'Dallas Stadium', homeScore: null, awayScore: null },
             { id: 'G58', group: 'F', home: 'Tunisia', away: 'Netherlands', date: '2026-06-25', time: '6:00 PM CT',
                 pst: '4:00 PM PST', stadium: 'Kansas City Stadium', homeScore: null, awayScore: null },
+            // Group G
             { id: 'G16', group: 'G', home: 'Belgium', away: 'Egypt', date: '2026-06-15', time: '12:00 PM PT',
                 pst: '12:00 PM PST', stadium: 'Seattle Stadium', homeScore: null, awayScore: null },
             { id: 'G15', group: 'G', home: 'IR Iran', away: 'New Zealand', date: '2026-06-15', time: '6:00 PM PT',
@@ -1098,6 +1105,7 @@
                 pst: '8:00 PM PST', stadium: 'Seattle Stadium', homeScore: null, awayScore: null },
             { id: 'G64', group: 'G', home: 'New Zealand', away: 'Belgium', date: '2026-06-26', time: '8:00 PM PT',
                 pst: '8:00 PM PST', stadium: 'BC Place, Vancouver', homeScore: null, awayScore: null },
+            // Group H
             { id: 'G14', group: 'H', home: 'Spain', away: 'Cabo Verde', date: '2026-06-15', time: '12:00 PM ET',
                 pst: '9:00 AM PST', stadium: 'Atlanta Stadium', homeScore: null, awayScore: null },
             { id: 'G13', group: 'H', home: 'Saudi Arabia', away: 'Uruguay', date: '2026-06-15', time: '6:00 PM ET',
@@ -1110,6 +1118,7 @@
                 pst: '5:00 PM PST', stadium: 'Houston Stadium', homeScore: null, awayScore: null },
             { id: 'G66', group: 'H', home: 'Uruguay', away: 'Spain', date: '2026-06-26', time: '6:00 PM CT',
                 pst: '4:00 PM PST', stadium: 'Estadio Guadalajara', homeScore: null, awayScore: null },
+            // Group I
             { id: 'G17', group: 'I', home: 'France', away: 'Senegal', date: '2026-06-16', time: '3:00 PM ET',
                 pst: '12:00 PM PST', stadium: 'New York New Jersey Stadium', homeScore: null, awayScore: null },
             { id: 'G18', group: 'I', home: 'Iraq', away: 'Norway', date: '2026-06-16', time: '6:00 PM ET',
@@ -1122,6 +1131,7 @@
                 pst: '12:00 PM PST', stadium: 'Boston Stadium', homeScore: null, awayScore: null },
             { id: 'G62', group: 'I', home: 'Senegal', away: 'Iraq', date: '2026-06-26', time: '3:00 PM ET',
                 pst: '12:00 PM PST', stadium: 'Toronto Stadium', homeScore: null, awayScore: null },
+            // Group J
             { id: 'G19', group: 'J', home: 'Argentina', away: 'Algeria', date: '2026-06-16', time: '8:00 PM CT',
                 pst: '6:00 PM PST', stadium: 'Kansas City Stadium', homeScore: null, awayScore: null },
             { id: 'G20', group: 'J', home: 'Austria', away: 'Jordan', date: '2026-06-16', time: '9:00 PM PT',
@@ -1134,6 +1144,7 @@
                 pst: '7:00 PM PST', stadium: 'Kansas City Stadium', homeScore: null, awayScore: null },
             { id: 'G70', group: 'J', home: 'Jordan', away: 'Argentina', date: '2026-06-27', time: '9:00 PM CT',
                 pst: '7:00 PM PST', stadium: 'Dallas Stadium', homeScore: null, awayScore: null },
+            // Group K
             { id: 'G23', group: 'K', home: 'Portugal', away: 'Congo DR', date: '2026-06-17', time: '12:00 PM CT',
                 pst: '10:00 AM PST', stadium: 'Houston Stadium', homeScore: null, awayScore: null },
             { id: 'G24', group: 'K', home: 'Uzbekistan', away: 'Colombia', date: '2026-06-17', time: '8:00 PM CT',
@@ -1146,6 +1157,7 @@
                 pst: '4:30 PM PST', stadium: 'Miami Stadium', homeScore: null, awayScore: null },
             { id: 'G72', group: 'K', home: 'Congo DR', away: 'Uzbekistan', date: '2026-06-27', time: '7:30 PM ET',
                 pst: '4:30 PM PST', stadium: 'Atlanta Stadium', homeScore: null, awayScore: null },
+            // Group L
             { id: 'G22', group: 'L', home: 'England', away: 'Croatia', date: '2026-06-17', time: '3:00 PM CT',
                 pst: '1:00 PM PST', stadium: 'Dallas Stadium', homeScore: null, awayScore: null },
             { id: 'G21', group: 'L', home: 'Ghana', away: 'Panama', date: '2026-06-17', time: '7:00 PM ET',
@@ -1161,114 +1173,129 @@
         ];
         allGroupGames.forEach(g => { g.round = 'group'; });
 
-        // ---- KNOCKOUT GAMES with final corrected times ----
+        // ---- KNOCKOUT GAMES (official FIFA schedule, ET to PST conversion) ----
         const allKoGames = [
-            // Round of 32 (73–88)
-            { id: 'K2', round: 'Round of 32', home: 'Netherlands', away: 'Morocco', date: '2026-06-29',
-                time: '6:00 PM PST', pst: '6:00 PM PST', stadium: 'Gillette Stadium, Foxborough', matchNumber: '74',
-                homeScore: null, awayScore: null, isKo: true },
-            { id: 'K5', round: 'Round of 32', home: 'Belgium', away: 'Senegal', date: '2026-07-01',
-                time: '1:00 PM PST', pst: '1:00 PM PST', stadium: 'MetLife Stadium, East Rutherford', matchNumber: '77',
-                homeScore: null, awayScore: null, isKo: true },
+            // Round of 32
+            // Sunday, June 28
             { id: 'K1', round: 'Round of 32', home: 'South Africa', away: 'Canada', date: '2026-06-28',
-                time: '12:00 PM PST', pst: '12:00 PM PST', stadium: 'SoFi Stadium, Inglewood', matchNumber: '73',
+                time: '12:00 PM PST', pst: '12:00 PM PST', stadium: 'Los Angeles Stadium', matchNumber: '73',
                 homeScore: null, awayScore: null, isKo: true },
-            { id: 'K3', round: 'Round of 32', home: 'Germany', away: 'Paraguay', date: '2026-06-29',
-                time: '1:30 PM PST', pst: '1:30 PM PST', stadium: 'Estadio BBVA, Guadalupe', matchNumber: '75',
+            // Monday, June 29 (ET 13:00, 16:30, 21:00 -> PST 10:00, 13:30, 18:00)
+            { id: 'K2', round: 'Round of 32', home: 'Germany', away: 'Paraguay', date: '2026-06-29',
+                time: '1:30 PM PST', pst: '1:30 PM PST', stadium: 'Boston Stadium', matchNumber: '74',
                 homeScore: null, awayScore: null, isKo: true },
-            { id: 'K4', round: 'Round of 32', home: 'France', away: 'Sweden', date: '2026-06-30',
-                time: '2:00 PM PST', pst: '2:00 PM PST', stadium: 'NRG Stadium, Houston', matchNumber: '76',
+            { id: 'K3', round: 'Round of 32', home: 'Netherlands', away: 'Morocco', date: '2026-06-29',
+                time: '10:00 AM PST', pst: '10:00 AM PST', stadium: 'Estadio Monterrey', matchNumber: '75',
                 homeScore: null, awayScore: null, isKo: true },
-            { id: 'K6', round: 'Round of 32', home: 'USA', away: 'Bosnia and Herzegovina', date: '2026-07-01',
-                time: '5:00 PM PST', pst: '5:00 PM PST', stadium: "AT&T Stadium, Arlington", matchNumber: '78',
+            { id: 'K4', round: 'Round of 32', home: 'Brazil', away: 'Japan', date: '2026-06-29',
+                time: '6:00 PM PST', pst: '6:00 PM PST', stadium: 'Houston Stadium', matchNumber: '76',
                 homeScore: null, awayScore: null, isKo: true },
-            { id: 'K7', round: 'Round of 32', home: 'Spain', away: 'Austria', date: '2026-07-02',
-                time: '12:00 PM PST', pst: '12:00 PM PST', stadium: 'Estadio Azteca, Mexico City', matchNumber: '79',
+            // Tuesday, June 30 (ET 13:00, 17:00, 21:00 -> PST 10:00, 14:00, 18:00)
+            { id: 'K5', round: 'Round of 32', home: 'France', away: 'Sweden', date: '2026-06-30',
+                time: '2:00 PM PST', pst: '2:00 PM PST', stadium: 'New York New Jersey Stadium', matchNumber: '77',
                 homeScore: null, awayScore: null, isKo: true },
-            { id: 'K8', round: 'Round of 32', home: 'Portugal', away: 'Croatia', date: '2026-07-02',
-                time: '4:00 PM PST', pst: '4:00 PM PST', stadium: 'Mercedes-Benz Stadium, Atlanta', matchNumber: '80',
+            { id: 'K6', round: 'Round of 32', home: 'Côte d\'Ivoire', away: 'Norway', date: '2026-06-30',
+                time: '10:00 AM PST', pst: '10:00 AM PST', stadium: 'Dallas Stadium', matchNumber: '78',
                 homeScore: null, awayScore: null, isKo: true },
-            { id: 'K11', round: 'Round of 32', home: 'Mexico', away: 'Ecuador', date: '2026-06-30',
-                time: '6:00 PM PST', pst: '6:00 PM PST', stadium: 'SoFi Stadium, Inglewood', matchNumber: '83',
+            { id: 'K7', round: 'Round of 32', home: 'Mexico', away: 'Ecuador', date: '2026-06-30',
+                time: '6:00 PM PST', pst: '6:00 PM PST', stadium: 'Mexico City Stadium', matchNumber: '79',
                 homeScore: null, awayScore: null, isKo: true },
-            { id: 'K12', round: 'Round of 32', home: 'England', away: 'Congo DR', date: '2026-07-01',
-                time: '9:00 AM PST', pst: '9:00 AM PST', stadium: 'BMO Field, Toronto', matchNumber: '84',
+            // Wednesday, July 1 (ET 12:00, 16:00, 20:00 -> PST 09:00, 13:00, 17:00)
+            { id: 'K8', round: 'Round of 32', home: 'England', away: 'Congo DR', date: '2026-07-01',
+                time: '9:00 AM PST', pst: '9:00 AM PST', stadium: 'Atlanta Stadium', matchNumber: '80',
                 homeScore: null, awayScore: null, isKo: true },
-            { id: 'K9', round: 'Round of 32', home: 'Brazil', away: 'Japan', date: '2026-06-29',
-                time: '10:00 AM PST', pst: '10:00 AM PST', stadium: "Levi's Stadium, Santa Clara", matchNumber: '81',
+            { id: 'K9', round: 'Round of 32', home: 'USA', away: 'Bosnia and Herzegovina', date: '2026-07-01',
+                time: '5:00 PM PST', pst: '5:00 PM PST', stadium: 'San Francisco Bay Area Stadium', matchNumber: '81',
                 homeScore: null, awayScore: null, isKo: true },
-            { id: 'K10', round: 'Round of 32', home: 'Côte d\'Ivoire', away: 'Norway', date: '2026-06-30',
-                time: '10:00 AM PST', pst: '10:00 AM PST', stadium: 'Lumen Field, Seattle', matchNumber: '82',
+            { id: 'K10', round: 'Round of 32', home: 'Belgium', away: 'Senegal', date: '2026-07-01',
+                time: '1:00 PM PST', pst: '1:00 PM PST', stadium: 'Seattle Stadium', matchNumber: '82',
                 homeScore: null, awayScore: null, isKo: true },
-            { id: 'K14', round: 'Round of 32', home: 'Colombia', away: 'Ghana', date: '2026-07-03',
-                time: '6:30 PM PST', pst: '6:30 PM PST', stadium: 'Arrowhead Stadium, Kansas City', matchNumber: '86',
+            // Thursday, July 2 (ET 15:00, 19:00, 23:00 -> PST 12:00, 16:00, 20:00)
+            { id: 'K11', round: 'Round of 32', home: 'Portugal', away: 'Croatia', date: '2026-07-02',
+                time: '4:00 PM PST', pst: '4:00 PM PST', stadium: 'Toronto Stadium', matchNumber: '83',
                 homeScore: null, awayScore: null, isKo: true },
-            { id: 'K16', round: 'Round of 32', home: 'Argentina', away: 'Cabo Verde', date: '2026-07-03',
-                time: '3:00 PM PST', pst: '3:00 PM PST', stadium: 'Estadio Akron, Zapopan', matchNumber: '88',
+            { id: 'K12', round: 'Round of 32', home: 'Spain', away: 'Austria', date: '2026-07-02',
+                time: '12:00 PM PST', pst: '12:00 PM PST', stadium: 'Los Angeles Stadium', matchNumber: '84',
                 homeScore: null, awayScore: null, isKo: true },
             { id: 'K13', round: 'Round of 32', home: 'Switzerland', away: 'Algeria', date: '2026-07-02',
-                time: '8:00 PM PST', pst: '8:00 PM PST', stadium: 'BC Place, Vancouver', matchNumber: '85',
+                time: '8:00 PM PST', pst: '8:00 PM PST', stadium: 'BC Place Vancouver', matchNumber: '85',
                 homeScore: null, awayScore: null, isKo: true },
-            { id: 'K15', round: 'Round of 32', home: 'Australia', away: 'Egypt', date: '2026-07-03',
-                time: '11:00 AM PST', pst: '11:00 AM PST', stadium: 'Hard Rock Stadium, Miami Gardens', matchNumber: '87',
+            // Friday, July 3 (ET 14:00, 18:00, 21:30 -> PST 11:00, 15:00, 18:30)
+            { id: 'K14', round: 'Round of 32', home: 'Argentina', away: 'Cabo Verde', date: '2026-07-03',
+                time: '11:00 AM PST', pst: '11:00 AM PST', stadium: 'Miami Stadium', matchNumber: '86',
+                homeScore: null, awayScore: null, isKo: true },
+            { id: 'K15', round: 'Round of 32', home: 'Colombia', away: 'Ghana', date: '2026-07-03',
+                time: '3:00 PM PST', pst: '3:00 PM PST', stadium: 'Kansas City Stadium', matchNumber: '87',
+                homeScore: null, awayScore: null, isKo: true },
+            { id: 'K16', round: 'Round of 32', home: 'Australia', away: 'Egypt', date: '2026-07-03',
+                time: '6:30 PM PST', pst: '6:30 PM PST', stadium: 'Dallas Stadium', matchNumber: '88',
                 homeScore: null, awayScore: null, isKo: true },
 
-            // Round of 16 (89–96)
+            // Round of 16
+            // Saturday, July 4 (ET 13:00, 17:00 -> PST 10:00, 14:00)
             { id: 'K17', round: 'Round of 16', home: 'Winner Match 74', away: 'Winner Match 77', date: '2026-07-04',
-                time: '1:00 PM PST', pst: '1:00 PM PST', stadium: 'NRG Stadium, Houston', matchNumber: '89',
+                time: '2:00 PM PST', pst: '2:00 PM PST', stadium: 'Philadelphia Stadium', matchNumber: '89',
                 homeScore: null, awayScore: null, isKo: true },
             { id: 'K18', round: 'Round of 16', home: 'Winner Match 73', away: 'Winner Match 75', date: '2026-07-04',
-                time: '1:00 PM PST', pst: '1:00 PM PST', stadium: 'Lincoln Financial Field, Philadelphia',
-                matchNumber: '90', homeScore: null, awayScore: null, isKo: true },
+                time: '10:00 AM PST', pst: '10:00 AM PST', stadium: 'Houston Stadium', matchNumber: '90',
+                homeScore: null, awayScore: null, isKo: true },
+            // Sunday, July 5 (ET 16:00, 20:00 -> PST 13:00, 17:00)
             { id: 'K19', round: 'Round of 16', home: 'Winner Match 76', away: 'Winner Match 78', date: '2026-07-05',
-                time: '10:00 AM PST', pst: '10:00 AM PST', stadium: 'MetLife Stadium, East Rutherford', matchNumber: '91',
+                time: '1:00 PM PST', pst: '1:00 PM PST', stadium: 'New York New Jersey Stadium', matchNumber: '91',
                 homeScore: null, awayScore: null, isKo: true },
             { id: 'K20', round: 'Round of 16', home: 'Winner Match 79', away: 'Winner Match 80', date: '2026-07-05',
-                time: '2:00 PM PST', pst: '2:00 PM PST', stadium: 'Estadio Azteca, Mexico City', matchNumber: '92',
+                time: '5:00 PM PST', pst: '5:00 PM PST', stadium: 'Mexico City Stadium', matchNumber: '92',
                 homeScore: null, awayScore: null, isKo: true },
+            // Monday, July 6 (ET 15:00, 20:00 -> PST 12:00, 17:00)
             { id: 'K21', round: 'Round of 16', home: 'Winner Match 83', away: 'Winner Match 84', date: '2026-07-06',
-                time: '10:00 AM PST', pst: '10:00 AM PST', stadium: 'Lumen Field, Seattle', matchNumber: '93',
+                time: '12:00 PM PST', pst: '12:00 PM PST', stadium: 'Dallas Stadium', matchNumber: '93',
                 homeScore: null, awayScore: null, isKo: true },
             { id: 'K22', round: 'Round of 16', home: 'Winner Match 81', away: 'Winner Match 82', date: '2026-07-06',
-                time: '2:00 PM PST', pst: '2:00 PM PST', stadium: 'AT&T Stadium, Arlington', matchNumber: '94',
+                time: '5:00 PM PST', pst: '5:00 PM PST', stadium: 'Seattle Stadium', matchNumber: '94',
                 homeScore: null, awayScore: null, isKo: true },
+            // Tuesday, July 7 (ET 12:00, 16:00 -> PST 09:00, 13:00)
             { id: 'K23', round: 'Round of 16', home: 'Winner Match 86', away: 'Winner Match 88', date: '2026-07-07',
-                time: '10:00 AM PST', pst: '10:00 AM PST', stadium: 'Mercedes-Benz Stadium, Atlanta', matchNumber: '95',
+                time: '9:00 AM PST', pst: '9:00 AM PST', stadium: 'Atlanta Stadium', matchNumber: '95',
                 homeScore: null, awayScore: null, isKo: true },
             { id: 'K24', round: 'Round of 16', home: 'Winner Match 85', away: 'Winner Match 87', date: '2026-07-07',
-                time: '2:00 PM PST', pst: '2:00 PM PST', stadium: 'BC Place, Vancouver', matchNumber: '96',
+                time: '1:00 PM PST', pst: '1:00 PM PST', stadium: 'BC Place Vancouver', matchNumber: '96',
                 homeScore: null, awayScore: null, isKo: true },
 
-            // Quarter-finals (97–100)
+            // Quarter-finals
+            // Thursday, July 9 (ET 16:00 -> PST 13:00)
             { id: 'K25', round: 'Quarter-finals', home: 'Winner Match 89', away: 'Winner Match 90', date: '2026-07-09',
-                time: '1:00 PM PST', pst: '1:00 PM PST', stadium: 'AT&T Stadium, Arlington', matchNumber: '97',
+                time: '1:00 PM PST', pst: '1:00 PM PST', stadium: 'Boston Stadium', matchNumber: '97',
                 homeScore: null, awayScore: null, isKo: true },
+            // Friday, July 10 (ET 15:00 -> PST 12:00)
             { id: 'K26', round: 'Quarter-finals', home: 'Winner Match 93', away: 'Winner Match 94', date: '2026-07-10',
-                time: '12:00 PM PST', pst: '12:00 PM PST', stadium: 'SoFi Stadium, Inglewood', matchNumber: '98',
+                time: '12:00 PM PST', pst: '12:00 PM PST', stadium: 'Los Angeles Stadium', matchNumber: '98',
                 homeScore: null, awayScore: null, isKo: true },
+            // Saturday, July 11 (ET 17:00, 21:00 -> PST 14:00, 18:00)
             { id: 'K27', round: 'Quarter-finals', home: 'Winner Match 91', away: 'Winner Match 92', date: '2026-07-11',
-                time: '12:00 PM PST', pst: '12:00 PM PST', stadium: 'Arrowhead Stadium, Kansas City', matchNumber: '99',
+                time: '2:00 PM PST', pst: '2:00 PM PST', stadium: 'Miami Stadium', matchNumber: '99',
                 homeScore: null, awayScore: null, isKo: true },
             { id: 'K28', round: 'Quarter-finals', home: 'Winner Match 95', away: 'Winner Match 96', date: '2026-07-11',
-                time: '12:00 PM PST', pst: '12:00 PM PST', stadium: 'Hard Rock Stadium, Miami Gardens', matchNumber: '100',
+                time: '6:00 PM PST', pst: '6:00 PM PST', stadium: 'Kansas City Stadium', matchNumber: '100',
                 homeScore: null, awayScore: null, isKo: true },
 
-            // Semi-finals (101–102)
+            // Semi-finals
+            // Tuesday, July 14 (ET 15:00 -> PST 12:00)
             { id: 'K29', round: 'Semi-finals', home: 'Winner Match 97', away: 'Winner Match 98', date: '2026-07-14',
-                time: '12:00 PM PST', pst: '12:00 PM PST', stadium: 'AT&T Stadium, Arlington', matchNumber: '101',
+                time: '12:00 PM PST', pst: '12:00 PM PST', stadium: 'Dallas Stadium', matchNumber: '101',
                 homeScore: null, awayScore: null, isKo: true },
+            // Wednesday, July 15 (ET 15:00 -> PST 12:00)
             { id: 'K30', round: 'Semi-finals', home: 'Winner Match 99', away: 'Winner Match 100', date: '2026-07-15',
-                time: '12:00 PM PST', pst: '12:00 PM PST', stadium: 'Mercedes-Benz Stadium, Atlanta', matchNumber: '102',
+                time: '12:00 PM PST', pst: '12:00 PM PST', stadium: 'Atlanta Stadium', matchNumber: '102',
                 homeScore: null, awayScore: null, isKo: true },
 
-            // Third Place (103) – changed to "Runner-up" and time to 12:00 PM PST
+            // Third Place (ET 17:00 -> PST 14:00)
             { id: 'K31', round: 'Third Place', home: 'Runner-up Match 101', away: 'Runner-up Match 102', date: '2026-07-18',
-                time: '12:00 PM PST', pst: '12:00 PM PST', stadium: 'Hard Rock Stadium, Miami Gardens', matchNumber: '103',
+                time: '2:00 PM PST', pst: '2:00 PM PST', stadium: 'Miami Stadium', matchNumber: '103',
                 homeScore: null, awayScore: null, isKo: true },
 
-            // Final (104)
+            // Final (ET 15:00 -> PST 12:00)
             { id: 'K32', round: 'Final', home: 'Winner Match 101', away: 'Winner Match 102', date: '2026-07-19',
-                time: '12:00 PM PST', pst: '12:00 PM PST', stadium: 'MetLife Stadium, East Rutherford', matchNumber: '104',
+                time: '12:00 PM PST', pst: '12:00 PM PST', stadium: 'New York New Jersey Stadium', matchNumber: '104',
                 homeScore: null, awayScore: null, isKo: true }
         ];
 
@@ -1359,14 +1386,14 @@
 
             // Round of 16
             const r16Map = [
-                ['K2', 'K5'],
-                ['K1', 'K3'],
-                ['K4', 'K6'],
-                ['K7', 'K8'],
-                ['K11', 'K12'],
-                ['K9', 'K10'],
-                ['K14', 'K16'],
-                ['K13', 'K15']
+                ['K2', 'K5'], // 89 = Winner 74 vs Winner 77
+                ['K1', 'K3'], // 90 = Winner 73 vs Winner 75
+                ['K4', 'K6'], // 91 = Winner 76 vs Winner 78
+                ['K7', 'K8'], // 92 = Winner 79 vs Winner 80
+                ['K11', 'K12'], // 93 = Winner 83 vs Winner 84
+                ['K9', 'K10'], // 94 = Winner 81 vs Winner 82
+                ['K14', 'K16'], // 95 = Winner 86 vs Winner 88
+                ['K13', 'K15'] // 96 = Winner 85 vs Winner 87
             ];
             const r16Ids = ['K17', 'K18', 'K19', 'K20', 'K21', 'K22', 'K23', 'K24'];
             r16Ids.forEach((mid, idx) => {
@@ -1419,7 +1446,7 @@
                 }
             });
 
-            // Third Place – now "Runner-up" instead of "Loser"
+            // Third Place – "Runner-up" instead of "Loser"
             const thirdMatch = allKoGames.find(g => g.id === 'K31');
             if (thirdMatch) {
                 if (thirdMatch.home && thirdMatch.home.startsWith('Runner-up Match')) {
