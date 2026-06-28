@@ -336,7 +336,7 @@
             border: 2px solid #dee2e6;
             border-radius: 12px;
             padding: 16px;
-            margin: 10px 12px 6px;
+            margin: 10px 0 6px;
             box-shadow: var(--shadow);
         }
         .legend-section h3 {
@@ -384,7 +384,7 @@
 
         /* ---- Bracket ---- */
         .bracket-wrapper {
-            margin-top: 16px;
+            margin-top: 0;
             margin-bottom: 16px;
             background: #fff;
             border-radius: 28px;
@@ -800,30 +800,34 @@
     <!-- Player Legend – always visible on main page -->
     <div id="playerLegend"></div>
 
-    <!-- Tabs: Groups + 3rd Place -->
+    <!-- Tabs: Bracket (default), Groups, 3rd Place -->
     <div class="tabs">
-        <button class="tab-btn active" data-view="groups">📋 Groups</button>
+        <button class="tab-btn active" data-view="bracket">🏆 Bracket</button>
+        <button class="tab-btn" data-view="groups">📋 Groups</button>
         <button class="tab-btn" data-view="thirdplace">📊 3rd Place</button>
     </div>
 
     <div class="content">
+        <!-- Bracket view (default) -->
+        <div class="view active" id="view-bracket">
+            <div class="bracket-wrapper" style="margin-top:0;">
+                <div class="bracket-header">
+                    <h2>🏆 WORLD CUP 2026 · KNOCKOUT BRACKET</h2>
+                    <div class="bracket-note">⚡ Click any match to edit score · Results auto-fill from Round of 32 → Final</div>
+                </div>
+                <div id="dynamicBracketTree" class="tournament-bracket"></div>
+            </div>
+        </div>
+
         <!-- Groups view -->
-        <div class="view active" id="view-groups">
+        <div class="view" id="view-groups">
             <div class="groups-grid" id="groupsGrid"></div>
         </div>
+
         <!-- 3rd Place view -->
         <div class="view" id="view-thirdplace">
             <div id="thirdPlaceContainer"></div>
         </div>
-    </div>
-
-    <!-- Bracket – always visible on main page, placed below tabs -->
-    <div id="globalBracketContainer" class="bracket-wrapper">
-        <div class="bracket-header">
-            <h2>🏆 WORLD CUP 2026 · KNOCKOUT BRACKET</h2>
-            <div class="bracket-note">⚡ Click any match to edit score · Results auto-fill from Round of 32 → Final</div>
-        </div>
-        <div id="dynamicBracketTree" class="tournament-bracket"></div>
     </div>
 
     <!-- Overlays -->
@@ -946,7 +950,7 @@
             return (hrs * 60) + mins;
         }
 
-        // ---- Group games (all dates/times verified for Round of 32) ----
+        // ---- Group games (all dates/times verified) ----
         const allGroupGames = [
             // Group A
             { id: 'G1', group: 'A', home: 'Mexico', away: 'South Africa', date: '2026-06-11', time: '1:00 PM CT',
@@ -1110,7 +1114,7 @@
         ];
         allGroupGames.forEach(g => { g.round = 'group'; });
 
-        // ---- Knockout games (Round of 32 dates/times verified) ----
+        // ---- Knockout games (all dates/times verified) ----
         const allKoGames = [
             // Round of 32 (K1 – K16)
             { id: 'K1', round: 'Round of 32', home: 'Runner-up A', away: 'Runner-up B', date: '2026-06-28',
@@ -1218,7 +1222,7 @@
 
         const allGames = [...allGroupGames, ...allKoGames];
         let selectedDate = null,
-            currentView = 'groups';
+            currentView = 'bracket';
 
         function isGroupComplete(gid) {
             const games = allGroupGames.filter(g => g.group === gid);
@@ -1760,10 +1764,18 @@
                 renderAll();
                 document.getElementById('dailyOverlay').classList.remove('open');
             });
-            if (currentView === 'groups') renderGroups();
-            else if (currentView === 'thirdplace') renderThirdPlace();
+            if (currentView === 'bracket') {
+                renderBracket();
+            } else if (currentView === 'groups') {
+                renderGroups();
+            } else if (currentView === 'thirdplace') {
+                renderThirdPlace();
+            }
             renderLegend();
-            renderBracket();
+            // Always render bracket in background for data consistency, but only display if view is bracket
+            if (currentView !== 'bracket') {
+                // still update internal data but don't need to render again
+            }
         }
 
         // Tab switching
