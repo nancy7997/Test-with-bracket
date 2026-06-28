@@ -1443,6 +1443,24 @@
             if (koMap['K16']) { koMap['K16'].home = winners['K'] || 'Winner K';
                 koMap['K16'].away = (allocation && allocation['K16']) ? allocation['K16'] : (bestThird[7] ? bestThird[7]
                     .team : '3rd Best*'); }
+
+            // ----- HARD-CODED OVERRIDES FOR SPECIFIC MATCHUPS -----
+            if (koMap['K2']) {
+                koMap['K2'].home = 'Germany';
+                koMap['K2'].away = 'Paraguay';
+            }
+            if (koMap['K5']) {
+                koMap['K5'].home = 'France';
+                koMap['K5'].away = 'Sweden';
+            }
+            if (koMap['K10']) {
+                koMap['K10'].home = 'Belgium';
+                koMap['K10'].away = 'Senegal';
+            }
+            if (koMap['K13']) {
+                koMap['K13'].home = 'Switzerland';
+                koMap['K13'].away = 'Algeria';
+            }
         }
 
         function propagateKnockoutResults() {
@@ -1804,16 +1822,33 @@
                 .gameId)));
         }
 
+        // ----- RENDER THIRD PLACE (HARD-CODED OFFICIAL LIST) -----
         function renderThirdPlace() {
-            const container = document.getElementById('thirdPlaceContainer'),
-                thirds = getAllThirdPlaceTeams();
+            const container = document.getElementById('thirdPlaceContainer');
+            const officialList = [
+                { pos: 1, group: 'K', team: 'DR Congo', pts: 4, gd: '+1', status: 'Qualified' },
+                { pos: 2, group: 'F', team: 'Sweden', pts: 4, gd: '0', status: 'Qualified' },
+                { pos: 3, group: 'E', team: 'Ecuador', pts: 4, gd: '0', status: 'Qualified' },
+                { pos: 4, group: 'L', team: 'Ghana', pts: 4, gd: '0', status: 'Qualified' },
+                { pos: 5, group: 'B', team: 'Bosnia & Herzegovina', pts: 4, gd: '-1', status: 'Qualified' },
+                { pos: 6, group: 'D', team: 'Paraguay', pts: 4, gd: '-2', status: 'Qualified' },
+                { pos: 7, group: 'I', team: 'Senegal', pts: 3, gd: '+2', status: 'Qualified' },
+                { pos: 8, group: 'G', team: 'IR Iran', pts: 3, gd: '0', status: 'Qualified' },
+                { pos: 9, group: 'A', team: 'South Korea', pts: 3, gd: '-1', status: 'Eliminated' },
+                { pos: 10, group: 'J', team: 'Algeria', pts: 3, gd: '-2', status: 'Eliminated' },
+                { pos: 11, group: 'C', team: 'Scotland', pts: 3, gd: '-3', status: 'Eliminated' },
+                { pos: 12, group: 'H', team: 'Uruguay', pts: 2, gd: '-1', status: 'Eliminated' }
+            ];
+
             let h =
-                `<div class="third-place-section"><h3>📊 Third-Placed Teams Ranking (Top 8 advance)</h3><table class="third-place-table"><thead><tr><th>Pos</th><th>Grp</th><th>Team</th><th>P</th><th>W</th><th>D</th><th>L</th><th>GF</th><th>GA</th><th>GD</th><th>Pts</th><th>Status</th></tr></thead><tbody>`;
-            thirds.forEach((t, i) => {
-                const q = i < 8,
-                    c = playerColors[t.person] || '#6c3bd4';
+                `<div class="third-place-section"><h3>📊 Third-Placed Teams Ranking (Top 8 advance)</h3><table class="third-place-table"><thead><tr><th>Pos</th><th>Grp</th><th>Team</th><th>Pts</th><th>GD</th><th>Status</th></tr></thead><tbody>`;
+            officialList.forEach(t => {
+                const q = t.status === 'Qualified';
+                // Map team name to player color if available
+                const person = peopleMap[t.team] || '';
+                const c = person ? playerColors[person] || '#6c3bd4' : '#6c3bd4';
                 h +=
-                    `<tr><td>${i + 1}</td><td>${t.group}</td><td>${t.team}<span class="player-name" style="color:${c}">${t.person}</span></td><td>${t.gp}</td><td>${t.w}</td><td>${t.d}</td><td>${t.l}</td><td>${t.gf}</td><td>${t.ga}</td><td>${t.gd >= 0 ? '+' : ''}${t.gd}</td><td class="pts">${t.pts}</td><td class="${q ? 'qualifies' : ''}">${q ? '✅ Advances' : '❌'}</td></tr>`;
+                    `<tr><td>${t.pos}</td><td>${t.group}</td><td>${t.team}<span class="player-name" style="color:${c}">${person}</span></td><td class="pts">${t.pts}</td><td>${t.gd}</td><td class="${q ? 'qualifies' : ''}">${q ? '✅ Qualified' : '❌ Eliminated'}</td></tr>`;
             });
             h += `</tbody></table></div>`;
             container.innerHTML = h;
