@@ -454,7 +454,6 @@
         }
         .bracket-round-col {
             flex: 0 0 200px;
-            /* increased width */
             background: #fefefe;
             border-radius: 20px;
             padding: 8px 4px;
@@ -859,10 +858,8 @@
     <div class="calendar-wrap"><div class="calendar-strip" id="calendarStrip"></div></div>
     <div class="filter-info" id="filterBanner"></div>
 
-    <!-- Player Legend – always visible on main page -->
     <div id="playerLegend"></div>
 
-    <!-- Tabs: Bracket (default), Groups, 3rd Place -->
     <div class="tabs">
         <button class="tab-btn active" data-view="bracket">🏆 Bracket</button>
         <button class="tab-btn" data-view="groups">📋 Groups</button>
@@ -870,7 +867,6 @@
     </div>
 
     <div class="content">
-        <!-- Bracket view (default) -->
         <div class="view active" id="view-bracket">
             <div class="bracket-wrapper" style="margin-top:0;">
                 <div class="bracket-header">
@@ -881,18 +877,15 @@
             </div>
         </div>
 
-        <!-- Groups view -->
         <div class="view" id="view-groups">
             <div class="groups-grid" id="groupsGrid"></div>
         </div>
 
-        <!-- 3rd Place view -->
         <div class="view" id="view-thirdplace">
             <div id="thirdPlaceContainer"></div>
         </div>
     </div>
 
-    <!-- Overlays -->
     <div class="daily-overlay" id="dailyOverlay"><div class="daily-modal" id="dailyModal"></div></div>
     <div class="modal-overlay" id="modalOverlay"><div class="modal" id="gameModal"></div></div>
     <div class="modal-overlay" id="playerOverlay"><div class="modal" id="playerModal"></div></div>
@@ -915,7 +908,6 @@
         const db = getDatabase(app);
         const scoresRef = ref(db, 'scores');
 
-        // Official groups as per FIFA
         const GROUPS = {
             'A': ['Mexico', 'South Africa', 'South Korea', 'Czechia'],
             'B': ['Canada', 'Bosnia and Herzegovina', 'Qatar', 'Switzerland'],
@@ -931,7 +923,6 @@
             'L': ['England', 'Croatia', 'Ghana', 'Panama']
         };
 
-        // Player mapping
         const peopleMap = {
             'Mexico': 'Irma',
             'South Korea': 'Grampa',
@@ -1015,9 +1006,7 @@
             return (hrs * 60) + mins;
         }
 
-        // ---- Group games (unchanged) ----
         const allGroupGames = [
-            // Group A
             { id: 'G1', group: 'A', home: 'Mexico', away: 'South Africa', date: '2026-06-11', time: '1:00 PM CT',
                 pst: '12:00 PM PST', stadium: 'Mexico City Stadium', homeScore: 2, awayScore: 0 },
             { id: 'G2', group: 'A', home: 'South Korea', away: 'Czechia', date: '2026-06-11', time: '8:00 PM CT',
@@ -1031,7 +1020,6 @@
                 pst: '6:00 PM PST', stadium: 'Mexico City Stadium', homeScore: null, awayScore: null },
             { id: 'G54', group: 'A', home: 'South Africa', away: 'South Korea', date: '2026-06-24', time: '7:00 PM CT',
                 pst: '6:00 PM PST', stadium: 'Estadio Monterrey', homeScore: null, awayScore: null },
-            // Group B
             { id: 'G3', group: 'B', home: 'Canada', away: 'Bosnia and Herzegovina', date: '2026-06-12',
                 time: '3:00 PM ET', pst: '12:00 PM PST', stadium: 'Toronto Stadium', homeScore: 1, awayScore: 1 },
             { id: 'G8', group: 'B', home: 'Qatar', away: 'Switzerland', date: '2026-06-13', time: '12:00 PM PT',
@@ -1046,7 +1034,6 @@
             { id: 'G52', group: 'B', home: 'Bosnia and Herzegovina', away: 'Qatar', date: '2026-06-24',
                 time: '12:00 PM PT', pst: '12:00 PM PST', stadium: 'Seattle Stadium', homeScore: null,
                 awayScore: null },
-            // Group C
             { id: 'G7', group: 'C', home: 'Brazil', away: 'Morocco', date: '2026-06-13', time: '6:00 PM ET',
                 pst: '3:00 PM PST', stadium: 'New York New Jersey Stadium', homeScore: null, awayScore: null },
             { id: 'G5', group: 'C', home: 'Haiti', away: 'Scotland', date: '2026-06-13', time: '9:00 PM ET',
@@ -1059,7 +1046,6 @@
                 pst: '3:00 PM PST', stadium: 'Miami Stadium', homeScore: null, awayScore: null },
             { id: 'G50', group: 'C', home: 'Morocco', away: 'Haiti', date: '2026-06-24', time: '6:00 PM ET',
                 pst: '3:00 PM PST', stadium: 'Atlanta Stadium', homeScore: null, awayScore: null },
-            // Group D
             { id: 'G4', group: 'D', home: 'USA', away: 'Paraguay', date: '2026-06-12', time: '6:00 PM PT',
                 pst: '6:00 PM PST', stadium: 'Los Angeles Stadium', homeScore: 4, awayScore: 1 },
             { id: 'G6', group: 'D', home: 'Australia', away: 'Türkiye', date: '2026-06-13', time: '9:00 PM PT',
@@ -1072,7 +1058,6 @@
                 pst: '7:00 PM PST', stadium: 'Los Angeles Stadium', homeScore: null, awayScore: null },
             { id: 'G60', group: 'D', home: 'Paraguay', away: 'Australia', date: '2026-06-25', time: '7:00 PM PT',
                 pst: '7:00 PM PST', stadium: "San Francisco Bay Area Stadium", homeScore: null, awayScore: null },
-            // Group E
             { id: 'G10', group: 'E', home: 'Germany', away: 'Curaçao', date: '2026-06-14', time: '12:00 PM CT',
                 pst: '10:00 AM PST', stadium: 'Houston Stadium', homeScore: null, awayScore: null },
             { id: 'G9', group: 'E', home: 'Côte d\'Ivoire', away: 'Ecuador', date: '2026-06-14', time: '7:00 PM ET',
@@ -1085,7 +1070,6 @@
                 pst: '1:00 PM PST', stadium: 'Philadelphia Stadium', homeScore: null, awayScore: null },
             { id: 'G56', group: 'E', home: 'Ecuador', away: 'Germany', date: '2026-06-25', time: '4:00 PM ET',
                 pst: '1:00 PM PST', stadium: 'New York New Jersey Stadium', homeScore: null, awayScore: null },
-            // Group F
             { id: 'G11', group: 'F', home: 'Netherlands', away: 'Japan', date: '2026-06-14', time: '3:00 PM CT',
                 pst: '1:00 PM PST', stadium: 'Dallas Stadium', homeScore: null, awayScore: null },
             { id: 'G12', group: 'F', home: 'Sweden', away: 'Tunisia', date: '2026-06-14', time: '7:00 PM PT',
@@ -1098,7 +1082,6 @@
                 pst: '4:00 PM PST', stadium: 'Dallas Stadium', homeScore: null, awayScore: null },
             { id: 'G58', group: 'F', home: 'Tunisia', away: 'Netherlands', date: '2026-06-25', time: '6:00 PM CT',
                 pst: '4:00 PM PST', stadium: 'Kansas City Stadium', homeScore: null, awayScore: null },
-            // Group G
             { id: 'G16', group: 'G', home: 'Belgium', away: 'Egypt', date: '2026-06-15', time: '12:00 PM PT',
                 pst: '12:00 PM PST', stadium: 'Seattle Stadium', homeScore: null, awayScore: null },
             { id: 'G15', group: 'G', home: 'IR Iran', away: 'New Zealand', date: '2026-06-15', time: '6:00 PM PT',
@@ -1111,7 +1094,6 @@
                 pst: '8:00 PM PST', stadium: 'Seattle Stadium', homeScore: null, awayScore: null },
             { id: 'G64', group: 'G', home: 'New Zealand', away: 'Belgium', date: '2026-06-26', time: '8:00 PM PT',
                 pst: '8:00 PM PST', stadium: 'BC Place, Vancouver', homeScore: null, awayScore: null },
-            // Group H
             { id: 'G14', group: 'H', home: 'Spain', away: 'Cabo Verde', date: '2026-06-15', time: '12:00 PM ET',
                 pst: '9:00 AM PST', stadium: 'Atlanta Stadium', homeScore: null, awayScore: null },
             { id: 'G13', group: 'H', home: 'Saudi Arabia', away: 'Uruguay', date: '2026-06-15', time: '6:00 PM ET',
@@ -1124,7 +1106,6 @@
                 pst: '5:00 PM PST', stadium: 'Houston Stadium', homeScore: null, awayScore: null },
             { id: 'G66', group: 'H', home: 'Uruguay', away: 'Spain', date: '2026-06-26', time: '6:00 PM CT',
                 pst: '4:00 PM PST', stadium: 'Estadio Guadalajara', homeScore: null, awayScore: null },
-            // Group I
             { id: 'G17', group: 'I', home: 'France', away: 'Senegal', date: '2026-06-16', time: '3:00 PM ET',
                 pst: '12:00 PM PST', stadium: 'New York New Jersey Stadium', homeScore: null, awayScore: null },
             { id: 'G18', group: 'I', home: 'Iraq', away: 'Norway', date: '2026-06-16', time: '6:00 PM ET',
@@ -1137,7 +1118,6 @@
                 pst: '12:00 PM PST', stadium: 'Boston Stadium', homeScore: null, awayScore: null },
             { id: 'G62', group: 'I', home: 'Senegal', away: 'Iraq', date: '2026-06-26', time: '3:00 PM ET',
                 pst: '12:00 PM PST', stadium: 'Toronto Stadium', homeScore: null, awayScore: null },
-            // Group J
             { id: 'G19', group: 'J', home: 'Argentina', away: 'Algeria', date: '2026-06-16', time: '8:00 PM CT',
                 pst: '6:00 PM PST', stadium: 'Kansas City Stadium', homeScore: null, awayScore: null },
             { id: 'G20', group: 'J', home: 'Austria', away: 'Jordan', date: '2026-06-16', time: '9:00 PM PT',
@@ -1150,7 +1130,6 @@
                 pst: '7:00 PM PST', stadium: 'Kansas City Stadium', homeScore: null, awayScore: null },
             { id: 'G70', group: 'J', home: 'Jordan', away: 'Argentina', date: '2026-06-27', time: '9:00 PM CT',
                 pst: '7:00 PM PST', stadium: 'Dallas Stadium', homeScore: null, awayScore: null },
-            // Group K
             { id: 'G23', group: 'K', home: 'Portugal', away: 'Congo DR', date: '2026-06-17', time: '12:00 PM CT',
                 pst: '10:00 AM PST', stadium: 'Houston Stadium', homeScore: null, awayScore: null },
             { id: 'G24', group: 'K', home: 'Uzbekistan', away: 'Colombia', date: '2026-06-17', time: '8:00 PM CT',
@@ -1163,7 +1142,6 @@
                 pst: '4:30 PM PST', stadium: 'Miami Stadium', homeScore: null, awayScore: null },
             { id: 'G72', group: 'K', home: 'Congo DR', away: 'Uzbekistan', date: '2026-06-27', time: '7:30 PM ET',
                 pst: '4:30 PM PST', stadium: 'Atlanta Stadium', homeScore: null, awayScore: null },
-            // Group L
             { id: 'G22', group: 'L', home: 'England', away: 'Croatia', date: '2026-06-17', time: '3:00 PM CT',
                 pst: '1:00 PM PST', stadium: 'Dallas Stadium', homeScore: null, awayScore: null },
             { id: 'G21', group: 'L', home: 'Ghana', away: 'Panama', date: '2026-06-17', time: '7:00 PM ET',
@@ -1179,59 +1157,50 @@
         ];
         allGroupGames.forEach(g => { g.round = 'group'; });
 
-        // ---- NEW KNOCKOUT GAMES (hardcoded bracket) ----
         const allKoGames = [
-            // Round of 32 – correctly paired for Round of 16
-            // K1 & K2 -> winners meet in K17
+            // Round of 32
             { id: 'K1', round: 'Round of 32', home: 'South Africa', away: 'Canada', date: '2026-06-28',
                 time: '12:00 PM PST', pst: '12:00 PM PST', stadium: 'SoFi Stadium, Inglewood', homeScore: null,
                 awayScore: null, isKo: true },
             { id: 'K2', round: 'Round of 32', home: 'Netherlands', away: 'Morocco', date: '2026-06-29',
                 time: '6:00 PM PST', pst: '6:00 PM PST', stadium: 'Gillette Stadium, Foxborough', homeScore: null,
                 awayScore: null, isKo: true },
-            // K3 & K4 -> winners meet in K18
             { id: 'K3', round: 'Round of 32', home: 'Germany', away: 'Paraguay', date: '2026-06-29',
                 time: '1:30 PM PST', pst: '1:30 PM PST', stadium: 'Estadio BBVA, Guadalupe', homeScore: null,
                 awayScore: null, isKo: true },
             { id: 'K4', round: 'Round of 32', home: 'France', away: 'Sweden', date: '2026-06-30',
                 time: '2:00 PM PST', pst: '2:00 PM PST', stadium: 'NRG Stadium, Houston', homeScore: null,
                 awayScore: null, isKo: true },
-            // K5 & K6 -> winners meet in K19
             { id: 'K5', round: 'Round of 32', home: 'Belgium', away: 'Senegal', date: '2026-07-01',
                 time: '1:00 PM PST', pst: '1:00 PM PST', stadium: 'MetLife Stadium, East Rutherford', homeScore: null,
                 awayScore: null, isKo: true },
             { id: 'K6', round: 'Round of 32', home: 'USA', away: 'Bosnia and Herzegovina', date: '2026-07-01',
                 time: '5:00 PM PST', pst: '5:00 PM PST', stadium: "AT&T Stadium, Arlington", homeScore: null,
                 awayScore: null, isKo: true },
-            // K7 & K8 -> winners meet in K20
             { id: 'K7', round: 'Round of 32', home: 'Spain', away: 'Austria', date: '2026-07-02',
                 time: '12:00 PM PST', pst: '12:00 PM PST', stadium: 'Estadio Azteca, Mexico City', homeScore: null,
                 awayScore: null, isKo: true },
             { id: 'K8', round: 'Round of 32', home: 'Portugal', away: 'Croatia', date: '2026-07-02',
                 time: '4:00 PM PST', pst: '4:00 PM PST', stadium: 'Mercedes-Benz Stadium, Atlanta', homeScore: null,
                 awayScore: null, isKo: true },
-            // K9 & K10 -> winners meet in K21
             { id: 'K9', round: 'Round of 32', home: 'Brazil', away: 'Japan', date: '2026-06-29',
                 time: '10:00 AM PST', pst: '10:00 AM PST', stadium: "Levi's Stadium, Santa Clara", homeScore: null,
                 awayScore: null, isKo: true },
             { id: 'K10', round: 'Round of 32', home: 'Côte d\'Ivoire', away: 'Norway', date: '2026-06-30',
                 time: '10:00 AM PST', pst: '10:00 AM PST', stadium: 'Lumen Field, Seattle', homeScore: null,
                 awayScore: null, isKo: true },
-            // K11 & K12 -> winners meet in K22
             { id: 'K11', round: 'Round of 32', home: 'Mexico', away: 'Ecuador', date: '2026-06-30',
                 time: '6:00 PM PST', pst: '6:00 PM PST', stadium: 'SoFi Stadium, Inglewood', homeScore: null,
                 awayScore: null, isKo: true },
             { id: 'K12', round: 'Round of 32', home: 'England', away: 'Congo DR', date: '2026-07-01',
                 time: '9:00 AM PST', pst: '9:00 AM PST', stadium: 'BMO Field, Toronto', homeScore: null,
                 awayScore: null, isKo: true },
-            // K13 & K14 -> winners meet in K23
             { id: 'K13', round: 'Round of 32', home: 'Switzerland', away: 'Algeria', date: '2026-07-02',
                 time: '8:00 PM PST', pst: '8:00 PM PST', stadium: 'BC Place, Vancouver', homeScore: null,
                 awayScore: null, isKo: true },
             { id: 'K14', round: 'Round of 32', home: 'Colombia', away: 'Ghana', date: '2026-07-03',
                 time: '6:30 PM PST', pst: '6:30 PM PST', stadium: 'Arrowhead Stadium, Kansas City', homeScore: null,
                 awayScore: null, isKo: true },
-            // K15 & K16 -> winners meet in K24
             { id: 'K15', round: 'Round of 32', home: 'Australia', away: 'Egypt', date: '2026-07-03',
                 time: '11:00 AM PST', pst: '11:00 AM PST', stadium: 'Hard Rock Stadium, Miami Gardens', homeScore: null,
                 awayScore: null, isKo: true },
@@ -1239,62 +1208,62 @@
                 time: '3:00 PM PST', pst: '3:00 PM PST', stadium: 'Estadio Akron, Zapopan', homeScore: null,
                 awayScore: null, isKo: true },
 
-            // Round of 16 – winners of K1 vs K2, etc.
+            // Round of 16
             { id: 'K17', round: 'Round of 16', home: 'W R32-1', away: 'W R32-2', date: '2026-07-04',
-                time: '1:00 PM ET', pst: '10:00 AM PST', stadium: 'Lincoln Financial Field, Philadelphia',
-                homeScore: null, awayScore: null, isKo: true },
-            { id: 'K18', round: 'Round of 16', home: 'W R32-3', away: 'W R32-4', date: '2026-07-04',
-                time: '4:00 PM CT', pst: '2:00 PM PST', stadium: 'NRG Stadium, Houston', homeScore: null,
+                time: '10:00 AM PST', pst: '10:00 AM PST', stadium: 'NRG Stadium, Houston', homeScore: null,
                 awayScore: null, isKo: true },
+            { id: 'K18', round: 'Round of 16', home: 'W R32-3', away: 'W R32-4', date: '2026-07-04',
+                time: '2:00 PM PST', pst: '2:00 PM PST', stadium: 'Lincoln Financial Field, Philadelphia',
+                homeScore: null, awayScore: null, isKo: true },
             { id: 'K19', round: 'Round of 16', home: 'W R32-5', away: 'W R32-6', date: '2026-07-05',
-                time: '1:00 PM ET', pst: '10:00 AM PST', stadium: 'MetLife Stadium, East Rutherford', homeScore: null,
+                time: '1:00 PM PST', pst: '1:00 PM PST', stadium: 'MetLife Stadium, East Rutherford', homeScore: null,
                 awayScore: null, isKo: true },
             { id: 'K20', round: 'Round of 16', home: 'W R32-7', away: 'W R32-8', date: '2026-07-05',
-                time: '4:00 PM CT', pst: '2:00 PM PST', stadium: 'Estadio Azteca, Mexico City', homeScore: null,
+                time: '5:00 PM PST', pst: '5:00 PM PST', stadium: 'Estadio Azteca, Mexico City', homeScore: null,
                 awayScore: null, isKo: true },
-            { id: 'K21', round: 'Round of 16', home: 'W R32-9', away: 'W R32-10', date: '2026-07-05',
-                time: '7:00 PM PT', pst: '7:00 PM PST', stadium: 'Lumen Field, Seattle', homeScore: null,
+            { id: 'K21', round: 'Round of 16', home: 'W R32-9', away: 'W R32-10', date: '2026-07-06',
+                time: '12:00 PM PST', pst: '12:00 PM PST', stadium: 'Lumen Field, Seattle', homeScore: null,
                 awayScore: null, isKo: true },
             { id: 'K22', round: 'Round of 16', home: 'W R32-11', away: 'W R32-12', date: '2026-07-06',
-                time: '1:00 PM CT', pst: '11:00 AM PST', stadium: 'AT&T Stadium, Arlington', homeScore: null,
+                time: '5:00 PM PST', pst: '5:00 PM PST', stadium: 'AT&T Stadium, Arlington', homeScore: null,
                 awayScore: null, isKo: true },
-            { id: 'K23', round: 'Round of 16', home: 'W R32-13', away: 'W R32-14', date: '2026-07-06',
-                time: '4:00 PM ET', pst: '1:00 PM PST', stadium: 'Mercedes-Benz Stadium, Atlanta', homeScore: null,
+            { id: 'K23', round: 'Round of 16', home: 'W R32-13', away: 'W R32-14', date: '2026-07-07',
+                time: '9:00 AM PST', pst: '9:00 AM PST', stadium: 'Mercedes-Benz Stadium, Atlanta', homeScore: null,
                 awayScore: null, isKo: true },
             { id: 'K24', round: 'Round of 16', home: 'W R32-15', away: 'W R32-16', date: '2026-07-07',
-                time: '7:00 PM PT', pst: '7:00 PM PST', stadium: 'BC Place, Vancouver', homeScore: null,
+                time: '1:00 PM PST', pst: '1:00 PM PST', stadium: 'BC Place, Vancouver', homeScore: null,
                 awayScore: null, isKo: true },
 
             // Quarter-finals
             { id: 'K25', round: 'Quarter-finals', home: 'W R16-1', away: 'W R16-2', date: '2026-07-09',
-                time: '1:00 PM CT', pst: '11:00 AM PST', stadium: 'AT&T Stadium, Arlington', homeScore: null,
+                time: '1:00 PM PST', pst: '1:00 PM PST', stadium: 'AT&T Stadium, Arlington', homeScore: null,
                 awayScore: null, isKo: true },
             { id: 'K26', round: 'Quarter-finals', home: 'W R16-3', away: 'W R16-4', date: '2026-07-10',
-                time: '1:00 PM PT', pst: '1:00 PM PST', stadium: 'SoFi Stadium, Inglewood', homeScore: null,
+                time: '12:00 PM PST', pst: '12:00 PM PST', stadium: 'SoFi Stadium, Inglewood', homeScore: null,
                 awayScore: null, isKo: true },
             { id: 'K27', round: 'Quarter-finals', home: 'W R16-5', away: 'W R16-6', date: '2026-07-11',
-                time: '1:00 PM CT', pst: '11:00 AM PST', stadium: 'Arrowhead Stadium, Kansas City', homeScore: null,
+                time: '1:00 PM PST', pst: '1:00 PM PST', stadium: 'Arrowhead Stadium, Kansas City', homeScore: null,
                 awayScore: null, isKo: true },
             { id: 'K28', round: 'Quarter-finals', home: 'W R16-7', away: 'W R16-8', date: '2026-07-12',
-                time: '1:00 PM ET', pst: '10:00 AM PST', stadium: 'Hard Rock Stadium, Miami Gardens', homeScore: null,
+                time: '10:00 AM PST', pst: '10:00 AM PST', stadium: 'Hard Rock Stadium, Miami Gardens', homeScore: null,
                 awayScore: null, isKo: true },
 
             // Semi-finals
             { id: 'K29', round: 'Semi-finals', home: 'W QF-1', away: 'W QF-2', date: '2026-07-14',
-                time: '1:00 PM CT', pst: '11:00 AM PST', stadium: 'AT&T Stadium, Arlington', homeScore: null,
+                time: '1:00 PM PST', pst: '1:00 PM PST', stadium: 'AT&T Stadium, Arlington', homeScore: null,
                 awayScore: null, isKo: true },
             { id: 'K30', round: 'Semi-finals', home: 'W QF-3', away: 'W QF-4', date: '2026-07-15',
-                time: '1:00 PM ET', pst: '10:00 AM PST', stadium: 'Mercedes-Benz Stadium, Atlanta', homeScore: null,
+                time: '10:00 AM PST', pst: '10:00 AM PST', stadium: 'Mercedes-Benz Stadium, Atlanta', homeScore: null,
                 awayScore: null, isKo: true },
 
             // Third Place
             { id: 'K31', round: 'Third Place', home: 'L SF-1', away: 'L SF-2', date: '2026-07-18',
-                time: '1:00 PM ET', pst: '10:00 AM PST', stadium: 'Hard Rock Stadium, Miami Gardens', homeScore: null,
+                time: '10:00 AM PST', pst: '10:00 AM PST', stadium: 'Hard Rock Stadium, Miami Gardens', homeScore: null,
                 awayScore: null, isKo: true },
 
             // Final
             { id: 'K32', round: 'Final', home: 'W SF-1', away: 'W SF-2', date: '2026-07-19',
-                time: '1:00 PM ET', pst: '10:00 AM PST', stadium: 'MetLife Stadium, East Rutherford', homeScore: null,
+                time: '12:00 PM PST', pst: '12:00 PM PST', stadium: 'MetLife Stadium, East Rutherford', homeScore: null,
                 awayScore: null, isKo: true }
         ];
 
@@ -1343,7 +1312,6 @@
             return thirds.sort((a, b) => b.pts - a.pts || b.gd - a.gd || b.gf - a.gf);
         }
 
-        // ----- ELIMINATION LOGIC -----
         function isTeamEliminated(teamName) {
             const finalMatch = allKoGames.find(g => g.round === 'Final');
             if (finalMatch && finalMatch.homeScore !== null && finalMatch.awayScore !== null && finalMatch.homeScore !==
@@ -1373,7 +1341,6 @@
             return false;
         }
 
-        // ----- PROPAGATE RESULTS -----
         function propagateKnockoutResults() {
             const winners = {},
                 losers = {};
@@ -1385,7 +1352,6 @@
                 }
             });
 
-            // Round of 16 pairings: K1 vs K2, K3 vs K4, ..., K15 vs K16
             const r16Map = [
                 ['K1', 'K2'],
                 ['K3', 'K4'],
@@ -1409,7 +1375,6 @@
                 }
             });
 
-            // Quarter-finals
             const qfMap = [
                 ['K17', 'K18'],
                 ['K19', 'K20'],
@@ -1429,7 +1394,6 @@
                 }
             });
 
-            // Semi-finals
             const sfMap = [
                 ['K25', 'K26'],
                 ['K27', 'K28']
@@ -1447,7 +1411,6 @@
                 }
             });
 
-            // Third Place – K31 uses losers of K29 and K30
             const thirdMatch = allKoGames.find(g => g.id === 'K31');
             if (thirdMatch) {
                 if (thirdMatch.home && thirdMatch.home.startsWith('L SF-')) {
@@ -1458,7 +1421,6 @@
                 }
             }
 
-            // Final – K32 uses winners of K29 and K30
             const finalMatch = allKoGames.find(g => g.id === 'K32');
             if (finalMatch) {
                 if (finalMatch.home && finalMatch.home.startsWith('W SF-')) {
@@ -1503,18 +1465,15 @@
             });
         }
 
-        // ---- Function to get player W/L/D ----
         function getPlayerRecord(playerName) {
             let wins = 0,
                 losses = 0,
                 draws = 0;
             allGames.forEach(g => {
-                // Only consider games with scores
                 if (g.homeScore === null || g.awayScore === null) return;
                 const isHome = peopleMap[g.home] === playerName;
                 const isAway = peopleMap[g.away] === playerName;
                 if (!isHome && !isAway) return;
-                // Determine result relative to this player
                 let playerScore, opponentScore;
                 if (isHome) {
                     playerScore = g.homeScore;
@@ -1531,13 +1490,11 @@
         }
 
         function renderBracket() {
-            // Ensure winners propagate before rendering
             propagateKnockoutResults();
             const container = document.getElementById('dynamicBracketTree');
             if (!container) return;
-            // Order: Round of 32, Round of 16, Quarter-finals, Semi-finals, Third Place, Final
             const rounds = ['Round of 32', 'Round of 16', 'Quarter-finals', 'Semi-finals', 'Third Place', 'Final'];
-            const factors = [1, 2, 4, 8, 16, 16]; // flex factors for sizing
+            const factors = [1, 2, 4, 8, 16, 16];
             let html = '';
             rounds.forEach((rnd, idx) => {
                 const matches = allKoGames.filter(m => m.round === rnd);
@@ -1548,7 +1505,6 @@
                 matches.forEach(m => {
                     const hasScore = (m.homeScore !== null && m.awayScore !== null);
                     const scoreText = hasScore ? `${m.homeScore} – ${m.awayScore}` : '—';
-                    // Format date as m/d
                     const dateObj = new Date(m.date + 'T00:00:00');
                     const month = dateObj.getMonth() + 1;
                     const day = dateObj.getDate();
@@ -1573,7 +1529,6 @@
                 html += `</div></div>`;
             });
 
-            // Champion column
             const finalMatch = allKoGames.find(g => g.round === 'Final');
             let champHtml = '';
             if (finalMatch && finalMatch.homeScore !== null && finalMatch.awayScore !== null && finalMatch.homeScore !==
@@ -1696,7 +1651,6 @@
         function openPlayerModal(playerName) {
             const overlay = document.getElementById('playerOverlay');
             const modal = document.getElementById('playerModal');
-            // Get record using the function
             const record = getPlayerRecord(playerName);
             const w = record.wins,
                 l = record.losses,
@@ -1782,10 +1736,8 @@
                 .gameId)));
         }
 
-        // ---- Updated Third Place with correct names and player mapping ----
         function renderThirdPlace() {
             const container = document.getElementById('thirdPlaceContainer');
-            // Fixed team names to match groups: "Congo DR" and "Bosnia and Herzegovina"
             const officialList = [
                 { pos: 1, group: 'K', team: 'Congo DR', pts: 4, gd: '+1', status: 'Qualified' },
                 { pos: 2, group: 'F', team: 'Sweden', pts: 4, gd: '0', status: 'Qualified' },
@@ -1850,7 +1802,6 @@
         document.getElementById('modalOverlay').addEventListener('click', function(e) { if (e.target === this) this
                 .classList.remove('open'); });
 
-        // ---- RENDER LEGEND with record and sorted teams ----
         function renderLegend() {
             const legendEl = document.getElementById('playerLegend');
             if (!legendEl) return;
@@ -1861,9 +1812,7 @@
                 if (legendData[person]) {
                     const c = legendData[person].color;
                     const teams = legendData[person].teams;
-                    // Get record
                     const record = getPlayerRecord(person);
-                    // Split into active and eliminated
                     const active = [],
                         eliminated = [];
                     teams.forEach(team => {
