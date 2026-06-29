@@ -906,20 +906,23 @@
         }
         .admin-filter-note {
             text-align: center;
-            font-size: 0.7rem;
+            font-size: 0.75rem;
             color: #6c757d;
-            margin-bottom: 10px;
+            margin-bottom: 12px;
             font-style: italic;
+            background: #f8f9fa;
+            padding: 6px;
+            border-radius: 6px;
         }
         .admin-editor table {
             width: 100%;
             border-collapse: separate;
-            border-spacing: 0 4px;
+            border-spacing: 0 8px;          /* increased vertical gap between rows */
             font-size: 0.78rem;
         }
         .admin-editor th {
             background: #f1f3f5;
-            padding: 10px 8px;
+            padding: 10px 10px;
             text-align: left;
             border-bottom: 2px solid #dee2e6;
             position: sticky;
@@ -929,17 +932,18 @@
             white-space: nowrap;
         }
         .admin-editor td {
-            padding: 10px 8px;
+            padding: 12px 10px;            /* generous cell padding */
             border-bottom: 1px solid #e9ecef;
             vertical-align: middle;
             background: #fff;
+            border-radius: 6px;
         }
         .admin-editor tr:hover td {
             background: #f8f9fa;
         }
         .admin-editor input {
             width: 100%;
-            padding: 7px 10px;
+            padding: 8px 10px;
             font-size: 0.78rem;
             border: 1px solid #ced4da;
             border-radius: 5px;
@@ -963,13 +967,13 @@
             min-width: 170px;
         }
         .admin-editor .col-date {
-            min-width: 135px;
+            min-width: 145px;
         }
         .admin-editor .col-time {
-            min-width: 150px;
+            min-width: 160px;
         }
         .admin-editor .col-stadium {
-            min-width: 180px;
+            min-width: 200px;
         }
         .admin-save-btn {
             display: block;
@@ -1131,7 +1135,7 @@
             }
             .admin-editor td,
             .admin-editor th {
-                padding: 6px 4px;
+                padding: 8px 6px;
             }
         }
         @media (min-width: 721px) and (max-width: 1080px) {
@@ -1605,10 +1609,7 @@
                     p.x += p.vx;
                     p.y += p.vy;
                     p.rot += p.rotSpeed;
-                    if (p.y > H) { p.y = -20;
-                        p.x = Math.random() * W;
-                        p.vy = Math.random() * 4 + 2;
-                        p.vx = (Math.random() - 0.5) * 3; }
+                    if (p.y > H) { p.y = -20; p.x = Math.random() * W; p.vy = Math.random() * 4 + 2; p.vx = (Math.random() - 0.5) * 3; }
                     ctx.save();
                     ctx.translate(p.x, p.y);
                     ctx.rotate((p.rot * Math.PI) / 180);
@@ -1623,8 +1624,7 @@
         }
 
         function stopConfetti() {
-            if (confettiAnimationId) { cancelAnimationFrame(confettiAnimationId);
-                confettiAnimationId = null; }
+            if (confettiAnimationId) { cancelAnimationFrame(confettiAnimationId); confettiAnimationId = null; }
             const canvas = document.getElementById('confettiCanvas');
             const ctx = canvas.getContext('2d');
             ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -1660,16 +1660,13 @@
             statusEl.textContent = '🟡 Syncing...';
             onValue(scoresRef, (snapshot) => {
                 const data = snapshot.val() || {};
-                allGames.forEach(g => { if (data[g.id] !== undefined) { g.homeScore = data[g.id].homeScore;
-                        g.awayScore = data[g.id].awayScore; } });
+                allGames.forEach(g => { if (data[g.id] !== undefined) { g.homeScore = data[g.id].homeScore; g.awayScore = data[g.id].awayScore; } });
                 statusEl.textContent = '🟢 Live Sync Connected';
                 statusEl.className = 'sync-status';
                 renderAll();
                 renderBracket();
                 checkAndCelebrate();
-            }, () => { statusEl.textContent = '🔴 Sync Error';
-                statusEl.className = 'sync-status offline';
-                renderAll(); });
+            }, () => { statusEl.textContent = '🔴 Sync Error'; statusEl.className = 'sync-status offline'; renderAll(); });
             onValue(scheduleRef, (snapshot) => {
                 const data = snapshot.val() || {};
                 allGames.forEach(g => {
@@ -1706,18 +1703,15 @@
         }
 
         function getPlayerRecord(playerName) {
-            let wins = 0,
-                losses = 0,
-                draws = 0;
+            let wins = 0, losses = 0, draws = 0;
             allGames.forEach(g => {
                 if (g.homeScore === null || g.awayScore === null) return;
                 const isHome = peopleMap[g.home] === playerName;
                 const isAway = peopleMap[g.away] === playerName;
                 if (!isHome && !isAway) return;
                 let playerScore, opponentScore;
-                if (isHome) { playerScore = g.homeScore;
-                    opponentScore = g.awayScore; } else { playerScore = g.awayScore;
-                    opponentScore = g.homeScore; }
+                if (isHome) { playerScore = g.homeScore; opponentScore = g.awayScore; }
+                else { playerScore = g.awayScore; opponentScore = g.homeScore; }
                 if (playerScore > opponentScore) wins++;
                 else if (playerScore < opponentScore) losses++;
                 else draws++;
@@ -1774,8 +1768,7 @@
             }
             container.innerHTML = html + champHtml;
             container.querySelectorAll('.match-card').forEach(el => {
-                el.addEventListener('click', (e) => { e.stopPropagation();
-                    openGameModal(el.dataset.gameId); });
+                el.addEventListener('click', (e) => { e.stopPropagation(); openGameModal(el.dataset.gameId); });
             });
         }
 
@@ -1800,9 +1793,7 @@
         function renderCalendar() {
             const strip = document.getElementById('calendarStrip');
             const dates = new Set(allGames.map(g => g.date));
-            const s = new Date(2026, 5, 11),
-                e = new Date(2026, 6, 19),
-                m = ['Jun', 'Jul'];
+            const s = new Date(2026, 5, 11), e = new Date(2026, 6, 19), m = ['Jun', 'Jul'];
             let h = '';
             const c = new Date(s);
             const todayPST = getTodayPST();
@@ -1821,46 +1812,33 @@
             strip.innerHTML = h;
             strip.querySelectorAll('.cal-day').forEach(el => el.addEventListener('click', () => {
                 const d = el.dataset.date;
-                if (selectedDate === d) { selectedDate = null;
-                    renderCalendar();
-                    renderAll();
-                    document.getElementById('dailyOverlay').classList.remove('open'); } else { selectedDate = d;
-                    renderCalendar();
-                    renderAll();
-                    openDailyModal(d); }
+                if (selectedDate === d) { selectedDate = null; renderCalendar(); renderAll(); document.getElementById('dailyOverlay').classList.remove('open'); }
+                else { selectedDate = d; renderCalendar(); renderAll(); openDailyModal(d); }
             }));
             const focusDate = selectedDate || todayPST;
             setTimeout(() => scrollCalendarToDate(focusDate), 50);
         }
 
         function openDailyModal(dateStr) {
-            const overlay = document.getElementById('dailyOverlay'),
-                modal = document.getElementById('dailyModal');
+            const overlay = document.getElementById('dailyOverlay'), modal = document.getElementById('dailyModal');
             const dayGames = allGames.filter(g => g.date === dateStr).sort((a, b) => parsePST(a.pst || a.time) - parsePST(b.pst || b.time));
             const dateObj = new Date(dateStr + 'T00:00:00');
             const dn = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
-                mn = ['January', 'February', 'March', 'April', 'May', 'June', 'July'];
+                  mn = ['January', 'February', 'March', 'April', 'May', 'June', 'July'];
             let h = `<h3>📅 ${dn[dateObj.getUTCDay()]}, ${mn[dateObj.getUTCMonth()]} ${dateObj.getUTCDate()}, 2026</h3><div class="daily-date">${dayGames.length} match${dayGames.length !== 1 ? 'es' : ''}</div>`;
             if (dayGames.length === 0) h += `<div class="daily-empty">No matches today.</div>`;
             else dayGames.forEach(game => {
                 const sc = game.homeScore !== null && game.awayScore !== null;
-                const hp = peopleMap[game.home] || '',
-                    ap = peopleMap[game.away] || '';
-                const hc = playerColors[hp] || '#6c3bd4',
-                    ac = playerColors[ap] || '#6c3bd4';
+                const hp = peopleMap[game.home] || '', ap = peopleMap[game.away] || '';
+                const hc = playerColors[hp] || '#6c3bd4', ac = playerColors[ap] || '#6c3bd4';
                 let groupDisplay = '';
-                if (game.round === 'group') {
-                    groupDisplay = `<span class="group-badge">Group ${game.group}</span>`;
-                } else {
-                    groupDisplay = `<span class="group-badge" style="background:#6c757d;">${game.round}</span>`;
-                }
+                if (game.round === 'group') groupDisplay = `<span class="group-badge">Group ${game.group}</span>`;
+                else groupDisplay = `<span class="group-badge" style="background:#6c757d;">${game.round}</span>`;
+                // Show only one time string (the main time field)
                 const displayTime = game.time || game.pst || '';
                 let matchLine = '';
-                if (game.matchNumber) {
-                    matchLine = `Match ${game.matchNumber}`;
-                } else if (game.group) {
-                    matchLine = `Group ${game.group}`;
-                }
+                if (game.matchNumber) matchLine = `Match ${game.matchNumber}`;
+                else if (game.group) matchLine = `Group ${game.group}`;
                 h += `<div class="daily-game-card" data-game-id="${game.id}">
                         <div class="match-info">
                             <div class="teams-line">${game.home} vs ${game.away} ${groupDisplay}</div>
@@ -1876,8 +1854,7 @@
             modal.innerHTML = h;
             overlay.classList.add('open');
             document.getElementById('dailyCloseBtn').addEventListener('click', () => overlay.classList.remove('open'));
-            modal.querySelectorAll('.daily-game-card').forEach(c => c.addEventListener('click', () => { overlay.classList.remove('open');
-                openGameModal(c.dataset.gameId); }));
+            modal.querySelectorAll('.daily-game-card').forEach(c => c.addEventListener('click', () => { overlay.classList.remove('open'); openGameModal(c.dataset.gameId); }));
         }
         document.getElementById('dailyOverlay').addEventListener('click', function(e) { if (e.target === this) this.classList.remove('open'); });
 
@@ -1904,8 +1881,7 @@
             if (playerGames.length === 0) h += `<p style="text-align:center; font-size:0.8em; color:#6c757d;">No games found.</p>`;
             playerGames.forEach(g => {
                 const sc = g.homeScore !== null && g.awayScore !== null;
-                const hp = peopleMap[g.home] || '';
-                const ap = peopleMap[g.away] || '';
+                const hp = peopleMap[g.home] || '', ap = peopleMap[g.away] || '';
                 const hColor = hp === playerName ? 'font-weight:900;text-decoration:underline;' : 'color:#6c757d;';
                 const aColor = ap === playerName ? 'font-weight:900;text-decoration:underline;' : 'color:#6c757d;';
                 const displayTime = g.time || g.pst || '';
@@ -1934,8 +1910,7 @@
             const fIds = new Set(filtered.map(g => g.id));
             let h = '';
             Object.keys(GROUPS).sort().forEach(gid => {
-                const st = calculateStandings(gid),
-                    games = allGroupGames.filter(g => g.group === gid);
+                const st = calculateStandings(gid), games = allGroupGames.filter(g => g.group === gid);
                 h += `<div class="group-card"><h3>🏴 Group ${gid}</h3><table class="group-standings"><thead><tr><th>Team</th><th>P</th><th>W</th><th>D</th><th>L</th><th>GF</th><th>GA</th><th>GD</th><th>Pts</th></tr></thead><tbody>`;
                 st.forEach(s => {
                     const c = playerColors[s.person] || '#6c3bd4';
@@ -1944,11 +1919,9 @@
                 h += `</tbody></table><div class="group-games">`;
                 games.forEach(g => {
                     const hi = fIds.has(g.id) || !selectedDate,
-                        sc = g.homeScore !== null && g.awayScore !== null,
-                        hp = peopleMap[g.home] || '',
-                        ap = peopleMap[g.away] || '',
-                        hc = playerColors[hp] || '#6c3bd4',
-                        ac = playerColors[ap] || '#6c3bd4';
+                          sc = g.homeScore !== null && g.awayScore !== null,
+                          hp = peopleMap[g.home] || '', ap = peopleMap[g.away] || '',
+                          hc = playerColors[hp] || '#6c3bd4', ac = playerColors[ap] || '#6c3bd4';
                     h += `<div class="game-row" data-game-id="${g.id}" style="${hi && selectedDate ? 'background:#fff8e1;' : ''}"><span class="teams"><strong>${g.home}</strong> <span class="player-inline" style="color:${hc}">(${hp || '—'})</span> — <strong>${g.away}</strong> <span class="player-inline" style="color:${ac}">(${ap || '—'})</span><br><span style="font-size:.65em;color:#adb5bd;">${g.stadium} · ${g.time || g.pst || ''}</span></span><span class="${sc ? 'score' : 'score pending'}">${sc ? g.homeScore + ' - ' + g.awayScore : 'vs'}</span><span class="date-sm">${g.date.slice(5)}</span></div>`;
                 });
                 h += `</div></div>`;
@@ -1987,30 +1960,23 @@
         function openGameModal(gameId) {
             const game = allGames.find(g => g.id === gameId);
             if (!game) return;
-            const overlay = document.getElementById('modalOverlay'),
-                modal = document.getElementById('gameModal');
-            const hs = game.homeScore !== null ? game.homeScore : '',
-                as = game.awayScore !== null ? game.awayScore : '',
-                hp = peopleMap[game.home] || '',
-                ap = peopleMap[game.away] || '',
-                hc = playerColors[hp] || '#6c3bd4',
-                ac = playerColors[ap] || '#6c3bd4';
+            const overlay = document.getElementById('modalOverlay'), modal = document.getElementById('gameModal');
+            const hs = game.homeScore !== null ? game.homeScore : '', as = game.awayScore !== null ? game.awayScore : '';
+            const hp = peopleMap[game.home] || '', ap = peopleMap[game.away] || '';
+            const hc = playerColors[hp] || '#6c3bd4', ac = playerColors[ap] || '#6c3bd4';
             const displayTime = game.time || game.pst || '';
             modal.innerHTML = `<h3>${game.round === 'group' ? 'Group ' + game.group + ' · ' : ''}${game.home} vs ${game.away}</h3><div class="modal-date">📅 ${game.date} | 🏟 ${game.stadium} | 🕐 ${displayTime}</div><div class="matchup"><div class="team-block"><div style="font-size:2em;">⚽</div><div class="country">${game.home}</div><div class="owner" style="color:${hc}">${hp || '—'}</div></div><div class="vs">VS</div><div class="team-block"><div style="font-size:2em;">⚽</div><div class="country">${game.away}</div><div class="owner" style="color:${ac}">${ap || '—'}</div></div></div><div class="score-inputs"><input type="number" id="modalHomeScore" value="${hs}" placeholder="-" min="0" max="99"><span>—</span><input type="number" id="modalAwayScore" value="${as}" placeholder="-" min="0" max="99"></div><div class="btn-row"><button class="btn btn-save" id="modalSave">💾 Save</button><button class="btn btn-reset" id="modalReset">Clear</button><button class="btn btn-close" id="modalClose">Close</button></div>`;
             overlay.classList.add('open');
             document.getElementById('modalSave').addEventListener('click', () => {
-                const hv = document.getElementById('modalHomeScore').value,
-                    av = document.getElementById('modalAwayScore').value;
-                if (hv !== '' && av !== '' && !isNaN(hv) && !isNaN(av)) { game.homeScore = parseInt(hv);
-                    game.awayScore = parseInt(av); } else if (hv === '' && av === '') { game.homeScore = null;
-                    game.awayScore = null; }
+                const hv = document.getElementById('modalHomeScore').value, av = document.getElementById('modalAwayScore').value;
+                if (hv !== '' && av !== '' && !isNaN(hv) && !isNaN(av)) { game.homeScore = parseInt(hv); game.awayScore = parseInt(av); }
+                else if (hv === '' && av === '') { game.homeScore = null; game.awayScore = null; }
                 saveToFirebase(game.id, game.homeScore, game.awayScore);
                 overlay.classList.remove('open');
                 renderBracket();
             });
             document.getElementById('modalReset').addEventListener('click', () => {
-                game.homeScore = null;
-                game.awayScore = null;
+                game.homeScore = null; game.awayScore = null;
                 saveToFirebase(game.id, null, null);
                 overlay.classList.remove('open');
                 renderBracket();
@@ -2029,12 +1995,9 @@
                     const c = legendData[person].color;
                     const teams = legendData[person].teams;
                     const record = getPlayerRecord(person);
-                    const active = [],
-                        eliminated = [];
-                    teams.forEach(team => { if (isTeamEliminated(team)) eliminated.push(team);
-                        else active.push(team); });
-                    active.sort();
-                    eliminated.sort();
+                    const active = [], eliminated = [];
+                    teams.forEach(team => { if (isTeamEliminated(team)) eliminated.push(team); else active.push(team); });
+                    active.sort(); eliminated.sort();
                     let teamsHtml = '';
                     const allTeams = [...active, ...eliminated];
                     allTeams.forEach((team, idx) => {
@@ -2092,6 +2055,7 @@
             const tbody = document.getElementById('adminTableBody');
             const todayPST = getTodayPST();
             let html = '';
+            // Filter only current and future games (date >= today PST)
             const sorted = [...allGames]
                 .filter(g => g.date >= todayPST)
                 .sort((a, b) => {
@@ -2125,6 +2089,7 @@
                 const game = allGames.find(g => g.id === id);
                 if (game) {
                     game[field] = val;
+                    // Keep pst in sync with time for clean daily modal display
                     if (field === 'time') game.pst = val;
                 }
             });
@@ -2153,18 +2118,11 @@
                 `🔍 Showing <strong>${selectedDate}</strong> <span class="clear-filter" id="clearFilter">[Show All]</span>` :
                 `📅 Click a date to see games · 🔴 Live Sync Active`;
             if (selectedDate) document.getElementById('clearFilter').addEventListener('click', () => {
-                selectedDate = null;
-                renderCalendar();
-                renderAll();
-                document.getElementById('dailyOverlay').classList.remove('open');
+                selectedDate = null; renderCalendar(); renderAll(); document.getElementById('dailyOverlay').classList.remove('open');
             });
-            if (currentView === 'bracket') {
-                renderBracket();
-            } else if (currentView === 'groups') {
-                renderGroups();
-            } else if (currentView === 'thirdplace') {
-                renderThirdPlace();
-            }
+            if (currentView === 'bracket') renderBracket();
+            else if (currentView === 'groups') renderGroups();
+            else if (currentView === 'thirdplace') renderThirdPlace();
             renderLegend();
         }
 
